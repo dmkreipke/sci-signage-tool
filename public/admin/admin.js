@@ -127,9 +127,38 @@ document.getElementById('btn-confirm').addEventListener('click', async () => {
 document.getElementById('btn-new').addEventListener('click', () => showState('upload'));
 document.getElementById('btn-manage').addEventListener('click', () => loadManage());
 
-// --- Manage state ---
+// --- Header buttons ---
+document.getElementById('btn-upload-header').addEventListener('click', () => showState('upload'));
 document.getElementById('btn-manage-header').addEventListener('click', () => loadManage());
+
+// --- Wipe schedule ---
+document.getElementById('btn-wipe').addEventListener('click', async () => {
+  if (!confirm('Wipe the published schedule? All displays will go blank until a new CSV is uploaded.')) return;
+  spinner.hidden = false;
+  try {
+    const res = await fetch('/api/schedule', { method: 'DELETE' });
+    if (!res.ok) throw new Error('Wipe failed');
+    parsedRows = [];
+    managedRows = [];
+    showState('upload');
+    alert('Schedule wiped. Upload a new CSV to publish.');
+  } catch (err) {
+    alert(`Wipe failed: ${err.message}`);
+  } finally {
+    spinner.hidden = true;
+  }
+});
+
+// --- Manage state ---
 document.getElementById('btn-manage-upload').addEventListener('click', () => showState('upload'));
+
+document.getElementById('btn-manage-add-row').addEventListener('click', () => {
+  managedRows.push(blankRow());
+  renderManageTable();
+  // scroll new row into view
+  const body = document.getElementById('manage-body');
+  body.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
 
 async function loadManage() {
   spinner.hidden = false;
@@ -137,20 +166,9 @@ async function loadManage() {
     const res = await fetch('/api/schedule');
     const data = await res.json();
     managedRows = data.rows || [];
-
-    const empty = document.getElementById('manage-empty');
-    const tableWrap = document.querySelector('#state-manage .table-scroll');
-    if (managedRows.length === 0) {
-      empty.hidden = false;
-      tableWrap.style.display = 'none';
-    } else {
-      empty.hidden = true;
-      tableWrap.style.display = '';
-      document.getElementById('manage-row-count').textContent = `${managedRows.length} rows`;
-      document.getElementById('manage-published-at').textContent =
-        data.publishedAt ? `Published ${new Date(data.publishedAt).toLocaleString()}` : '';
-      renderManageTable();
-    }
+    document.getElementById('manage-published-at').textContent =
+      data.publishedAt ? `Published ${new Date(data.publishedAt).toLocaleString()}` : '';
+    renderManageTable();
     showState('manage');
   } catch (err) {
     alert(`Failed to load schedule: ${err.message}`);
@@ -160,24 +178,36 @@ async function loadManage() {
 }
 
 function renderManageTable() {
+  document.getElementById('manage-row-count').textContent =
+    `${managedRows.length} row${managedRows.length !== 1 ? 's' : ''}`;
   const body = document.getElementById('manage-body');
   body.innerHTML = managedRows.map((row, i) => `
-    <tr data-manage-index="${i}">
+    <tr data-manage-index="${i}" class="${row._new ? 'new-row' : ''}">
       <td contenteditable="true" data-field="startTime">${esc(row.startTime)}</td>
       <td contenteditable="true" data-field="programName">${esc(row.programName)}</td>
       <td contenteditable="true" data-field="groupName">${esc(row.groupName)}</td>
       <td contenteditable="true" data-field="location" class="${!row.location ? 'warn-cell' : ''}">${esc(row.location)}</td>
+      <td><button class="btn-row-remove" data-remove-index="${i}" title="Remove this row">×</button></td>
     </tr>
   `).join('');
-
-  body.addEventListener('input', e => {
-    const td = e.target.closest('td[data-field]');
-    if (!td) return;
-    const tr = td.closest('tr[data-manage-index]');
-    const index = parseInt(tr.dataset.manageIndex, 10);
-    managedRows[index][td.dataset.field] = td.textContent.trim();
-  });
 }
+
+// Single delegated listeners — attached once, not inside renderManageTable
+document.getElementById('manage-body').addEventListener('input', e => {
+  const td = e.target.closest('td[data-field]');
+  if (!td) return;
+  const tr = td.closest('tr[data-manage-index]');
+  const index = parseInt(tr.dataset.manageIndex, 10);
+  managedRows[index][td.dataset.field] = td.textContent.trim();
+});
+
+document.getElementById('manage-body').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-remove-index]');
+  if (!btn) return;
+  const index = parseInt(btn.dataset.removeIndex, 10);
+  managedRows.splice(index, 1);
+  renderManageTable();
+});
 
 document.getElementById('btn-manage-save').addEventListener('click', async () => {
   spinner.hidden = false;
@@ -189,6 +219,8 @@ document.getElementById('btn-manage-save').addEventListener('click', async () =>
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Save failed');
+    managedRows = managedRows.map(r => { const c = { ...r }; delete c._new; return c; });
+    renderManageTable();
     document.getElementById('manage-published-at').textContent =
       `Saved at ${new Date(data.publishedAt).toLocaleTimeString()}`;
     alert(`Saved. ${data.count} rows are now live.`);
@@ -198,6 +230,19 @@ document.getElementById('btn-manage-save').addEventListener('click', async () =>
     spinner.hidden = true;
   }
 });
+
+// --- Helpers ---
+function blankRow() {
+  return {
+    id: `manual-${Date.now()}`,
+    startTime: '',
+    startTimeISO: '',
+    programName: '',
+    groupName: '',
+    location: '',
+    _new: true,
+  };
+}
 
 function esc(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');

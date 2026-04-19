@@ -19,6 +19,58 @@ body {
 
 .header h1 { font-size: 1.4rem; color: #00e5ff; }
 
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 12px;
+}
+
+/* Display nav (preview/live links, persistent on every page) */
+.display-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 14px 32px;
+  background: #0d1117;
+  border-bottom: 1px solid #30363d;
+}
+
+.display-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.display-group-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-right: 4px;
+}
+
+.btn-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  background: transparent;
+  color: #00e5ff;
+  border: 1px solid #00e5ff;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-pill:hover { background: rgba(0, 229, 255, 0.1); }
+
+.btn-pill-live {
+  color: #69f0ae;
+  border-color: #69f0ae;
+}
+.btn-pill-live:hover { background: rgba(105, 240, 174, 0.1); }
+
 .badge {
   padding: 4px 12px;
   border-radius: 12px;
@@ -85,6 +137,20 @@ main { padding: 32px; max-width: 1100px; margin: 0 auto; }
 
 .btn-secondary:hover { background: rgba(0, 229, 255, 0.08); }
 
+.btn-danger {
+  display: inline-block;
+  padding: 10px 24px;
+  background: transparent;
+  color: #f85149;
+  border: 1px solid #f85149;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-danger:hover { background: rgba(248, 81, 73, 0.1); }
+
 /* Toolbar */
 .toolbar {
   display: flex;
@@ -126,6 +192,7 @@ tbody tr { border-bottom: 1px solid #21262d; }
 tbody tr:last-child { border-bottom: none; }
 tbody tr:hover { background: rgba(255,255,255,0.02); }
 tbody tr.warn-row { background: rgba(212, 160, 23, 0.06); }
+tbody tr.new-row { background: rgba(0, 229, 255, 0.04); border-left: 2px solid rgba(0, 229, 255, 0.4); }
 
 td { padding: 10px 16px; vertical-align: top; }
 td[contenteditable="true"] {
@@ -136,6 +203,20 @@ td[contenteditable="true"] {
 td[contenteditable="true"]:focus { background: rgba(0, 229, 255, 0.08); box-shadow: 0 0 0 1px #00e5ff inset; }
 
 .warn-cell { color: #d4a017; }
+
+.btn-row-remove {
+  background: transparent;
+  color: #f85149;
+  border: 1px solid rgba(248, 81, 73, 0.4);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+}
+.btn-row-remove:hover { background: rgba(248, 81, 73, 0.15); }
 
 /* Modal */
 #state-confirm {

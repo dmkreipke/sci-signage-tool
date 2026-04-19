@@ -96,4 +96,4 @@ function parseCSV(buffer) {
   return { rows, warnings };
 }
 
-module.exports = { parseCSV };
+module.exports = { parseCSV, parseTimeToISO };
