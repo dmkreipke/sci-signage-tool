@@ -85,6 +85,19 @@ main { padding: 32px; max-width: 1100px; margin: 0 auto; }
 .state { display: none; }
 .state.active { display: block; }
 
+/* Help text */
+.help-text {
+  background: rgba(0, 229, 255, 0.05);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  color: #8b949e;
+  line-height: 1.6;
+}
+.help-text strong { color: #e0e6ed; }
+
 /* Drop zone */
 .drop-zone {
   border: 2px dashed #30363d;

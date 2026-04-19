@@ -75,8 +75,9 @@ function parseCSV(buffer) {
       row[fieldName] = raw[rawKey] || '';
     }
 
+    if (!row.startTime && !row.programName && !row.groupName && !row.location) continue;
+
     row.groupName = scrubGroupName(row.groupName);
-    if (!row.groupName) row.groupName = 'Private Show';
 
     const startTimeISO = parseTimeToISO(row.startTime);
     if (!startTimeISO) {

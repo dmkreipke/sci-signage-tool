@@ -105,6 +105,12 @@
 
     <!-- State 5: Manage -->
     <div id="state-manage" class="state">
+      <div class="help-text">
+        <strong>Manage Schedule</strong> — View and edit the schedule that is currently live on all displays.
+        Click any cell to edit it directly. Use <strong>+ Add Row</strong> to manually enter a new program.
+        Use <strong>×</strong> to remove a row. When you're done, click <strong>Push Changes</strong> to push
+        updates to all displays. Changes appear on the kiosks within 60 seconds.
+      </div>
       <div class="toolbar">
         <div class="toolbar-info">
           <span id="manage-row-count"></span>
@@ -113,7 +119,7 @@
         <div class="toolbar-actions">
           <button id="btn-manage-add-row" class="btn-secondary">+ Add Row</button>
           <button id="btn-manage-upload" class="btn-secondary">Upload New File</button>
-          <button id="btn-manage-save" class="btn-primary">Save Changes</button>
+          <button id="btn-manage-save" class="btn-primary">Push Changes</button>
         </div>
       </div>
       <div class="table-scroll">
