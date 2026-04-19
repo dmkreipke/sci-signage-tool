@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCI Signage Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="header">
+    <h1>SCI Signage Admin</h1>
+    <span id="status-badge" class="badge"></span>
+    <button id="btn-manage-header" class="btn-secondary" style="margin-left:auto">Manage Current Schedule</button>
+  </div>
+
+  <main>
+    <!-- State 1: Upload -->
+    <div id="state-upload" class="state active">
+      <div class="display-links" style="margin-bottom:20px">
+        <a href="/display/star-theater.html?preview=1" target="_blank" class="btn-secondary">Preview Star Theater</a>
+        <a href="/display/sci-live.html" target="_blank" class="btn-secondary">Preview SCI Live</a>
+        <a href="/display/front-entrance.html" target="_blank" class="btn-secondary">Preview Front Entrance</a>
+      </div>
+      <div id="drop-zone" class="drop-zone">
+        <div class="drop-icon">📂</div>
+        <p>Drag & drop your Altru CSV export here</p>
+        <p class="sub">or</p>
+        <label class="btn-primary">
+          Choose File
+          <input type="file" id="file-input" accept=".csv" hidden>
+        </label>
+      </div>
+      <div id="upload-error" class="error-msg" hidden></div>
+    </div>
+
+    <!-- State 2: Preview/Edit -->
+    <div id="state-preview" class="state">
+      <div class="toolbar">
+        <div class="toolbar-info">
+          <span id="row-count"></span>
+          <span id="warning-count" class="warning-label"></span>
+        </div>
+        <div class="toolbar-actions">
+          <button id="btn-reset" class="btn-secondary">Upload New File</button>
+          <button id="btn-publish" class="btn-primary">Publish to Displays</button>
+        </div>
+      </div>
+      <div id="warnings-panel" class="warnings-panel" hidden></div>
+      <div class="table-scroll">
+        <table id="preview-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Program</th>
+              <th>Group</th>
+              <th>Location</th>
+            </tr>
+          </thead>
+          <tbody id="preview-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- State 3: Confirm -->
+    <div id="state-confirm" class="state">
+      <div class="modal-card">
+        <h2>Publish Schedule?</h2>
+        <p id="confirm-msg"></p>
+        <div class="modal-actions">
+          <button id="btn-cancel" class="btn-secondary">Cancel</button>
+          <button id="btn-confirm" class="btn-primary">Yes, Publish</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- State 4: Published -->
+    <div id="state-published" class="state">
+      <div class="success-card">
+        <div class="success-icon">✓</div>
+        <h2>Schedule Published</h2>
+        <p id="published-msg"></p>
+        <div class="display-links">
+          <a href="/display/star-theater.html?preview=1" target="_blank" class="btn-secondary">Preview Star Theater</a>
+          <a href="/display/sci-live.html" target="_blank" class="btn-secondary">Preview SCI Live</a>
+          <a href="/display/front-entrance.html" target="_blank" class="btn-secondary">Preview Front Entrance</a>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:8px">
+          <button id="btn-manage" class="btn-secondary">Edit Current Schedule</button>
+          <button id="btn-new" class="btn-primary">Upload New Schedule</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- State 5: Manage -->
+    <div id="state-manage" class="state">
+      <div class="toolbar">
+        <div class="toolbar-info">
+          <span id="manage-row-count"></span>
+          <span id="manage-published-at" style="color:#8b949e;font-size:0.85rem"></span>
+        </div>
+        <div class="toolbar-actions">
+          <a href="/display/star-theater.html?preview=1" target="_blank" class="btn-secondary">Preview Star Theater</a>
+          <a href="/display/sci-live.html" target="_blank" class="btn-secondary">Preview SCI Live</a>
+          <a href="/display/front-entrance.html" target="_blank" class="btn-secondary">Preview Front Entrance</a>
+          <button id="btn-manage-upload" class="btn-secondary">Upload New File</button>
+          <button id="btn-manage-save" class="btn-primary">Save Changes</button>
+        </div>
+      </div>
+      <div id="manage-empty" class="error-msg" hidden>No schedule has been published yet.</div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Program</th>
+              <th>Group</th>
+              <th>Location</th>
+            </tr>
+          </thead>
+          <tbody id="manage-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <div id="spinner" class="spinner-overlay" hidden>
+    <div class="spinner"></div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: none;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background nebula */
+.bg {
+  position: fixed;
+  inset: 0;
+  background: url('assets/nebula.jpg') center top / cover no-repeat;
+  z-index: 0;
+}
+.bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.50);
+}
+
+/* Layout */
+.screen {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 24px 20px 16px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.header .title {
+  font-size: clamp(22px, 4.5vw, 36px);
+  color: #00e5ff;
+  text-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.header .clock {
+  font-size: clamp(40px, 8vw, 72px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-top: 4px;
+}
+
+/* Pinned top cards */
+#top-cards {
+  flex-shrink: 0;
+}
+
+/* Schedule container */
+.schedule-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Cards */
+.card {
+  background: rgba(10, 15, 30, 0.50);
+  border: 1.5px solid rgba(0, 229, 255, 0.55);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.card-label {
+  font-size: clamp(14px, 2vw, 20px);
+  color: #69f0ae;
+  text-shadow: 0 0 12px rgba(105, 240, 174, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.card-program {
+  font-size: clamp(24px, 4.5vw, 40px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.15;
+  margin-bottom: 4px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.card-group {
+  font-size: clamp(14px, 2.2vw, 20px);
+  color: #b0c4d4;
+  flex: 1;
+  min-width: 0;
+}
+
+.card-time {
+  font-size: clamp(16px, 2.5vw, 22px);
+  color: #69f0ae;
+  text-shadow: 0 0 12px rgba(105, 240, 174, 0.5);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Progress bar */
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.progress-label {
+  font-size: clamp(10px, 1.5vw, 13px);
+  color: #8ab0c4;
+  white-space: nowrap;
+}
+
+.progress-pct {
+  font-size: clamp(10px, 1.5vw, 13px);
+  color: #8ab0c4;
+  white-space: nowrap;
+}
+
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #00e5ff;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+/* Next Up card footer */
+.card-footer {
+  text-align: center;
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: #a0b8c8;
+  font-style: italic;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+/* Coming Up section */
+.section-label {
+  font-size: clamp(14px, 2vw, 20px);
+  color: #00e5ff;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  padding: 4px 0 8px 16px;
+  flex-shrink: 0;
+}
+
+.row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.row-item:last-child { margin-bottom: 0; }
+
+.row-left { flex: 1; min-width: 0; }
+
+.row-program {
+  font-size: clamp(20px, 3.5vw, 30px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.row-group {
+  font-size: clamp(12px, 2vw, 18px);
+  color: #b0c4d4;
+  margin-top: 2px;
+}
+
+.row-time {
+  font-size: clamp(14px, 2.2vw, 22px);
+  color: #00e5ff;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Preview mode banner */
+.preview-banner {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  background: #d4a017;
+  color: #000;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 6px;
+}
+
+/* Empty / no-shows */
+.empty-msg {
+  text-align: center;
+  color: #4a6070;
+  font-size: clamp(16px, 2.5vw, 22px);
+  padding: 40px 0;
+}

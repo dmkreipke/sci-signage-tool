@@ -1,0 +1,390 @@
+{
+  "publishedAt": "2026-04-19T16:14:43.083Z",
+  "publishedBy": "admin",
+  "rows": [
+    {
+      "id": "1",
+      "startTime": "12:00 AM",
+      "programName": "Cosmic Coasters",
+      "groupName": "Einstein Academy",
+      "location": "SCI Live Theater",
+      "startTimeISO": "00:00"
+    },
+    {
+      "id": "2",
+      "startTime": "12:30 AM",
+      "programName": "Slime Time 101",
+      "groupName": "Goodall Prep",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "00:30"
+    },
+    {
+      "id": "3",
+      "startTime": "01:00 AM",
+      "programName": "Nebula Knots",
+      "groupName": "Sagan Science Club",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "01:00"
+    },
+    {
+      "id": "4",
+      "startTime": "01:30 AM",
+      "programName": "Static Shockers",
+      "groupName": "Franklin Middle",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "01:30"
+    },
+    {
+      "id": "5",
+      "startTime": "02:00 AM",
+      "programName": "Alien Atmospheres",
+      "groupName": "Goddard Charter",
+      "location": "SCI Live Theater",
+      "startTimeISO": "02:00"
+    },
+    {
+      "id": "6",
+      "startTime": "02:30 AM",
+      "programName": "Bubbles & Booms",
+      "groupName": "Mendeleev Magnet",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "02:30"
+    },
+    {
+      "id": "7",
+      "startTime": "03:00 AM",
+      "programName": "Galactic Safari",
+      "groupName": "Darwin Day School",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "03:00"
+    },
+    {
+      "id": "8",
+      "startTime": "03:30 AM",
+      "programName": "Neon Nightmares",
+      "groupName": "Lovelace Labs",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "03:30"
+    },
+    {
+      "id": "9",
+      "startTime": "04:00 AM",
+      "programName": "Stellar Supernovas",
+      "groupName": "Ride Academy",
+      "location": "SCI Live Theater",
+      "startTimeISO": "04:00"
+    },
+    {
+      "id": "10",
+      "startTime": "04:30 AM",
+      "programName": "The Periodic Party",
+      "groupName": "Pasteur Prep",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "04:30"
+    },
+    {
+      "id": "11",
+      "startTime": "05:00 AM",
+      "programName": "Moon Base Alpha",
+      "groupName": "Carson Elementary",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "05:00"
+    },
+    {
+      "id": "12",
+      "startTime": "05:30 AM",
+      "programName": "Liquid Nitrogen Lounge",
+      "groupName": "Anning Academy",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "05:30"
+    },
+    {
+      "id": "13",
+      "startTime": "06:00 AM",
+      "programName": "Gravity Games",
+      "groupName": "Curie High",
+      "location": "SCI Live Theater",
+      "startTimeISO": "06:00"
+    },
+    {
+      "id": "14",
+      "startTime": "06:30 AM",
+      "programName": "Molecular Magic",
+      "groupName": "Hawking Heights",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "06:30"
+    },
+    {
+      "id": "15",
+      "startTime": "07:00 AM",
+      "programName": "Spark Station",
+      "groupName": "Hubble Prep",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "07:00"
+    },
+    {
+      "id": "16",
+      "startTime": "07:30 AM",
+      "programName": "Laser Legends",
+      "groupName": "Galileo Elementary",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "07:30"
+    },
+    {
+      "id": "17",
+      "startTime": "08:00 AM",
+      "programName": "Solar Secrets",
+      "groupName": "Tesla Tech",
+      "location": "SCI Live Theater",
+      "startTimeISO": "08:00"
+    },
+    {
+      "id": "18",
+      "startTime": "08:30 AM",
+      "programName": "Frosty Physics",
+      "groupName": "Bohr Boarding",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "08:30"
+    },
+    {
+      "id": "19",
+      "startTime": "09:00 AM",
+      "programName": "Kinetic Chaos",
+      "groupName": "Fermi School",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "09:00"
+    },
+    {
+      "id": "20",
+      "startTime": "09:30 AM",
+      "programName": "Orbital Oddities",
+      "groupName": "Watt Works",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "09:30"
+    },
+    {
+      "id": "21",
+      "startTime": "10:00 AM",
+      "programName": "Magnetic Mayhem",
+      "groupName": "Kepler Kids",
+      "location": "SCI Live Theater",
+      "startTimeISO": "10:00"
+    },
+    {
+      "id": "22",
+      "startTime": "10:30 AM",
+      "programName": "Prism Party",
+      "groupName": "Halley High",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "10:30"
+    },
+    {
+      "id": "23",
+      "startTime": "11:00 AM",
+      "programName": "Superfluid Safari",
+      "groupName": "Cassini Charter",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "11:00"
+    },
+    {
+      "id": "24",
+      "startTime": "11:30 AM",
+      "programName": "Bot Battles",
+      "groupName": "Event Horizon High",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "11:30"
+    },
+    {
+      "id": "25",
+      "startTime": "12:00 PM",
+      "programName": "Cosmic Coasters",
+      "groupName": "Einstein Academy",
+      "location": "SCI Live Theater",
+      "startTimeISO": "12:00"
+    },
+    {
+      "id": "26",
+      "startTime": "12:30 PM",
+      "programName": "Slime Time 101",
+      "groupName": "Goodall Prep",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "12:30"
+    },
+    {
+      "id": "27",
+      "startTime": "01:00 PM",
+      "programName": "Nebula Knots",
+      "groupName": "Sagan Science Club",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "13:00"
+    },
+    {
+      "id": "28",
+      "startTime": "01:30 PM",
+      "programName": "Static Shockers",
+      "groupName": "Franklin Middle",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "13:30"
+    },
+    {
+      "id": "29",
+      "startTime": "02:00 PM",
+      "programName": "Alien Atmospheres",
+      "groupName": "Goddard Charter",
+      "location": "SCI Live Theater",
+      "startTimeISO": "14:00"
+    },
+    {
+      "id": "30",
+      "startTime": "02:30 PM",
+      "programName": "Bubbles & Booms",
+      "groupName": "Mendeleev Magnet",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "14:30"
+    },
+    {
+      "id": "31",
+      "startTime": "03:00 PM",
+      "programName": "Galactic Safari",
+      "groupName": "Darwin Day School",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "15:00"
+    },
+    {
+      "id": "32",
+      "startTime": "03:30 PM",
+      "programName": "Neon Nightmares",
+      "groupName": "Lovelace Labs",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "15:30"
+    },
+    {
+      "id": "33",
+      "startTime": "04:00 PM",
+      "programName": "Stellar Supernovas",
+      "groupName": "Ride Academy",
+      "location": "SCI Live Theater",
+      "startTimeISO": "16:00"
+    },
+    {
+      "id": "34",
+      "startTime": "04:30 PM",
+      "programName": "The Periodic Party",
+      "groupName": "Pasteur Prep",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "16:30"
+    },
+    {
+      "id": "35",
+      "startTime": "05:00 PM",
+      "programName": "Moon Base Alpha",
+      "groupName": "Carson Elementary",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "17:00"
+    },
+    {
+      "id": "36",
+      "startTime": "05:30 PM",
+      "programName": "Liquid Nitrogen Lounge",
+      "groupName": "Anning Academy",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "17:30"
+    },
+    {
+      "id": "37",
+      "startTime": "06:00 PM",
+      "programName": "Gravity Games",
+      "groupName": "Curie High",
+      "location": "SCI Live Theater",
+      "startTimeISO": "18:00"
+    },
+    {
+      "id": "38",
+      "startTime": "06:30 PM",
+      "programName": "Molecular Magic",
+      "groupName": "Hawking Heights",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "18:30"
+    },
+    {
+      "id": "39",
+      "startTime": "07:00 PM",
+      "programName": "Spark Station",
+      "groupName": "Hubble Prep",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "19:00"
+    },
+    {
+      "id": "40",
+      "startTime": "07:30 PM",
+      "programName": "Laser Legends",
+      "groupName": "Galileo Elementary",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "19:30"
+    },
+    {
+      "id": "41",
+      "startTime": "08:00 PM",
+      "programName": "Solar Secrets",
+      "groupName": "Tesla Tech",
+      "location": "SCI Live Theater",
+      "startTimeISO": "20:00"
+    },
+    {
+      "id": "42",
+      "startTime": "08:30 PM",
+      "programName": "Frosty Physics",
+      "groupName": "Bohr Boarding",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "20:30"
+    },
+    {
+      "id": "43",
+      "startTime": "09:00 PM",
+      "programName": "Kinetic Chaos",
+      "groupName": "Fermi School",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "21:00"
+    },
+    {
+      "id": "44",
+      "startTime": "09:30 PM",
+      "programName": "Orbital Oddities",
+      "groupName": "Watt Works",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "21:30"
+    },
+    {
+      "id": "45",
+      "startTime": "10:00 PM",
+      "programName": "Magnetic Mayhem",
+      "groupName": "Kepler Kids",
+      "location": "SCI Live Theater",
+      "startTimeISO": "22:00"
+    },
+    {
+      "id": "46",
+      "startTime": "10:30 PM",
+      "programName": "Prism Party",
+      "groupName": "Halley High",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "22:30"
+    },
+    {
+      "id": "47",
+      "startTime": "11:00 PM",
+      "programName": "Superfluid Safari",
+      "groupName": "Cassini Charter",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "23:00"
+    },
+    {
+      "id": "48",
+      "startTime": "11:30 PM",
+      "programName": "Bot Battles",
+      "groupName": "Event Horizon High",
+      "location": "Star Theater Planetarium",
+      "startTimeISO": "23:30"
+    }
+  ]
+}
