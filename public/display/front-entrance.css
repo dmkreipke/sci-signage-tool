@@ -80,7 +80,7 @@ body {
   min-height: 0;
   overflow: hidden;
   display: grid;
-  grid-template-rows: var(--row-group, 80px) var(--row-arrive, 1fr) var(--row-lunch, 1fr) var(--row-programs, 2fr);
+  grid-template-rows: var(--row-group, 100px) var(--row-lunch, 1fr) var(--row-programs, 2fr);
   align-items: center;
 }
 
@@ -137,7 +137,7 @@ body {
   border-radius: 14px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
   display: grid;
-  grid-template-rows: var(--row-group, 80px) var(--row-arrive, 1fr) var(--row-lunch, 1fr) var(--row-programs, 2fr);
+  grid-template-rows: var(--row-group, 100px) var(--row-lunch, 1fr) var(--row-programs, 2fr);
   overflow: hidden;
 }
 
@@ -153,21 +153,27 @@ body {
 
 /* School name (header row) */
 .card-group-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(213, 244, 60, 0.12);
+  border-bottom: 1px solid rgba(213, 244, 60, 0.3);
+}
+.card-group-label {
   font-size: clamp(18px, 1.6vw, 24px);
   font-weight: 800;
   color: #d5f43c;
   line-height: 1.15;
   text-align: center;
-  background: rgba(213, 244, 60, 0.12);
-  border-bottom: 1px solid rgba(213, 244, 60, 0.3);
 }
-
-/* Big time field (arrive) */
-.card-time-big {
-  font-size: clamp(28px, 2.6vw, 38px);
-  font-weight: 700;
-  color: #ffffff;
+.card-arrive {
+  font-size: clamp(13px, 1.2vw, 17px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
 }
 
 /* Lunches — stacked list (parallel to programs) */
@@ -184,14 +190,14 @@ body {
   padding-left: 8px;
 }
 .lunch-time {
-  font-size: clamp(26px, 2.4vw, 34px);
+  font-size: clamp(14px, 2vw, 24px);
   font-weight: 700;
   color: #ffffff;
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
 }
 .lunch-loc {
-  font-size: clamp(20px, 1.9vw, 26px);
+  font-size: clamp(14px, 1.4vw, 18px);
   color: rgba(255, 255, 255, 0.6);
   margin-top: 1px;
 }
@@ -205,7 +211,7 @@ body {
 }
 .program-item {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 6.5em 1fr;
   column-gap: 10px;
   row-gap: 2px;
   align-items: baseline;
@@ -227,7 +233,7 @@ body {
 }
 .program-loc {
   grid-column: 2 / 3;
-  font-size: clamp(20px, 1.9vw, 26px);
+  font-size: clamp(14px, 1.4vw, 18px);
   color: rgba(255, 255, 255, 0.6);
 }
 

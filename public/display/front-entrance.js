@@ -94,7 +94,9 @@ function renderLunchItem(l) {
 }
 
 function renderCard(g) {
-  const arrive = g.arriveTime ? `<div class="card-time-big">${esc(g.arriveTime)}</div>` : emptyCell();
+  const arriveTag = g.arriveTime
+    ? `<span class="card-arrive">${esc(g.arriveTime)} Arrival</span>`
+    : '';
   const lunches = g.lunches && g.lunches.length
     ? `<div class="card-lunches">${g.lunches.map(renderLunchItem).join('')}</div>`
     : emptyCell();
@@ -104,8 +106,10 @@ function renderCard(g) {
 
   return `
     <div class="card">
-      <div class="card-cell card-group-name">${esc(g.groupName || 'Group')}</div>
-      <div class="card-cell">${arrive}</div>
+      <div class="card-cell card-group-name">
+        <span class="card-group-label">${esc(g.groupName || 'Group')}</span>
+        ${arriveTag}
+      </div>
       <div class="card-cell">${lunches}</div>
       <div class="card-cell">${programs}</div>
     </div>
@@ -130,8 +134,7 @@ function render() {
   const maxPrograms = Math.max(1, ...groups.map(g => g.programs ? g.programs.length : 0));
   const maxLunches  = Math.max(1, ...groups.map(g => g.lunches  ? g.lunches.length  : 0));
   const programsRowMin = Math.max(160, 48 + maxPrograms * 88);
-  const lunchRowMin    = Math.max(100, 32 + maxLunches  * 76);
-  document.documentElement.style.setProperty('--row-arrive',   'minmax(75px, 0.6fr)');
+  const lunchRowMin    = Math.max(70, 24 + Math.min(maxLunches, 3) * 52);
   document.documentElement.style.setProperty('--row-programs', `minmax(${programsRowMin}px, 2fr)`);
   document.documentElement.style.setProperty('--row-lunch',    `minmax(${lunchRowMin}px, 1fr)`);
 
