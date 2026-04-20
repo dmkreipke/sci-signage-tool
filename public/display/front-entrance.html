@@ -2,15 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Front Entrance Schedule</title>
-  <style>
-    body { background: #0a0a1a; color: #00e5ff; font-family: 'Segoe UI', Arial, sans-serif;
-           display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    h1 { font-size: 2rem; opacity: 0.5; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCI Front Entrance — Today's Schools</title>
+  <link rel="stylesheet" href="front-entrance.css">
 </head>
 <body>
-  <h1>Front Entrance Display — Coming Soon</h1>
+  <div class="bg"></div>
+
+  <div id="preview-banner" class="preview-banner" hidden>PREVIEW MODE</div>
+
+  <header class="top-bar">
+    <div class="top-bar-title">Welcome to the Science Center of Iowa</div>
+    <div class="top-bar-clock" id="clock"></div>
+  </header>
+
+  <main class="stage">
+    <aside class="sidebar">
+      <div class="sidebar-rows">
+        <div class="sidebar-row" data-row="group">School</div>
+        <div class="sidebar-row" data-row="arrive">Arrive</div>
+        <div class="sidebar-row" data-row="lunch">Lunch</div>
+        <div class="sidebar-row" data-row="programs">Program(s)</div>
+      </div>
+    </aside>
+
+    <section class="card-lane" id="card-lane">
+      <div class="card-track" id="card-track">
+        <!-- cards injected by JS, duplicated for seamless loop -->
+      </div>
+      <div class="empty-state" id="empty-state" hidden>
+        <p>No schools scheduled today.</p>
+      </div>
+    </section>
+  </main>
+
   <script src="kiosk-lock.js"></script>
+  <script src="front-entrance.js?v=6"></script>
 </body>
 </html>

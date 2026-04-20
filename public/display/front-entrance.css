@@ -1,0 +1,263 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: none;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #1a2030;
+}
+
+body {
+  background: #d5f43c;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background — lime science doodle, full bleed, faintly washed for legibility */
+.bg {
+  position: fixed;
+  inset: 0;
+  background: url('assets/front-entrance-bg.png') center center / cover no-repeat;
+  z-index: 0;
+}
+.bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Top bar */
+.top-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 36px;
+  background: rgba(20, 30, 50, 0.88);
+  color: #fff;
+  flex-shrink: 0;
+}
+.top-bar-title {
+  font-size: clamp(20px, 2.2vw, 32px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.top-bar-clock {
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #d5f43c;
+}
+
+/* Stage = sidebar + card lane */
+.stage {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ----- Sidebar ----- */
+.sidebar {
+  flex: 0 0 220px;
+  background: rgba(20, 30, 50, 0.92);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0 20px;
+}
+
+.sidebar-rows {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: var(--row-group, 80px) var(--row-arrive, 1fr) var(--row-lunch, 1fr) var(--row-programs, 2fr);
+  align-items: center;
+}
+
+.sidebar-row {
+  font-size: clamp(14px, 1.4vw, 20px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #d5f43c;
+  padding: 0 24px;
+  border-bottom: 1px dashed rgba(213, 244, 60, 0.25);
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.sidebar-row:last-child { border-bottom: none; }
+
+
+/* ----- Card lane ----- */
+.card-lane {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  padding: 16px 0;
+}
+
+.card-track {
+  display: flex;
+  gap: 18px;
+  height: 100%;
+  padding: 0 18px;
+  will-change: transform;
+}
+
+/* Animation applied via class so it can be paused / restarted on data change */
+.card-track.scrolling {
+  animation: scroll-left var(--scroll-duration, 60s) linear infinite;
+}
+
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-track.scrolling { animation: none; }
+}
+
+/* ----- Cards ----- */
+.card {
+  flex: 0 0 380px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(213, 244, 60, 0.3);
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  display: grid;
+  grid-template-rows: var(--row-group, 80px) var(--row-arrive, 1fr) var(--row-lunch, 1fr) var(--row-programs, 2fr);
+  overflow: hidden;
+}
+
+.card-cell {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+.card-cell:last-child { border-bottom: none; }
+
+/* School name (header row) */
+.card-group-name {
+  font-size: clamp(18px, 1.6vw, 24px);
+  font-weight: 800;
+  color: #d5f43c;
+  line-height: 1.15;
+  text-align: center;
+  background: rgba(213, 244, 60, 0.12);
+  border-bottom: 1px solid rgba(213, 244, 60, 0.3);
+}
+
+/* Big time field (arrive) */
+.card-time-big {
+  font-size: clamp(28px, 2.6vw, 38px);
+  font-weight: 700;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lunches — stacked list (parallel to programs) */
+.card-lunches {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+.lunch-item {
+  display: flex;
+  flex-direction: column;
+  border-left: 3px solid #d5f43c;
+  padding-left: 8px;
+}
+.lunch-time {
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 700;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.lunch-loc {
+  font-size: clamp(20px, 1.9vw, 26px);
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 1px;
+}
+
+/* Programs — list of mini-rows */
+.card-programs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+.program-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  row-gap: 2px;
+  align-items: baseline;
+  border-left: 3px solid #d5f43c;
+  padding-left: 10px;
+}
+.program-time {
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 700;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.program-name {
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+.program-loc {
+  grid-column: 2 / 3;
+  font-size: clamp(20px, 1.9vw, 26px);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Empty placeholder */
+.empty-cell {
+  font-size: clamp(18px, 1.6vw, 24px);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Empty state */
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(20px, 2vw, 28px);
+  color: #4a5468;
+}
+
+/* Preview banner */
+.preview-banner {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  background: #d4a017;
+  color: #000;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 6px;
+}

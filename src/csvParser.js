@@ -1,14 +1,14 @@
 const { parse } = require('csv-parse/sync');
 
 const COLUMN_MAP = {
-  'BUSINESSPROCESSOUTPUT_PKID': 'id',
+  'QUERYRECID': 'id',
   'Itineraries\\Items\\Start time': 'startTime',
   'Itineraries\\Items\\Name': 'programName',
   'Name': 'groupName',
   'Itineraries\\Items\\Program\\Locations\\Name': 'location',
 };
 
-const KNOWN_LOCATIONS = ['Star Theater Planetarium', 'SCI Live Theater'];
+const KNOWN_LOCATIONS = ['Star Theater Planetarium', 'SCI Live Theater', 'Full Facility', 'Innovation Hallway'];
 
 function parseTimeToISO(timeStr) {
   if (!timeStr) return null;
