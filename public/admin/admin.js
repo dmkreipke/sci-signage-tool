@@ -1,5 +1,8 @@
 let parsedRows = [];
 let managedRows = [];
+let previewWarnings = [];
+let sortState = { column: null, ascending: true };
+let previewSortState = { column: null, ascending: true };
 
 const states = {
   upload: document.getElementById('state-upload'),
@@ -40,7 +43,10 @@ async function uploadFile(file) {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Upload failed');
     parsedRows = data.rows;
+    previewWarnings = data.warnings || [];
+    previewSortState = { column: null, ascending: true };
     renderPreview(data.rows, data.warnings);
+    updatePreviewSortIndicators(null);
     showState('preview');
   } catch (err) {
     uploadError.textContent = err.message;
@@ -72,23 +78,79 @@ function renderPreview(rows, warnings) {
     warningsPanel.hidden = true;
   }
 
-  body.innerHTML = rows.map((row, i) => `
+  const sortedRows = rows.map((row, i) => ({ row, i }));
+  if (previewSortState.column) {
+    sortedRows.sort((a, b) => {
+      let aVal = a.row[previewSortState.column] || '';
+      let bVal = b.row[previewSortState.column] || '';
+      if (previewSortState.column === 'startTime') {
+        aVal = parseTime(aVal);
+        bVal = parseTime(bVal);
+      } else {
+        aVal = String(aVal).toLowerCase();
+        bVal = String(bVal).toLowerCase();
+      }
+      if (aVal < bVal) return previewSortState.ascending ? -1 : 1;
+      if (aVal > bVal) return previewSortState.ascending ? 1 : -1;
+      return 0;
+    });
+  }
+
+  body.innerHTML = sortedRows.map(({ row, i }) => `
     <tr class="${warnSet.has(i) ? 'warn-row' : ''}" data-index="${i}">
       <td contenteditable="true" data-field="startTime">${esc(row.startTime)}</td>
       <td contenteditable="true" data-field="programName">${esc(row.programName)}</td>
       <td contenteditable="true" data-field="groupName">${esc(row.groupName)}</td>
       <td contenteditable="true" data-field="location" class="${!row.location ? 'warn-cell' : ''}">${esc(row.location)}</td>
+      <td><button class="btn-row-remove" data-remove-index="${i}" title="Remove this row">×</button></td>
     </tr>
   `).join('');
+}
 
-  body.addEventListener('input', e => {
-    const td = e.target.closest('td[data-field]');
-    if (!td) return;
-    const tr = td.closest('tr[data-index]');
-    const index = parseInt(tr.dataset.index, 10);
-    parsedRows[index][td.dataset.field] = td.textContent.trim();
+// Preview table header sort
+const previewHeaders = document.querySelectorAll('#preview-table thead th');
+['startTime', 'programName', 'groupName', 'location'].forEach((field, idx) => {
+  previewHeaders[idx].addEventListener('click', () => {
+    if (previewSortState.column === field) {
+      previewSortState.ascending = !previewSortState.ascending;
+    } else {
+      previewSortState.column = field;
+      previewSortState.ascending = true;
+    }
+    updatePreviewSortIndicators(field);
+    renderPreview(parsedRows, previewWarnings);
+  });
+});
+
+function updatePreviewSortIndicators(activeColumn) {
+  const headers = document.querySelectorAll('#preview-table thead th');
+  headers.forEach((th, idx) => {
+    const fields = ['startTime', 'programName', 'groupName', 'location'];
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (fields[idx] === activeColumn) {
+      th.classList.add(previewSortState.ascending ? 'sort-asc' : 'sort-desc');
+    }
   });
 }
+
+document.getElementById('preview-body').addEventListener('input', e => {
+  const td = e.target.closest('td[data-field]');
+  if (!td) return;
+  const tr = td.closest('tr[data-index]');
+  const index = parseInt(tr.dataset.index, 10);
+  parsedRows[index][td.dataset.field] = td.textContent.trim();
+});
+
+document.getElementById('preview-body').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-remove-index]');
+  if (!btn) return;
+  const index = parseInt(btn.dataset.removeIndex, 10);
+  parsedRows.splice(index, 1);
+  previewWarnings = previewWarnings
+    .filter(w => w.rowIndex !== index)
+    .map(w => w.rowIndex > index ? { ...w, rowIndex: w.rowIndex - 1 } : w);
+  renderPreview(parsedRows, previewWarnings);
+});
 
 document.getElementById('btn-reset').addEventListener('click', () => showState('upload'));
 
@@ -166,9 +228,11 @@ async function loadManage() {
     const res = await fetch('/api/schedule');
     const data = await res.json();
     managedRows = data.rows || [];
+    sortState = { column: null, ascending: true };
     document.getElementById('manage-published-at').textContent =
       data.publishedAt ? `Published ${new Date(data.publishedAt).toLocaleString()}` : '';
     renderManageTable();
+    updateSortIndicators(null);
     showState('manage');
   } catch (err) {
     alert(`Failed to load schedule: ${err.message}`);
@@ -180,16 +244,67 @@ async function loadManage() {
 function renderManageTable() {
   document.getElementById('manage-row-count').textContent =
     `${managedRows.length} row${managedRows.length !== 1 ? 's' : ''}`;
+
+  const sortedRows = [...managedRows];
+  if (sortState.column) {
+    sortedRows.sort((a, b) => {
+      let aVal = a[sortState.column] || '';
+      let bVal = b[sortState.column] || '';
+
+      if (sortState.column === 'startTime') {
+        aVal = parseTime(aVal);
+        bVal = parseTime(bVal);
+      } else {
+        aVal = String(aVal).toLowerCase();
+        bVal = String(bVal).toLowerCase();
+      }
+
+      if (aVal < bVal) return sortState.ascending ? -1 : 1;
+      if (aVal > bVal) return sortState.ascending ? 1 : -1;
+      return 0;
+    });
+  }
+
   const body = document.getElementById('manage-body');
-  body.innerHTML = managedRows.map((row, i) => `
-    <tr data-manage-index="${i}" class="${row._new ? 'new-row' : ''}">
+  body.innerHTML = sortedRows.map((row) => {
+    const originalIndex = managedRows.indexOf(row);
+    return `
+    <tr data-manage-index="${originalIndex}" class="${row._new ? 'new-row' : ''}">
       <td contenteditable="true" data-field="startTime">${esc(row.startTime)}</td>
       <td contenteditable="true" data-field="programName">${esc(row.programName)}</td>
       <td contenteditable="true" data-field="groupName">${esc(row.groupName)}</td>
       <td contenteditable="true" data-field="location" class="${!row.location ? 'warn-cell' : ''}">${esc(row.location)}</td>
-      <td><button class="btn-row-remove" data-remove-index="${i}" title="Remove this row">×</button></td>
+      <td><button class="btn-row-remove" data-remove-index="${originalIndex}" title="Remove this row">×</button></td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
+}
+
+// Manage table header sort
+const manageHeaders = document.querySelectorAll('#state-manage table thead th');
+['startTime', 'programName', 'groupName', 'location'].forEach((field, idx) => {
+  manageHeaders[idx].style.cursor = 'pointer';
+  manageHeaders[idx].addEventListener('click', () => {
+    if (sortState.column === field) {
+      sortState.ascending = !sortState.ascending;
+    } else {
+      sortState.column = field;
+      sortState.ascending = true;
+    }
+    updateSortIndicators(field);
+    renderManageTable();
+  });
+});
+
+function updateSortIndicators(activeColumn) {
+  const headers = document.querySelectorAll('#state-manage table thead th');
+  headers.forEach((th, idx) => {
+    const fields = ['startTime', 'programName', 'groupName', 'location'];
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (fields[idx] === activeColumn) {
+      th.classList.add(sortState.ascending ? 'sort-asc' : 'sort-desc');
+    }
+  });
 }
 
 // Single delegated listeners — attached once, not inside renderManageTable
@@ -246,4 +361,16 @@ function blankRow() {
 
 function esc(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function parseTime(timeStr) {
+  if (!timeStr) return '';
+  const match = timeStr.match(/(\d{1,2}):(\d{2})\s?(AM|PM)?/i);
+  if (!match) return timeStr;
+  let hours = parseInt(match[1], 10);
+  const minutes = match[2];
+  const period = match[3] ? match[3].toUpperCase() : '';
+  if (period === 'PM' && hours !== 12) hours += 12;
+  if (period === 'AM' && hours === 12) hours = 0;
+  return String(hours).padStart(2, '0') + ':' + minutes;
 }
