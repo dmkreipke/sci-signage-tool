@@ -1,5 +1,182 @@
 {
-  "publishedAt": "2026-04-22T02:48:03.301Z",
+  "publishedAt": "2026-04-22T03:18:13.947Z",
   "publishedBy": "admin",
-  "rows": []
+  "rows": [
+    {
+      "id": "g-roosevelt",
+      "startTime": "9:30 AM",
+      "startTimeISO": "09:30",
+      "programName": "School SCI Exploration",
+      "groupName": "Roosevelt Elementary",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-roosevelt",
+      "startTime": "11:00 AM",
+      "startTimeISO": "11:00",
+      "programName": "School Lunch",
+      "groupName": "Roosevelt Elementary",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-roosevelt",
+      "startTime": "10:00 PM",
+      "startTimeISO": "22:00",
+      "programName": "Stars of the Pharaohs",
+      "groupName": "Roosevelt Elementary",
+      "location": "Star Theater Planetarium"
+    },
+    {
+      "id": "g-roosevelt",
+      "startTime": "10:10 PM",
+      "startTimeISO": "22:10",
+      "programName": "Amazing Science",
+      "groupName": "Roosevelt Elementary",
+      "location": "SCI Live Theater"
+    },
+    {
+      "id": "g-roosevelt",
+      "startTime": "11:30 PM",
+      "startTimeISO": "23:30",
+      "programName": "Dynamic Earth",
+      "groupName": "Roosevelt Elementary",
+      "location": "Star Theater Planetarium"
+    },
+    {
+      "id": "g-lincoln",
+      "startTime": "9:45 AM",
+      "startTimeISO": "09:45",
+      "programName": "School SCI Exploration",
+      "groupName": "Lincoln Middle School",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-lincoln",
+      "startTime": "11:30 AM",
+      "startTimeISO": "11:30",
+      "programName": "School Lunch",
+      "groupName": "Lincoln Middle School",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-lincoln",
+      "startTime": "10:00 PM",
+      "startTimeISO": "22:00",
+      "programName": "Stars of the Pharaohs",
+      "groupName": "Lincoln Middle School",
+      "location": "Star Theater Planetarium"
+    },
+    {
+      "id": "g-lincoln",
+      "startTime": "10:15 PM",
+      "startTimeISO": "22:15",
+      "programName": "Amazing Science",
+      "groupName": "Lincoln Middle School",
+      "location": "SCI Live Theater"
+    },
+    {
+      "id": "g-washington",
+      "startTime": "10:00 AM",
+      "startTimeISO": "10:00",
+      "programName": "School SCI Exploration",
+      "groupName": "Washington Heights Academy",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-washington",
+      "startTime": "12:15 PM",
+      "startTimeISO": "12:15",
+      "programName": "School Lunch",
+      "groupName": "Washington Heights Academy",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-washington",
+      "startTime": "10:15 PM",
+      "startTimeISO": "22:15",
+      "programName": "Chemistry in Action",
+      "groupName": "Washington Heights Academy",
+      "location": "SCI Live Theater"
+    },
+    {
+      "id": "g-washington",
+      "startTime": "10:15 PM",
+      "startTimeISO": "22:15",
+      "programName": "Black Holes",
+      "groupName": "Washington Heights Academy",
+      "location": "Star Theater Planetarium"
+    },
+    {
+      "id": "g-washington",
+      "startTime": "11:45 PM",
+      "startTimeISO": "23:45",
+      "programName": "Liquid Nitrogen Show",
+      "groupName": "Washington Heights Academy",
+      "location": "SCI Live Theater"
+    },
+    {
+      "id": "g-jefferson",
+      "startTime": "10:15 AM",
+      "startTimeISO": "10:15",
+      "programName": "School SCI Exploration",
+      "groupName": "Jefferson Academy",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-jefferson",
+      "startTime": "12:45 PM",
+      "startTimeISO": "12:45",
+      "programName": "School Lunch",
+      "groupName": "Jefferson Academy",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-jefferson",
+      "startTime": "10:15 PM",
+      "startTimeISO": "22:15",
+      "programName": "Chemistry in Action",
+      "groupName": "Jefferson Academy",
+      "location": "SCI Live Theater"
+    },
+    {
+      "id": "g-jefferson",
+      "startTime": "11:00 PM",
+      "startTimeISO": "23:00",
+      "programName": "Journey to the Stars",
+      "groupName": "Jefferson Academy",
+      "location": "Star Theater Planetarium"
+    },
+    {
+      "id": "g-madison",
+      "startTime": "10:30 AM",
+      "startTimeISO": "10:30",
+      "programName": "School SCI Exploration",
+      "groupName": "Madison Elementary",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-madison",
+      "startTime": "1:00 PM",
+      "startTimeISO": "13:00",
+      "programName": "School Lunch",
+      "groupName": "Madison Elementary",
+      "location": "Full Facility"
+    },
+    {
+      "id": "g-madison",
+      "startTime": "11:00 PM",
+      "startTimeISO": "23:00",
+      "programName": "Journey to the Stars",
+      "groupName": "Madison Elementary",
+      "location": "Star Theater Planetarium"
+    },
+    {
+      "id": "g-madison",
+      "startTime": "11:15 PM",
+      "startTimeISO": "23:15",
+      "programName": "Electricity Live",
+      "groupName": "Madison Elementary",
+      "location": "SCI Live Theater"
+    }
+  ]
 }
