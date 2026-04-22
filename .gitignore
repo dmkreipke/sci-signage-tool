@@ -1,0 +1,11 @@
+# Dependencies — rebuilt by "npm install"
+node_modules/
+
+# Local IDE/tool settings
+.claude/
+
+# Logs
+npm-debug.log*
+
+# Environment variables (secrets)
+.env
