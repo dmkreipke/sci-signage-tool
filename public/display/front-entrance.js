@@ -62,7 +62,7 @@ async function fetchSchedule() {
     lastGroupsJson = newJson;
     groups = data.rows || [];
     render();
-  } catch { /* keep current display on error */ }
+  } catch (e) { /* keep current display on error */ }
 }
 
 // --- Render helpers ---

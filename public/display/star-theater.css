@@ -43,26 +43,44 @@ body {
 /* Header */
 .header {
   text-align: center;
-  padding-bottom: 16px;
+  padding-bottom: 32px;
   flex-shrink: 0;
+  position: relative;
 }
 
 .header .title {
-  font-size: clamp(22px, 4.5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.header .title-main {
+  font-size: clamp(36px, 7vw, 54px);
   color: #00e5ff;
-  text-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
+  text-shadow: 0 0 24px rgba(0, 229, 255, 0.516);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 700;
 }
 
+.header .title-sub {
+  font-size: clamp(26px, 4.5vw, 40px);
+  color: #69f0ae;
+  text-shadow: 0 0 12px rgba(105, 240, 174, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
 .header .clock {
-  font-size: clamp(40px, 8vw, 72px);
+  font-size: clamp(32px, 5vw, 48px);
   font-weight: 700;
   color: #ffffff;
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
   letter-spacing: 0.02em;
   line-height: 1.1;
-  margin-top: 4px;
+  white-space: nowrap;
 }
 
 /* Pinned top cards */
@@ -143,23 +161,28 @@ body {
 }
 
 .progress-label {
-  font-size: clamp(10px, 1.5vw, 13px);
+  font-size: clamp(14px, 2.2vw, 20px);
   color: #8ab0c4;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
 }
 
 .progress-pct {
-  font-size: clamp(10px, 1.5vw, 13px);
+  font-size: clamp(14px, 2.2vw, 20px);
   color: #8ab0c4;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
 }
 
 .progress-track {
   flex: 1;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.12);
+  height: 12px;
+  background: rgba(255, 255, 255, 0.112);
   border-radius: 3px;
   overflow: hidden;
+  margin-top: 3px;
 }
 
 .progress-fill {
@@ -213,12 +236,14 @@ body {
   font-weight: 700;
   color: #ffffff;
   line-height: 1.2;
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.299);
 }
 
 .row-group {
   font-size: clamp(12px, 2vw, 18px);
   color: #b0c4d4;
   margin-top: 2px;
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.299);
 }
 
 .row-time {
@@ -246,7 +271,11 @@ body {
 /* Empty / no-shows */
 .empty-msg {
   text-align: center;
-  color: #4a6070;
-  font-size: clamp(16px, 2.5vw, 22px);
-  padding: 40px 0;
+  color: #ffffff;
+  font-size: clamp(28px, 4.5vw, 40px);
+  padding: 80px 20px;
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
 }

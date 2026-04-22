@@ -90,12 +90,9 @@ function render() {
   const upcoming = PREVIEW_MODE ? allRows : allRows.filter(r => classifyRow(r) === 'upcoming');
 
   if (!PREVIEW_MODE && playing.length === 0 && upcoming.length === 0) {
-    const updatedStr = lastPublishedAt
-      ? ` Last updated: ${new Date(lastPublishedAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}.`
-      : '';
     topCardsEl.innerHTML = '';
     document.getElementById('coming-up-label').innerHTML = '';
-    list.innerHTML = `<div class="empty-msg">All shows have concluded.${updatedStr}</div>`;
+    list.innerHTML = `<div class="empty-msg">All shows have concluded.</div>`;
     resetScroll();
     return;
   }

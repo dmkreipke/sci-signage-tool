@@ -5,7 +5,22 @@
       "Bash(gh auth *)",
       "Bash(gh repo *)",
       "Bash(npm install *)",
-      "Bash(where node *)"
+      "Bash(where node *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(node *)",
+      "Bash(/c/Program Files/nodejs/node.exe *)",
+      "Bash(curl -s -X POST -F \"file=@C:/Users/dan.kreipke/Downloads/newDataFormatExample.csv\" http://localhost:3000/api/schedule/upload)",
+      "Bash('/c/Program Files/nodejs/node.exe' -e ' *)",
+      "Bash(npm start *)",
+      "Bash(ssh *)",
+      "Bash(rsync *)",
+      "Bash(curl -s --max-time 5 \"http://192.168.39.107:3000/api/schedule/front-entrance\")",
+      "Bash(scp *)",
+      "Bash(curl -s \"http://192.168.39.107:3000/display/front-entrance.js\")",
+      "Bash(curl -s \"http://192.168.39.107:3000/display/front-entrance.html\")",
+      "Bash(grep -E '\\\\.\\(css|js|html\\)$')"
     ]
   }
 }
