@@ -81,7 +81,6 @@ body {
   overflow: hidden;
   display: grid;
   grid-template-rows: var(--row-group, 100px) var(--row-lunch, 1fr) var(--row-programs, 2fr);
-  align-items: center;
 }
 
 .sidebar-row {

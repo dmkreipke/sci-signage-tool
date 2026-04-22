@@ -48,7 +48,7 @@ body.theme-star-theater {
 body.theme-sci-live {
   --bg-image: url('assets/group-schedules-bg.png') center center / cover no-repeat;
   --bg-filter: hue-rotate(-25deg) saturate(1.05) brightness(0.92);
-  --bg-overlay: rgba(15, 10, 5, 0.62);
+  --bg-overlay: rgba(15, 10, 5, 0.089);
 
   --accent: #F0C040;
   --accent-glow-title: rgba(240, 192, 64, 0.50);
@@ -265,6 +265,16 @@ body.theme-sci-live {
   font-weight: 700;
   padding: 4px 0 8px 16px;
   flex-shrink: 0;
+}
+
+body.theme-sci-live .title-main {
+  color: var(--subtitle);
+  text-shadow: 0 0 24px var(--subtitle-glow);
+}
+
+body.theme-sci-live .section-label {
+  color: var(--subtitle);
+  text-shadow: 0 0 12px var(--subtitle-glow), 0 2px 6px rgba(0, 0, 0, 0.85);
 }
 
 .row-item {
