@@ -7,7 +7,7 @@ const { filterAndMerge } = require('../src/displayFilter');
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
-const VALID_DISPLAYS = ['star-theater', 'sci-live', 'front-entrance'];
+const VALID_DISPLAYS = ['star-theater', 'sci-live', 'group-schedules'];
 
 router.post('/schedule/upload', upload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });

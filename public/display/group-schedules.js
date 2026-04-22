@@ -54,7 +54,7 @@ function stopScroll() {
 // --- Fetch ---
 async function fetchSchedule() {
   try {
-    const res = await fetch('/api/schedule/front-entrance');
+    const res = await fetch('/api/schedule/group-schedules');
     if (!res.ok) return;
     const data = await res.json();
     const newJson = JSON.stringify(data.rows || []);

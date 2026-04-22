@@ -80,7 +80,7 @@ function aggregateByGroup(rows) {
 }
 
 function filterAndMerge(rows, display) {
-  if (display === 'front-entrance') {
+  if (display === 'group-schedules') {
     return aggregateByGroup(rows);
   }
   const targetLocation = LOCATION_MAP[display];
