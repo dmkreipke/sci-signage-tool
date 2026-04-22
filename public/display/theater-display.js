@@ -1,3 +1,7 @@
+// Shared script for theater displays. Which schedule to fetch is read from
+// <body data-display="..."> on the host page.
+
+const DISPLAY = document.body.dataset.display;
 const POLL_INTERVAL = 60 * 1000;
 const EXPIRY_MINUTES = 20;
 const SCROLL_SPEED = 0.4; // px per frame
@@ -51,7 +55,7 @@ function progressPct(row) {
 // --- Fetch ---
 async function fetchSchedule() {
   try {
-    const res = await fetch('/api/schedule/star-theater');
+    const res = await fetch(`/api/schedule/${DISPLAY}`);
     if (!res.ok) return;
     const data = await res.json();
     allRows = data.rows || [];

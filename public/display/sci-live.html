@@ -2,15 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SCI Live Theater Schedule</title>
-  <style>
-    body { background: #0a0a1a; color: #00e5ff; font-family: 'Segoe UI', Arial, sans-serif;
-           display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    h1 { font-size: 2rem; opacity: 0.5; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>SCI Live Theater Program Schedule</title>
+  <link rel="stylesheet" href="theater-display.css">
 </head>
-<body>
-  <h1>SCI Live Theater Display — Coming Soon</h1>
+<body class="theme-sci-live" data-display="sci-live">
+  <div class="bg"></div>
+  <div class="screen">
+    <div class="header">
+      <div class="title">
+        <div class="title-main">SCI Live Theater</div>
+        <div class="title-sub">Program Schedule</div>
+        <div class="clock" id="clock">--:--:-- --</div>
+      </div>
+    </div>
+    <div id="top-cards"></div>
+    <div id="coming-up-label"></div>
+    <div class="schedule-container" id="schedule-container">
+      <div class="schedule-list" id="schedule-list">
+        <div class="empty-msg">Loading schedule…</div>
+      </div>
+    </div>
+  </div>
   <script src="kiosk-lock.js"></script>
+  <script src="theater-display.js"></script>
 </body>
 </html>

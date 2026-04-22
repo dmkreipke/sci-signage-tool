@@ -1,3 +1,6 @@
+/* Shared stylesheet for theater displays.
+   Per-theme palette is set on <body class="theme-..."> below. */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -16,21 +19,74 @@ body {
   flex-direction: column;
 }
 
-/* Background nebula */
+/* ---------- Themes ---------- */
+
+body.theme-star-theater {
+  --bg-image: url('assets/nebula.jpg') center top / cover no-repeat;
+  --bg-filter: none;
+  --bg-overlay: rgba(0, 0, 0, 0.50);
+
+  --accent: #00e5ff;
+  --accent-glow-title: rgba(0, 229, 255, 0.516);
+  --accent-glow-bar: rgba(0, 229, 255, 0.70);
+  --accent-border: rgba(0, 229, 255, 0.55);
+  --accent-border-soft: rgba(0, 229, 255, 0.2);
+
+  --subtitle: #69f0ae;
+  --subtitle-glow: rgba(105, 240, 174, 0.5);
+
+  --label: #69f0ae;
+  --label-glow: rgba(105, 240, 174, 0.5);
+
+  --card-bg: rgba(10, 15, 30, 0.50);
+  --row-bg: rgba(255, 255, 255, 0.04);
+  --row-border: rgba(255, 255, 255, 0.07);
+
+  --muted: #b0c4d4;
+}
+
+body.theme-sci-live {
+  --bg-image: url('assets/front-entrance-bg.png') center center / cover no-repeat;
+  --bg-filter: hue-rotate(-25deg) saturate(1.05) brightness(0.92);
+  --bg-overlay: rgba(15, 10, 5, 0.62);
+
+  --accent: #F0C040;
+  --accent-glow-title: rgba(240, 192, 64, 0.50);
+  --accent-glow-bar: rgba(240, 192, 64, 0.70);
+  --accent-border: rgba(240, 192, 64, 0.45);
+  --accent-border-soft: rgba(240, 192, 64, 0.25);
+
+  --subtitle: #ffffff;
+  --subtitle-glow: rgba(255, 255, 255, 0.35);
+
+  --label: #F0C040;
+  --label-glow: rgba(240, 192, 64, 0.50);
+
+  --card-bg: rgba(20, 30, 50, 0.88);
+  --row-bg: rgba(20, 30, 50, 0.72);
+  --row-border: rgba(240, 192, 64, 0.18);
+
+  --muted: rgba(255, 255, 255, 0.70);
+}
+
+/* ---------- Background ---------- */
+
 .bg {
   position: fixed;
   inset: 0;
-  background: url('assets/nebula.jpg') center top / cover no-repeat;
+  background: var(--bg-image);
+  filter: var(--bg-filter);
   z-index: 0;
 }
 .bg::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.50);
+  background: var(--bg-overlay);
 }
 
-/* Layout */
+/* ---------- Layout ---------- */
+
 .screen {
   position: relative;
   z-index: 1;
@@ -40,7 +96,8 @@ body {
   padding: 24px 20px 16px;
 }
 
-/* Header */
+/* ---------- Header ---------- */
+
 .header {
   text-align: center;
   padding-bottom: 32px;
@@ -57,8 +114,8 @@ body {
 
 .header .title-main {
   font-size: clamp(36px, 7vw, 54px);
-  color: #00e5ff;
-  text-shadow: 0 0 24px rgba(0, 229, 255, 0.516);
+  color: var(--accent);
+  text-shadow: 0 0 24px var(--accent-glow-title);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 700;
@@ -66,8 +123,8 @@ body {
 
 .header .title-sub {
   font-size: clamp(26px, 4.5vw, 40px);
-  color: #69f0ae;
-  text-shadow: 0 0 12px rgba(105, 240, 174, 0.5);
+  color: var(--subtitle);
+  text-shadow: 0 0 12px var(--subtitle-glow);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 600;
@@ -83,12 +140,12 @@ body {
   white-space: nowrap;
 }
 
-/* Pinned top cards */
+/* ---------- Top cards (Now Playing / Next Up) ---------- */
+
 #top-cards {
   flex-shrink: 0;
 }
 
-/* Schedule container */
 .schedule-container {
   flex: 1;
   overflow: hidden;
@@ -101,10 +158,9 @@ body {
   gap: 0;
 }
 
-/* Cards */
 .card {
-  background: rgba(10, 15, 30, 0.50);
-  border: 1.5px solid rgba(0, 229, 255, 0.55);
+  background: var(--card-bg);
+  border: 1.5px solid var(--accent-border);
   border-radius: 10px;
   padding: 14px 16px;
   margin-bottom: 10px;
@@ -113,8 +169,8 @@ body {
 
 .card-label {
   font-size: clamp(14px, 2vw, 20px);
-  color: #69f0ae;
-  text-shadow: 0 0 12px rgba(105, 240, 174, 0.5);
+  color: var(--label);
+  text-shadow: 0 0 12px var(--label-glow);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 700;
@@ -138,21 +194,22 @@ body {
 
 .card-group {
   font-size: clamp(14px, 2.2vw, 20px);
-  color: #b0c4d4;
+  color: var(--muted);
   flex: 1;
   min-width: 0;
 }
 
 .card-time {
   font-size: clamp(16px, 2.5vw, 22px);
-  color: #69f0ae;
-  text-shadow: 0 0 12px rgba(105, 240, 174, 0.5);
+  color: var(--label);
+  text-shadow: 0 0 12px var(--label-glow);
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* Progress bar */
+/* ---------- Progress bar ---------- */
+
 .progress-row {
   display: flex;
   align-items: center;
@@ -160,17 +217,10 @@ body {
   margin-top: 8px;
 }
 
-.progress-label {
-  font-size: clamp(14px, 2.2vw, 20px);
-  color: #8ab0c4;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-}
-
+.progress-label,
 .progress-pct {
   font-size: clamp(14px, 2.2vw, 20px);
-  color: #8ab0c4;
+  color: var(--muted);
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -187,26 +237,29 @@ body {
 
 .progress-fill {
   height: 100%;
-  background: #00e5ff;
+  background: var(--accent);
   border-radius: 3px;
+  box-shadow: 0 0 10px var(--accent-glow-bar);
   transition: width 1s ease;
 }
 
-/* Next Up card footer */
+/* ---------- Next Up card footer ---------- */
+
 .card-footer {
   text-align: center;
   font-size: clamp(16px, 2.5vw, 20px);
-  color: #a0b8c8;
+  color: var(--muted);
   font-style: italic;
   margin-top: 8px;
   padding-top: 8px;
-  border-top: 1px solid rgba(0, 229, 255, 0.2);
+  border-top: 1px solid var(--accent-border-soft);
 }
 
-/* Coming Up section */
+/* ---------- Coming Up section ---------- */
+
 .section-label {
   font-size: clamp(14px, 2vw, 20px);
-  color: #00e5ff;
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 700;
@@ -219,8 +272,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--row-bg);
+  border: 1px solid var(--row-border);
   border-radius: 8px;
   margin-bottom: 8px;
   flex-shrink: 0;
@@ -241,20 +294,21 @@ body {
 
 .row-group {
   font-size: clamp(12px, 2vw, 18px);
-  color: #b0c4d4;
+  color: var(--muted);
   margin-top: 2px;
   text-shadow: 0 0 16px rgba(0, 0, 0, 0.299);
 }
 
 .row-time {
   font-size: clamp(14px, 2.2vw, 22px);
-  color: #00e5ff;
+  color: var(--accent);
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* Preview mode banner */
+/* ---------- Preview banner ---------- */
+
 .preview-banner {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -268,7 +322,8 @@ body {
   padding: 6px;
 }
 
-/* Empty / no-shows */
+/* ---------- Empty / no-shows ---------- */
+
 .empty-msg {
   text-align: center;
   color: #ffffff;
