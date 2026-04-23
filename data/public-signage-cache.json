@@ -1,0 +1,83 @@
+{
+  "fetchedAt": "2026-04-23T20:37:51.789Z",
+  "forDate": "2026-04-23",
+  "lastSuccessAt": "2026-04-23T20:37:51.789Z",
+  "lastErrorAt": "2026-04-23T18:34:22.276Z",
+  "lastErrorMessage": "fetch failed",
+  "etag": null,
+  "lastModified": null,
+  "events": [
+    {
+      "source": "website",
+      "startTime": "09:30",
+      "endTime": "10:00",
+      "title": "Story Time Under the Stars",
+      "location": "Star Theater Planetarium",
+      "category": "Planetarium",
+      "description": "Our youngest visitors can bring their imaginations as an SCI Programs Team member reads under the starry skies."
+    },
+    {
+      "source": "website",
+      "startTime": "10:30",
+      "endTime": "11:00",
+      "title": "Deep Freeze",
+      "location": "SCI Live Theater",
+      "category": "Live Programs",
+      "description": "Get chills and thrills from cryogenic demonstrations."
+    },
+    {
+      "source": "website",
+      "startTime": "11:30",
+      "endTime": "12:00",
+      "title": "Iowa Skies Tonight",
+      "location": "Star Theater Planetarium",
+      "category": "Planetarium",
+      "description": "Locate constellations and planets, and hear myths of the night sky in this live planetarium program. Program and location subject to change."
+    },
+    {
+      "source": "website",
+      "startTime": "12:30",
+      "endTime": "12:45",
+      "title": "Snapping Turtle Feeding",
+      "location": "What on Earth?",
+      "category": "Live Programs",
+      "description": "Have you ever wondered what Snippy the Snapping Turtle eats? Come check out a feeding demonstration of one of SCI’s most ravenous reptiles! The snapping turtle feeding may be too intense for some visitors."
+    },
+    {
+      "source": "website",
+      "startTime": "13:00",
+      "endTime": "13:30",
+      "title": "Cold Blooded Critters",
+      "location": "SCI Live Theater",
+      "category": "Live Programs",
+      "description": "Meet and get the chance to touch some of SCI’s resident reptiles and amphibians."
+    },
+    {
+      "source": "website",
+      "startTime": "13:30",
+      "endTime": "14:00",
+      "title": "Solar Odyssey: Journey Through Our Cosmic Neighborhood",
+      "location": "Star Theater Planetarium",
+      "category": "Planetarium",
+      "description": "Help guide a breathtaking journey through our solar system, exploring the unique features, mysteries, and wonders of its most important celestial bodies."
+    },
+    {
+      "source": "website",
+      "startTime": "14:30",
+      "endTime": "15:00",
+      "title": "Fire Works",
+      "location": "SCI Live Theater",
+      "category": "Live Programs",
+      "description": "From things that glow to things that explode, this program is a real blast!"
+    },
+    {
+      "source": "website",
+      "startTime": "15:00",
+      "endTime": "15:30",
+      "title": "Phantom of the Universe: The Hunt for Dark Matter",
+      "location": "Star Theater Planetarium",
+      "category": "Planetarium",
+      "description": "This show reveals dark matter's earliest clues, covering the astral choreography of galactic orbits as well as sensitive detectors hidden deep underground in ancient gold mines. Narrated by Tilda Swinton. Program and location subject to change."
+    }
+  ]
+}

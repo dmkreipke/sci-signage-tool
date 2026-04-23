@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SCI — Daily Programs Signage</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Barlow:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="public-signage.css">
+</head>
+<body>
+
+<div id="stage-wrap">
+  <div id="stage" data-screen-label="Public Signage">
+
+    <header class="hdr">
+      <div class="hdr-title">
+        Daily Programs &amp; Events
+      </div>
+      <div class="hdr-right">
+        <div class="clock">
+          <span id="clock-time">—</span>
+          <span class="ampm" id="clock-ampm">—</span>
+        </div>
+      </div>
+    </header>
+
+    <section id="now-area" class="now" style="display:none">
+      <div id="now-cards"></div>
+      <div id="overflow-strip" class="overflow-strip" hidden></div>
+    </section>
+
+    <aside class="qr-rail">
+      <img class="rail-logo" src="assets/sci-logo-green.png" alt="SCI" onerror="this.style.display='none'" />
+      <h2>Today's<em>Full Schedule</em></h2>
+      <div class="divider"></div>
+      <div class="qr-big" id="qr-box"></div>
+      <div class="scan-cta">
+        <div class="big">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+          Scan to view
+        </div>
+        <div class="sub">   </div>
+      </div>
+      <div class="closing-card" id="closing-card" hidden>
+        <div class="closing-kicker">Closes today at</div>
+        <div class="closing-time" id="closing-time-text">—</div>
+      </div>
+    </aside>
+
+    <section id="empty-area" class="empty" style="display:none">
+      <div class="box">
+        <h2 id="empty-head">Coming up next</h2>
+        <p id="empty-sub">The next program begins shortly. Check the scrolling schedule below.</p>
+      </div>
+    </section>
+
+    <section id="done-area" class="empty" style="display:none">
+      <div class="box">
+        <h2>That's a wrap for today</h2>
+        <p>Thanks for visiting the Science Center of Iowa. Scan the QR code on the right for tomorrow's schedule, ticket info, and upcoming special events.</p>
+      </div>
+    </section>
+
+    <section class="upnext" id="upnext">
+      <div class="upnext-head">
+        <div class="l"><span class="bar"></span> Up Next Today</div>
+        <div class="r" id="upnext-count">—</div>
+      </div>
+      <div class="marquee"><div class="track" id="track"></div></div>
+    </section>
+
+    <div class="ticker">
+      <div class="badge">Info</div>
+      <div class="scroll"><span id="ticker-text"></span></div>
+    </div>
+
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script src="public-signage.js"></script>
+</body>
+</html>

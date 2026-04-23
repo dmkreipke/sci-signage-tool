@@ -11,9 +11,11 @@
     <h1>SCI Signage Admin</h1>
     <span id="status-badge" class="badge"></span>
     <div class="header-actions">
-      <button id="btn-upload-header" class="btn-secondary">Upload New File</button>
-      <button id="btn-manage-header" class="btn-secondary">Manage Schedule</button>
-      <button id="btn-wipe" class="btn-danger">Wipe Schedule</button>
+      <button id="btn-public-signage-header" class="btn-secondary btn-secondary-live">Public Schedule</button>
+      <button id="btn-upload-header" class="btn-secondary">Upload Group Schedule</button>
+      <button id="btn-manage-header" class="btn-secondary">Manage Group Schedule</button>
+      <button id="btn-wipe" class="btn-danger">Wipe Group Schedule</button>
+      <button id="btn-theme-toggle" class="btn-secondary" title="Switch to bright mode">&#9728; Bright</button>
     </div>
   </div>
 
@@ -32,6 +34,10 @@
       <span class="display-group-label">Group Schedules</span>
       <a href="/display/group-schedules.html?preview=1" target="_blank" class="btn-pill" title="Preview mode — shows all rows in the schedule regardless of time. Use this to verify your edits before they go live.">Preview</a>
       <a href="/display/group-schedules.html" target="_blank" class="btn-pill btn-pill-live" title="Live view — identical to what is showing on the Group Schedules kiosks right now (only in-progress and upcoming shows; expired shows are hidden).">Live</a>
+    </div>
+    <div class="display-group">
+      <span class="display-group-label">Public Signage</span>
+      <a href="/display/public-signage.html" target="_blank" class="btn-pill btn-pill-live" title="Live view of the public day signage — merged website schedule plus any manual events.">Live</a>
     </div>
   </nav>
 
@@ -138,6 +144,126 @@
           <tbody id="manage-body"></tbody>
         </table>
       </div>
+    </div>
+    <!-- State 6: Public Signage -->
+    <div id="state-public-signage" class="state">
+      <div class="help-text">
+        <strong>Public Day Signage</strong> — Controls the signage kiosk for public-open days.
+        Today's schedule is pulled automatically from
+        <a href="https://sciowa.org/programs-and-events/event-calendar/" target="_blank" style="color:#00e5ff">sciowa.org/event-calendar</a>
+        every 60 seconds. Add <strong>manual events</strong> for programs that can't be published on the website
+        (e.g. Innovation Lab open hours). Edits appear on the kiosk within ~60 seconds.
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar-info">
+          <span id="ps-scrape-status">—</span>
+        </div>
+        <div class="toolbar-actions">
+          <button id="btn-ps-refresh" class="btn-secondary">Refresh from website</button>
+        </div>
+      </div>
+
+      <section class="ps-section">
+        <h3 class="ps-heading">Today's schedule</h3>
+        <div class="help-sub">Merged view of website + manual events for today. This is what the kiosk will show.</div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Source</th>
+                <th>Time</th>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody id="ps-today-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="ps-section">
+        <div class="ps-section-head">
+          <h3 class="ps-heading">Manual events</h3>
+          <button id="btn-ps-add-manual" class="btn-secondary">+ Add manual event</button>
+        </div>
+        <div class="help-sub">
+          Events you want on the kiosk that aren't published to the website.
+          Entries are date-specific — repeat them for each day you want them to show.
+        </div>
+        <div id="ps-manual-list" class="ps-manual-list"></div>
+      </section>
+
+      <section class="ps-section">
+        <h3 class="ps-heading">Dropdown lists</h3>
+        <div class="help-sub">
+          Controls the autocomplete options for the Title, Location, and Category fields
+          in Manual events above. One entry per line.
+        </div>
+        <div class="ps-lists-grid">
+          <label class="ps-field">
+            <span>Titles</span>
+            <textarea id="ps-list-titles" rows="6"></textarea>
+          </label>
+          <label class="ps-field">
+            <span>Locations</span>
+            <textarea id="ps-list-locations" rows="6"></textarea>
+          </label>
+          <label class="ps-field">
+            <span>Categories</span>
+            <textarea id="ps-list-categories" rows="6"></textarea>
+          </label>
+          <div class="ps-field-actions">
+            <span id="ps-lists-status" class="ps-status-note"></span>
+            <button id="btn-ps-save-lists" class="btn-primary">Save lists</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="ps-section">
+        <h3 class="ps-heading">Closing time</h3>
+        <div class="help-sub">
+          The time the Science Center closes today. A "Closes today at…" card will appear
+          on the public display during the final 3 hours before close.
+        </div>
+        <div class="ps-closing-grid">
+          <label class="ps-field">
+            <span>Closing time (24-hour)</span>
+            <input type="time" id="ps-closing-time">
+          </label>
+          <div class="ps-field-actions">
+            <span id="ps-closing-status" class="ps-status-note"></span>
+            <button id="btn-ps-save-closing" class="btn-primary">Save closing time</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="ps-section">
+        <h3 class="ps-heading">Signage text</h3>
+        <div class="ps-text-grid">
+          <label class="ps-field">
+            <span>Ticker text (scrolling footer)</span>
+            <textarea id="ps-ticker" rows="3"></textarea>
+          </label>
+          <label class="ps-field">
+            <span>QR URL (what the QR code encodes)</span>
+            <input type="text" id="ps-qr-url" placeholder="https://www.sciowa.org/programs-and-events/event-calendar/">
+          </label>
+          <label class="ps-field">
+            <span>QR label (displayed under the QR code)</span>
+            <input type="text" id="ps-qr-label" placeholder="sciowa.org/event-calendar">
+          </label>
+          <div class="ps-field-actions">
+            <span id="ps-config-status" class="ps-status-note"></span>
+            <button id="btn-ps-save-config" class="btn-primary">Save signage text</button>
+          </div>
+        </div>
+      </section>
+
+      <datalist id="ps-titles"></datalist>
+      <datalist id="ps-locations"></datalist>
+      <datalist id="ps-categories"></datalist>
     </div>
   </main>
 
