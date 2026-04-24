@@ -559,6 +559,10 @@ function parseTime(timeStr) {
 let psManualLocal = [];   // working copy of manual events (may include unsaved edits)
 let psTodayISO = null;
 
+function psSignature(ev) {
+  return [ev.startTime || '', ev.endTime || '', ev.title || '', ev.location || ''].join('|');
+}
+
 function psTimeTo12(hhmm) {
   if (!hhmm || !/^\d{2}:\d{2}$/.test(hhmm)) return hhmm || '';
   const [h, m] = hhmm.split(':').map(Number);
@@ -609,15 +613,21 @@ function renderPsTodayTable(data) {
   const body = document.getElementById('ps-today-body');
   const events = data.events || [];
   if (events.length === 0) {
-    body.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#8b949e;padding:20px">No events scheduled for today.</td></tr>`;
+    body.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#8b949e;padding:20px">No events scheduled for today.</td></tr>`;
     return;
   }
   body.innerHTML = events.map(ev => {
+    const isWebsite = ev.source !== 'manual';
     const badge = ev.source === 'manual'
       ? `<span class="ps-badge ps-badge-manual">Manual</span>`
       : `<span class="ps-badge ps-badge-website">Website</span>`;
+    const rowClass = isWebsite && ev.hidden ? ' class="ps-row-hidden"' : '';
+    const toggleCell = isWebsite
+      ? `<td><label class="ps-hide-toggle" title="Show on public display"><input type="checkbox" data-ps-hide-sig="${esc(psSignature(ev))}"${ev.hidden ? '' : ' checked'}></label></td>`
+      : `<td style="text-align:center;color:#8b949e">—</td>`;
     return `
-      <tr>
+      <tr${rowClass}>
+        ${toggleCell}
         <td>${badge}</td>
         <td>${esc(psTimeTo12(ev.startTime))} – ${esc(psTimeTo12(ev.endTime))}</td>
         <td>${esc(ev.title)}</td>
@@ -720,6 +730,28 @@ function parsePsList(textareaId) {
 }
 
 // Handlers
+document.getElementById('ps-today-body').addEventListener('change', async e => {
+  const input = e.target.closest('input[data-ps-hide-sig]');
+  if (!input) return;
+  const signature = input.getAttribute('data-ps-hide-sig');
+  const shouldShow = input.checked;
+  const hidden = !shouldShow;
+  const tr = input.closest('tr');
+  if (tr) tr.classList.toggle('ps-row-hidden', hidden);
+  try {
+    const res = await fetch('/api/public-signage/hidden', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date: psTodayISO, signature, hidden }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  } catch (err) {
+    input.checked = shouldShow ? false : true;
+    if (tr) tr.classList.toggle('ps-row-hidden', !hidden);
+    alert(`Failed to update visibility: ${err.message}`);
+  }
+});
+
 document.getElementById('btn-ps-refresh').addEventListener('click', async () => {
   spinner.hidden = false;
   try {

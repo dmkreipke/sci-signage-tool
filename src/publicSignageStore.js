@@ -19,7 +19,31 @@ const DEFAULTS = {
   categories: ['Planetarium', 'Live Programs', 'Special Events'],
   closingTime: '17:00',
   manualEvents: [],
+  hiddenWebsiteEvents: {},
 };
+
+function signatureFor(ev) {
+  return [ev.startTime || '', ev.endTime || '', ev.title || '', ev.location || ''].join('|');
+}
+
+function normalizeHiddenMap(input) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) return {};
+  const out = {};
+  for (const [date, sigs] of Object.entries(input)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;
+    if (!Array.isArray(sigs)) continue;
+    const seen = new Set();
+    const clean = [];
+    for (const s of sigs) {
+      const v = typeof s === 'string' ? s : '';
+      if (!v || seen.has(v)) continue;
+      seen.add(v);
+      clean.push(v);
+    }
+    if (clean.length) out[date] = clean;
+  }
+  return out;
+}
 
 function normalizeList(input) {
   if (!Array.isArray(input)) return null;
@@ -47,6 +71,7 @@ function read() {
       titles: Array.isArray(parsed.titles) ? parsed.titles : DEFAULTS.titles,
       locations: Array.isArray(parsed.locations) ? parsed.locations : DEFAULTS.locations,
       categories: Array.isArray(parsed.categories) ? parsed.categories : DEFAULTS.categories,
+      hiddenWebsiteEvents: normalizeHiddenMap(parsed.hiddenWebsiteEvents),
     };
   } catch {
     return { ...DEFAULTS };
@@ -170,6 +195,34 @@ function manualForDate(iso) {
     .map(({ date, ...rest }) => rest);
 }
 
+function getHiddenSignatures(dateISO) {
+  const data = read();
+  const list = data.hiddenWebsiteEvents[dateISO] || [];
+  return new Set(list);
+}
+
+function setHidden(dateISO, signature, hidden) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateISO)) {
+    return { ok: false, errors: ['date must be YYYY-MM-DD'] };
+  }
+  if (typeof signature !== 'string' || !signature) {
+    return { ok: false, errors: ['signature required'] };
+  }
+  const data = read();
+  const pruned = {};
+  if (Array.isArray(data.hiddenWebsiteEvents[dateISO])) {
+    pruned[dateISO] = data.hiddenWebsiteEvents[dateISO].slice();
+  }
+  const current = new Set(pruned[dateISO] || []);
+  if (hidden) current.add(signature);
+  else current.delete(signature);
+  if (current.size) pruned[dateISO] = Array.from(current);
+  else delete pruned[dateISO];
+  data.hiddenWebsiteEvents = pruned;
+  writeAll(data);
+  return { ok: true };
+}
+
 module.exports = {
   read,
   getConfig,
@@ -179,4 +232,7 @@ module.exports = {
   updateManual,
   removeManual,
   manualForDate,
+  signatureFor,
+  getHiddenSignatures,
+  setHidden,
 };

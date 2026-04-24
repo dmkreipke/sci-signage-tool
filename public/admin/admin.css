@@ -576,6 +576,12 @@ body.bright-mode .ps-field input[type="time"]::-webkit-calendar-picker-indicator
 
 .ps-empty { padding: 20px; text-align: center; color: var(--text-secondary); border: 1px dashed var(--border); border-radius: 8px; }
 
+#ps-today-body td:first-child { text-align: center; }
+.ps-hide-toggle { display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.ps-hide-toggle input { cursor: pointer; width: 18px; height: 18px; accent-color: var(--accent-cyan); margin: 0; }
+#ps-today-body tr.ps-row-hidden td { opacity: 0.45; }
+#ps-today-body tr.ps-row-hidden td:first-child { opacity: 1; }
+
 /* Spinner */
 .spinner-overlay {
   position: fixed;

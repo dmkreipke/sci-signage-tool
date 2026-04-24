@@ -58,7 +58,10 @@ router.get('/public-signage/today', (req, res) => {
   const config = publicStore.getConfig();
   const manual = publicStore.manualForDate(cached.today);
 
-  const website = cached.stale ? [] : cached.events;
+  const hiddenSet = publicStore.getHiddenSignatures(cached.today);
+  const website = cached.stale
+    ? []
+    : cached.events.map(ev => ({ ...ev, hidden: hiddenSet.has(publicStore.signatureFor(ev)) }));
   const merged = [...website, ...manual].sort((a, b) =>
     a.startTime.localeCompare(b.startTime)
   );
@@ -114,6 +117,13 @@ router.patch('/public-signage/manual/:id', (req, res) => {
 router.delete('/public-signage/manual/:id', (req, res) => {
   const result = publicStore.removeManual(req.params.id);
   if (!result.ok) return res.status(404).json({ error: 'not found' });
+  res.json({ ok: true });
+});
+
+router.put('/public-signage/hidden', (req, res) => {
+  const { date, signature, hidden } = req.body || {};
+  const result = publicStore.setHidden(date, signature, Boolean(hidden));
+  if (!result.ok) return res.status(400).json({ error: 'Invalid request', details: result.errors });
   res.json({ ok: true });
 });
 

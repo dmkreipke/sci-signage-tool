@@ -247,7 +247,7 @@ async function fetchData() {
     if (!res.ok) return;
     const data = await res.json();
     currentData = {
-      events: data.events || [],
+      events: (data.events || []).filter(e => !e.hidden),
       config: data.config || currentData.config,
     };
     render();

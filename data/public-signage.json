@@ -1,11 +1,11 @@
 {
-  "publishedAt": "2026-04-24T15:59:20.798Z",
+  "publishedAt": "2026-04-24T18:04:38.947Z",
   "qrUrl": "https://www.sciowa.org/programs-and-events/event-calendar/",
   "qrLabel": "",
   "tickerText": "Welcome to the Science Center of Iowa — Programs run throughout the day, no reservation required for general admission · Planetarium & Live Shows seat on a first-come basis, arrive 5 minutes early · Ask any staff member for today's program locations · Members visit free — join at the A-ha! Store.",
   "titles": [
     "Innovation Lab Open Hours",
-    "An Event"
+    "Open Hours:"
   ],
   "locations": [
     "Star Theater Planetarium",
@@ -31,5 +31,10 @@
       "category": "Live Programs",
       "description": "Come make a robot say swear words!"
     }
-  ]
+  ],
+  "hiddenWebsiteEvents": {
+    "2026-04-24": [
+      "12:00|13:00|WHO H-D Channel 13 Live Weather Forecast|What on Earth?"
+    ]
+  }
 }
