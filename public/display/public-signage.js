@@ -162,7 +162,7 @@ function makeMarqueeCard(ev, isNextUp) {
   const dur = Math.max(0, endMin - startMin);
   const sf = fmt12(startMin);
   const el = document.createElement('div');
-  el.className = 'event-card ' + catClass(ev.category) + (isNextUp ? ' next-up' : '');
+  el.className = 'event-card ' + catClass(ev.category) + (ev.source === 'manual' ? ' manual' : '');
   el.innerHTML = `
     <div class="time-block">
       <div class="t">${sf.pretty}</div>
@@ -184,15 +184,25 @@ function makeMarqueeCard(ev, isNextUp) {
 function renderMarquee(upcoming, anyNowPlaying) {
   const track = document.getElementById('track');
   const countEl = document.getElementById('upnext-count');
+  const headLeft = document.querySelector('.upnext-head .l');
   track.innerHTML = '';
 
   if (upcoming.length === 0) {
     countEl.textContent = anyNowPlaying ? 'Last program of the day' : 'Today’s programs have concluded';
     track.style.animation = 'none';
+    if (headLeft) headLeft.style.display = 'none';
     return;
   }
 
+  if (headLeft) headLeft.style.display = '';
   countEl.textContent = `${upcoming.length} program${upcoming.length === 1 ? '' : 's'} remaining today`;
+
+  if (upcoming.length <= 3) {
+    upcoming.forEach(ev => track.appendChild(makeMarqueeCard(ev)));
+    track.style.animation = 'none';
+    track.style.removeProperty('--half-width');
+    return;
+  }
 
   const copies = Math.max(3, Math.ceil(10 / upcoming.length));
   for (let k = 0; k < copies; k++) {
