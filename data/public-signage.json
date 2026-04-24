@@ -1,34 +1,22 @@
 {
-  "publishedAt": "2026-04-23T20:08:56.257Z",
+  "publishedAt": "2026-04-24T02:11:02.459Z",
   "qrUrl": "https://www.sciowa.org/programs-and-events/event-calendar/",
   "qrLabel": "",
   "tickerText": "Welcome to the Science Center of Iowa — Programs run throughout the day, no reservation required for general admission · Planetarium & Live Shows seat on a first-come basis, arrive 5 minutes early · Ask any staff member for today's program locations · Members visit free — join at the A-ha! Store.",
   "titles": [
-    "Innovation Lab Open Hours"
+    "Innovation Lab Open Hours",
+    "An Event"
   ],
   "locations": [
     "Star Theater Planetarium",
     "SCI Live Theater",
-    "What on Earth?",
-    "Innovation Lab"
+    "What on Earth?"
   ],
   "categories": [
-    "Planetarium",
     "Live Programs",
+    "Planetarium",
     "Special Events"
   ],
   "closingTime": "16:00",
-  "manualEvents": [
-    {
-      "id": "manual-561ee823-3f20-4b44-ad14-22e07c123951",
-      "source": "manual",
-      "date": "2026-04-23",
-      "startTime": "14:03",
-      "endTime": "16:00",
-      "title": "Open Hours: Robots or Whatever",
-      "location": "Innovation Lab",
-      "category": "I duno dude",
-      "description": "Wana come check it out??"
-    }
-  ]
+  "manualEvents": []
 }

@@ -7,15 +7,17 @@ let previewSortState = { column: null, ascending: true };
 // --- Theme ---
 const THEME_KEY = 'sci-admin-theme';
 function applyTheme(theme) {
-  document.body.classList.toggle('bright-mode', theme === 'bright');
-  const btn = document.getElementById('btn-theme-toggle');
-  if (btn) {
-    btn.textContent = theme === 'bright' ? '🌙 Dark' : '☀ Bright';
-    btn.title = theme === 'bright' ? 'Switch to dark mode' : 'Switch to bright mode';
+  const bright = theme === 'bright';
+  document.body.classList.toggle('bright-mode', bright);
+  const sw = document.getElementById('theme-switch');
+  if (sw) {
+    sw.classList.toggle('on', bright);
+    sw.setAttribute('aria-checked', bright ? 'true' : 'false');
+    sw.title = bright ? 'Switch to dark mode' : 'Switch to bright mode';
   }
 }
 applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
-document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+document.getElementById('theme-switch').addEventListener('click', () => {
   const next = document.body.classList.contains('bright-mode') ? 'dark' : 'bright';
   localStorage.setItem(THEME_KEY, next);
   applyTheme(next);
@@ -33,6 +35,39 @@ const states = {
 function showState(name) {
   Object.entries(states).forEach(([key, el]) => el.classList.toggle('active', key === name));
 }
+
+// --- Tabs ---
+const TAB_KEY = 'sci-admin-active-tab';
+const tabPanels = {
+  group: document.getElementById('tab-panel-group'),
+  public: document.getElementById('tab-panel-public'),
+};
+const tabButtons = {
+  group: document.getElementById('tab-group'),
+  public: document.getElementById('tab-public'),
+};
+
+function activateTab(name) {
+  if (!tabPanels[name]) name = 'group';
+  Object.entries(tabPanels).forEach(([key, el]) => el.classList.toggle('active', key === name));
+  Object.entries(tabButtons).forEach(([key, el]) => {
+    el.classList.toggle('active', key === name);
+    el.setAttribute('aria-selected', key === name ? 'true' : 'false');
+  });
+  localStorage.setItem(TAB_KEY, name);
+
+  if (name === 'group') {
+    const groupSubstates = ['upload', 'preview', 'published', 'manage'];
+    const alreadyInGroup = groupSubstates.some(s => states[s]?.classList.contains('active'));
+    if (!alreadyInGroup) loadManage();
+  } else if (name === 'public') {
+    loadPublicSignage();
+  }
+}
+
+Object.entries(tabButtons).forEach(([name, btn]) => {
+  btn.addEventListener('click', () => activateTab(name));
+});
 
 // --- Upload state ---
 const dropZone = document.getElementById('drop-zone');
@@ -207,12 +242,8 @@ document.getElementById('btn-confirm').addEventListener('click', async () => {
 document.getElementById('btn-new').addEventListener('click', () => showState('upload'));
 document.getElementById('btn-manage').addEventListener('click', () => loadManage());
 
-// --- Header buttons ---
-document.getElementById('btn-upload-header').addEventListener('click', () => showState('upload'));
-document.getElementById('btn-manage-header').addEventListener('click', () => loadManage());
-
-// --- Wipe schedule ---
-document.getElementById('btn-wipe').addEventListener('click', async () => {
+// --- Wipe schedule (from within the Manage toolbar) ---
+document.getElementById('btn-manage-wipe').addEventListener('click', async () => {
   if (!confirm('Wipe the published schedule? All displays will go blank until a new CSV is uploaded.')) return;
   spinner.hidden = false;
   try {
@@ -561,8 +592,6 @@ function parsePsList(textareaId) {
 }
 
 // Handlers
-document.getElementById('btn-public-signage-header').addEventListener('click', () => loadPublicSignage());
-
 document.getElementById('btn-ps-refresh').addEventListener('click', async () => {
   spinner.hidden = false;
   try {
@@ -596,7 +625,7 @@ document.getElementById('btn-ps-add-manual').addEventListener('click', () => {
   renderPsManualList();
 });
 
-document.getElementById('ps-manual-list').addEventListener('input', e => {
+function handlePsManualFieldChange(e) {
   const input = e.target.closest('[data-psf]');
   if (!input) return;
   const card = input.closest('[data-ps-index]');
@@ -616,7 +645,9 @@ document.getElementById('ps-manual-list').addEventListener('input', e => {
       }
     }
   }
-});
+}
+document.getElementById('ps-manual-list').addEventListener('input', handlePsManualFieldChange);
+document.getElementById('ps-manual-list').addEventListener('change', handlePsManualFieldChange);
 
 document.getElementById('ps-manual-list').addEventListener('click', async e => {
   const saveBtn = e.target.closest('[data-ps-save]');
@@ -773,3 +804,6 @@ document.getElementById('btn-ps-save-lists').addEventListener('click', async () 
     spinner.hidden = true;
   }
 });
+
+// --- Initial tab activation (runs once all functions are defined) ---
+activateTab(localStorage.getItem(TAB_KEY) || 'group');

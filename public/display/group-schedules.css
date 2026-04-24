@@ -161,14 +161,14 @@ body {
   border-bottom: 1px solid rgba(213, 244, 60, 0.3);
 }
 .card-group-label {
-  font-size: clamp(18px, 1.6vw, 24px);
+  font-size: clamp(20px, 1.85vw, 28px);
   font-weight: 800;
   color: #d5f43c;
   line-height: 1.15;
   text-align: center;
 }
 .card-arrive {
-  font-size: clamp(13px, 1.2vw, 17px);
+  font-size: clamp(15px, 1.35vw, 20px);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.75);
   font-variant-numeric: tabular-nums;

@@ -8,42 +8,46 @@
 </head>
 <body>
   <div class="header">
-    <h1>SCI Signage Admin</h1>
-    <span id="status-badge" class="badge"></span>
-    <div class="header-actions">
-      <button id="btn-public-signage-header" class="btn-secondary btn-secondary-live">Public Schedule</button>
-      <button id="btn-upload-header" class="btn-secondary">Upload Group Schedule</button>
-      <button id="btn-manage-header" class="btn-secondary">Manage Group Schedule</button>
-      <button id="btn-wipe" class="btn-danger">Wipe Group Schedule</button>
-      <button id="btn-theme-toggle" class="btn-secondary" title="Switch to bright mode">&#9728; Bright</button>
+    <div class="header-left">
+      <h1>SCI Signage Admin</h1>
+      <span id="status-badge" class="badge"></span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button id="tab-public" class="tab" role="tab" aria-selected="false" data-tab="public">Public Schedule</button>
+      <button id="tab-group" class="tab" role="tab" aria-selected="false" data-tab="group">Group Schedule</button>
+    </nav>
+    <div class="header-right">
+      <button id="theme-switch" class="theme-switch" role="switch" aria-checked="false" aria-label="Toggle bright mode" title="Switch to bright mode">
+        <span class="theme-switch-icon theme-switch-sun" aria-hidden="true">&#9728;</span>
+        <span class="theme-switch-icon theme-switch-moon" aria-hidden="true">&#127769;</span>
+        <span class="theme-switch-knob" aria-hidden="true"></span>
+      </button>
     </div>
   </div>
 
-  <nav class="display-nav">
-    <div class="display-group">
-      <span class="display-group-label">Star Theater</span>
-      <a href="/display/star-theater.html?preview=1" target="_blank" class="btn-pill" title="Preview mode — shows all rows in the schedule regardless of time. Use this to verify your edits before they go live.">Preview</a>
-      <a href="/display/star-theater.html" target="_blank" class="btn-pill btn-pill-live" title="Live view — identical to what is showing on the Star Theater kiosk right now (only in-progress and upcoming shows; expired shows are hidden).">Live</a>
-    </div>
-    <div class="display-group">
-      <span class="display-group-label">SCI Live</span>
-      <a href="/display/sci-live.html?preview=1" target="_blank" class="btn-pill" title="Preview mode — shows all rows in the schedule regardless of time. Use this to verify your edits before they go live.">Preview</a>
-      <a href="/display/sci-live.html" target="_blank" class="btn-pill btn-pill-live" title="Live view — identical to what is showing on the SCI Live kiosk right now (only in-progress and upcoming shows; expired shows are hidden).">Live</a>
-    </div>
-    <div class="display-group">
-      <span class="display-group-label">Group Schedules</span>
-      <a href="/display/group-schedules.html?preview=1" target="_blank" class="btn-pill" title="Preview mode — shows all rows in the schedule regardless of time. Use this to verify your edits before they go live.">Preview</a>
-      <a href="/display/group-schedules.html" target="_blank" class="btn-pill btn-pill-live" title="Live view — identical to what is showing on the Group Schedules kiosks right now (only in-progress and upcoming shows; expired shows are hidden).">Live</a>
-    </div>
-    <div class="display-group">
-      <span class="display-group-label">Public Signage</span>
-      <a href="/display/public-signage.html" target="_blank" class="btn-pill btn-pill-live" title="Live view of the public day signage — merged website schedule plus any manual events.">Live</a>
-    </div>
-  </nav>
-
   <main>
+    <!-- Group Schedule tab panel (wraps upload/preview/published/manage sub-states) -->
+    <div id="tab-panel-group" class="tab-panel">
+      <nav class="tab-displays">
+        <div class="display-group">
+          <span class="display-group-label">Star Theater</span>
+          <a href="/display/star-theater.html?preview=1" target="_blank" class="btn-pill" title="Preview mode — shows all rows in the schedule regardless of time. Use this to verify your edits before they go live.">Preview</a>
+          <a href="/display/star-theater.html" target="_blank" class="btn-pill btn-pill-live" title="Live view — identical to what is showing on the Star Theater kiosk right now (only in-progress and upcoming shows; expired shows are hidden).">Live View</a>
+        </div>
+        <div class="display-group">
+          <span class="display-group-label">SCI Live</span>
+          <a href="/display/sci-live.html?preview=1" target="_blank" class="btn-pill" title="Preview mode — shows all rows in the schedule regardless of time. Use this to verify your edits before they go live.">Preview</a>
+          <a href="/display/sci-live.html" target="_blank" class="btn-pill btn-pill-live" title="Live view — identical to what is showing on the SCI Live kiosk right now (only in-progress and upcoming shows; expired shows are hidden).">Live View</a>
+        </div>
+        <div class="display-group">
+          <span class="display-group-label">Group Schedules</span>
+          <a href="/display/group-schedules.html?preview=1" target="_blank" class="btn-pill" title="Preview mode — shows all rows in the schedule regardless of time. Use this to verify your edits before they go live.">Preview</a>
+          <a href="/display/group-schedules.html" target="_blank" class="btn-pill btn-pill-live" title="Live view — identical to what is showing on the Group Schedules kiosks right now (only in-progress and upcoming shows; expired shows are hidden).">Live View</a>
+        </div>
+      </nav>
+
     <!-- State 1: Upload -->
-    <div id="state-upload" class="state active">
+    <div id="state-upload" class="state">
       <div id="drop-zone" class="drop-zone">
         <div class="drop-icon">📂</div>
         <p>Drag & drop your Altru CSV export here</p>
@@ -86,18 +90,6 @@
       </div>
     </div>
 
-    <!-- State 3: Confirm -->
-    <div id="state-confirm" class="state">
-      <div class="modal-card">
-        <h2>Publish Schedule?</h2>
-        <p id="confirm-msg"></p>
-        <div class="modal-actions">
-          <button id="btn-cancel" class="btn-secondary">Cancel</button>
-          <button id="btn-confirm" class="btn-primary">Yes, Publish</button>
-        </div>
-      </div>
-    </div>
-
     <!-- State 4: Published -->
     <div id="state-published" class="state">
       <div class="success-card">
@@ -127,6 +119,7 @@
         <div class="toolbar-actions">
           <button id="btn-manage-add-row" class="btn-secondary">+ Add Row</button>
           <button id="btn-manage-upload" class="btn-secondary">Upload New File</button>
+          <button id="btn-manage-wipe" class="btn-danger">Wipe Schedule</button>
           <button id="btn-manage-save" class="btn-primary">Push Changes</button>
         </div>
       </div>
@@ -145,6 +138,18 @@
         </table>
       </div>
     </div>
+    </div>
+    <!-- End Group Schedule tab panel -->
+
+    <!-- Public Schedule tab panel -->
+    <div id="tab-panel-public" class="tab-panel">
+      <nav class="tab-displays">
+        <div class="display-group">
+          <span class="display-group-label">Public Signage</span>
+          <a href="/display/public-signage.html" target="_blank" class="btn-pill btn-pill-live" title="Live view of the public day signage — merged website schedule plus any manual events.">Live View</a>
+        </div>
+      </nav>
+
     <!-- State 6: Public Signage -->
     <div id="state-public-signage" class="state">
       <div class="help-text">
@@ -265,7 +270,21 @@
       <datalist id="ps-locations"></datalist>
       <datalist id="ps-categories"></datalist>
     </div>
+    </div>
+    <!-- End Public Schedule tab panel -->
   </main>
+
+  <!-- State 3: Confirm (modal overlay, lives outside tab panels) -->
+  <div id="state-confirm" class="state">
+    <div class="modal-card">
+      <h2>Publish Schedule?</h2>
+      <p id="confirm-msg"></p>
+      <div class="modal-actions">
+        <button id="btn-cancel" class="btn-secondary">Cancel</button>
+        <button id="btn-confirm" class="btn-primary">Yes, Publish</button>
+      </div>
+    </div>
+  </div>
 
   <div id="spinner" class="spinner-overlay" hidden>
     <div class="spinner"></div>

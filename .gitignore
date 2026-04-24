@@ -9,3 +9,6 @@ npm-debug.log*
 
 # Environment variables (secrets)
 .env
+
+# dev tools and docs
+forHumans/

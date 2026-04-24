@@ -46,7 +46,8 @@ body {
 }
 
 .header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 16px;
   padding: 16px 32px;
@@ -54,22 +55,102 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.header h1 { font-size: 1.4rem; color: var(--accent-cyan); }
-
-.header-actions {
-  margin-left: auto;
+.header-left {
   display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   gap: 12px;
 }
 
-/* Display nav (preview/live links, persistent on every page) */
-.display-nav {
+.header h1 { font-size: 1.4rem; color: var(--accent-cyan); }
+
+/* Primary section tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  justify-self: center;
+}
+
+.tab {
+  padding: 8px 22px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.tab:hover { color: var(--text-primary); border-color: var(--accent-cyan); }
+.tab.active {
+  background: var(--accent-cyan);
+  color: var(--btn-primary-text);
+  border-color: var(--accent-cyan);
+}
+
+/* Theme switch */
+.theme-switch {
+  position: relative;
+  width: 60px;
+  height: 28px;
+  padding: 0;
+  border-radius: 999px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.2s, border-color 0.2s;
+}
+.theme-switch:hover { border-color: var(--accent-cyan); }
+.theme-switch-icon {
+  width: 28px;
+  font-size: 0.85rem;
+  line-height: 1;
+  text-align: center;
+  color: var(--text-secondary);
+  pointer-events: none;
+  z-index: 1;
+}
+.theme-switch-sun { color: var(--accent-gold); }
+.theme-switch-moon { color: var(--text-secondary); }
+.theme-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease;
+}
+.theme-switch.on .theme-switch-knob {
+  transform: translateX(32px);
+}
+
+/* Per-tab displays row */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.tab-displays {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  padding: 14px 32px;
-  background: var(--bg-input);
-  border-bottom: 1px solid var(--border);
+  padding: 12px 18px;
+  margin-bottom: 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
 }
 
 .display-group {

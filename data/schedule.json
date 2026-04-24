@@ -1,5 +1,5 @@
 {
-  "publishedAt": "2026-04-22T13:45:14.434Z",
+  "publishedAt": "2026-04-24T02:18:30.726Z",
   "publishedBy": "admin",
   "rows": [
     {
@@ -379,22 +379,6 @@
       "startTimeISO": "23:30"
     },
     {
-      "startTime": "11:30 PM",
-      "programName": "Solar System Adventure",
-      "groupName": "Polk Night Owls Camp",
-      "location": "Star Theater Planetarium",
-      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
-      "startTimeISO": "23:30"
-    },
-    {
-      "startTime": "12:30 AM",
-      "programName": "Night Sky Tour",
-      "groupName": "Polk Night Owls Camp",
-      "location": "Star Theater Planetarium",
-      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
-      "startTimeISO": "00:30"
-    },
-    {
       "startTime": "1:30 AM",
       "programName": "Iowa Skies Tonight",
       "groupName": "Polk Night Owls Camp",
@@ -417,30 +401,6 @@
       "location": "Star Theater Planetarium",
       "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
       "startTimeISO": "03:30"
-    },
-    {
-      "startTime": "5:00 AM",
-      "programName": "Wonder of Water",
-      "groupName": "Polk Night Owls Camp",
-      "location": "Full Facility",
-      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
-      "startTimeISO": "05:00"
-    },
-    {
-      "startTime": "6:30 AM",
-      "programName": "SCI Live Show",
-      "groupName": "Polk Night Owls Camp",
-      "location": "SCI Live Theater",
-      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
-      "startTimeISO": "06:30"
-    },
-    {
-      "startTime": "7:30 AM",
-      "programName": "Meet Stuffee Program",
-      "groupName": "Polk Night Owls Camp",
-      "location": "Star Theater Planetarium",
-      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
-      "startTimeISO": "07:30"
     }
   ]
 }
