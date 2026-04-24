@@ -23,6 +23,134 @@ document.getElementById('theme-switch').addEventListener('click', () => {
   applyTheme(next);
 });
 
+// --- Time override (preview displays at a specific time, this browser only) ---
+const TIME_OVERRIDE_KEY = 'sciTimeOverride';
+const TIME_OVERRIDE_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+
+const toEl = {
+  root: document.getElementById('time-override'),
+  pill: document.getElementById('time-override-pill'),
+  label: document.getElementById('time-override-label'),
+  popover: document.getElementById('time-override-popover'),
+  enabled: document.getElementById('time-override-enabled'),
+  input: document.getElementById('time-override-input'),
+  btnNow: document.getElementById('time-override-now'),
+  btnClear: document.getElementById('time-override-clear'),
+};
+
+function readTimeOverride() {
+  try {
+    const raw = localStorage.getItem(TIME_OVERRIDE_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s || !s.enabled) return null;
+    if (!/^\d{2}:\d{2}$/.test(s.anchorDisplayTime || '')) return null;
+    if (typeof s.anchorRealTime !== 'number') return null;
+    if (Date.now() - s.anchorRealTime > TIME_OVERRIDE_MAX_AGE_MS) return null;
+    return s;
+  } catch { return null; }
+}
+
+function computeVirtualHHMM(state) {
+  const [h, m] = state.anchorDisplayTime.split(':').map(Number);
+  const anchorDisplay = new Date(state.anchorRealTime);
+  anchorDisplay.setHours(h, m, 0, 0);
+  const virtual = new Date(anchorDisplay.getTime() + (Date.now() - state.anchorRealTime));
+  return `${String(virtual.getHours()).padStart(2, '0')}:${String(virtual.getMinutes()).padStart(2, '0')}`;
+}
+
+function refreshTimeOverridePill() {
+  const state = readTimeOverride();
+  if (state) {
+    toEl.pill.classList.add('active');
+    toEl.label.textContent = `Time: ${computeVirtualHHMM(state)}`;
+  } else {
+    toEl.pill.classList.remove('active');
+    toEl.label.textContent = 'Time: LIVE';
+  }
+}
+
+function loadTimeOverrideIntoForm() {
+  const state = readTimeOverride();
+  if (state) {
+    toEl.enabled.checked = true;
+    toEl.input.value = computeVirtualHHMM(state);
+  } else {
+    toEl.enabled.checked = false;
+    const raw = localStorage.getItem(TIME_OVERRIDE_KEY);
+    if (raw) {
+      try {
+        const s = JSON.parse(raw);
+        if (s && /^\d{2}:\d{2}$/.test(s.anchorDisplayTime || '')) {
+          toEl.input.value = s.anchorDisplayTime;
+          return;
+        }
+      } catch { /* ignore */ }
+    }
+    const now = new Date();
+    toEl.input.value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  }
+}
+
+function writeTimeOverride(enabled, hhmm) {
+  const payload = {
+    enabled: !!enabled,
+    anchorDisplayTime: /^\d{2}:\d{2}$/.test(hhmm) ? hhmm : '12:00',
+    anchorRealTime: Date.now(),
+  };
+  localStorage.setItem(TIME_OVERRIDE_KEY, JSON.stringify(payload));
+  if (typeof window.__timeOverrideNotify === 'function') window.__timeOverrideNotify();
+  refreshTimeOverridePill();
+}
+
+function clearTimeOverride() {
+  localStorage.removeItem(TIME_OVERRIDE_KEY);
+  if (typeof window.__timeOverrideNotify === 'function') window.__timeOverrideNotify();
+  refreshTimeOverridePill();
+}
+
+function setPopoverOpen(open) {
+  toEl.popover.hidden = !open;
+  toEl.pill.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) loadTimeOverrideIntoForm();
+}
+
+toEl.pill.addEventListener('click', (e) => {
+  e.stopPropagation();
+  setPopoverOpen(toEl.popover.hidden);
+});
+
+toEl.enabled.addEventListener('change', () => {
+  writeTimeOverride(toEl.enabled.checked, toEl.input.value);
+});
+
+toEl.input.addEventListener('change', () => {
+  writeTimeOverride(toEl.enabled.checked, toEl.input.value);
+});
+
+toEl.btnNow.addEventListener('click', () => {
+  const now = new Date();
+  toEl.input.value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  writeTimeOverride(toEl.enabled.checked, toEl.input.value);
+});
+
+toEl.btnClear.addEventListener('click', () => {
+  toEl.enabled.checked = false;
+  clearTimeOverride();
+});
+
+document.addEventListener('click', (e) => {
+  if (toEl.popover.hidden) return;
+  if (!toEl.root.contains(e.target)) setPopoverOpen(false);
+});
+
+window.addEventListener('storage', (e) => {
+  if (e.key === TIME_OVERRIDE_KEY || e.key === null) refreshTimeOverridePill();
+});
+
+refreshTimeOverridePill();
+setInterval(refreshTimeOverridePill, 1000);
+
 const states = {
   upload: document.getElementById('state-upload'),
   preview: document.getElementById('state-preview'),

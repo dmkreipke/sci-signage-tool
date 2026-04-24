@@ -17,7 +17,7 @@ let scrollOffset = 0;
 
 // --- Clock ---
 function updateClock() {
-  const now = new Date();
+  const now = window.__nowDate();
   let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
   const period = h >= 12 ? 'PM' : 'AM';
   h = h % 12 || 12;
@@ -34,7 +34,7 @@ function isoToMinutes(iso) {
 }
 
 function nowMinutes() {
-  const now = new Date();
+  const now = window.__nowDate();
   return now.getHours() * 60 + now.getMinutes();
 }
 
@@ -221,3 +221,4 @@ setInterval(() => {
   fetchSchedule();
   render(); // re-render in place to update progress bar and expiry without waiting for next fetch
 }, POLL_INTERVAL);
+window.addEventListener('timeoverridechange', () => { updateClock(); render(); });

@@ -138,6 +138,119 @@ body {
   transform: translateX(32px);
 }
 
+/* Time override */
+.time-override { position: relative; display: inline-flex; align-items: center; }
+
+.time-override-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.time-override-pill:hover { color: var(--text-primary); border-color: var(--accent-cyan); }
+
+.time-override-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--accent-green) 60%, transparent);
+}
+
+.time-override-pill.active {
+  color: var(--btn-primary-text);
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+.time-override-pill.active .time-override-dot {
+  background: var(--btn-primary-text);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--btn-primary-text) 60%, transparent);
+  animation: time-override-pulse 1.4s ease-in-out infinite;
+}
+@keyframes time-override-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.time-override-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 280px;
+  padding: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.time-override-head {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+}
+.time-override-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-top: -6px;
+}
+
+.time-override-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+.time-override-row input[type="checkbox"] { accent-color: var(--accent-cyan); width: 16px; height: 16px; cursor: pointer; }
+.time-override-row-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  min-width: 40px;
+}
+.time-override-row input[type="time"] {
+  flex: 1;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+.time-override-row input[type="time"]:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 0 1px var(--accent-cyan) inset; }
+.time-override-row input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+body.bright-mode .time-override-row input[type="time"]::-webkit-calendar-picker-indicator { filter: none; }
+
+.time-override-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+.time-override-actions .btn-secondary {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
 /* Per-tab displays row */
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }

@@ -22,11 +22,11 @@ function fmt12(totMin) {
   return { h, m, ampm, pretty: `${h}:${String(m).padStart(2, '0')}` };
 }
 function nowMinutes() {
-  const d = new Date();
+  const d = window.__nowDate();
   return d.getHours() * 60 + d.getMinutes();
 }
 function dayName() {
-  return ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'][new Date().getDay()];
+  return ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'][window.__nowDate().getDay()];
 }
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -270,3 +270,4 @@ fetchData();
 setInterval(fetchData, POLL_INTERVAL_MS);
 setInterval(render, 15000);
 setInterval(renderClock, CLOCK_TICK_MS);
+window.addEventListener('timeoverridechange', () => { renderClock(); render(); });

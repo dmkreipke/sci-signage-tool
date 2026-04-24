@@ -17,6 +17,32 @@
       <button id="tab-group" class="tab" role="tab" aria-selected="false" data-tab="group">Group Schedule</button>
     </nav>
     <div class="header-right">
+      <div class="time-override" id="time-override">
+        <button id="time-override-pill" class="time-override-pill" type="button"
+                aria-expanded="false" aria-controls="time-override-popover"
+                title="Preview displays at a specific time (this browser only)">
+          <span class="time-override-dot" aria-hidden="true"></span>
+          <span id="time-override-label">Time: LIVE</span>
+        </button>
+        <div id="time-override-popover" class="time-override-popover" hidden>
+          <div class="time-override-head">Display time override</div>
+          <div class="time-override-sub">
+            Only affects displays opened in this browser. Advances naturally once set.
+          </div>
+          <label class="time-override-row">
+            <input type="checkbox" id="time-override-enabled">
+            <span>Enable override</span>
+          </label>
+          <label class="time-override-row">
+            <span class="time-override-row-label">Time</span>
+            <input type="time" id="time-override-input" value="12:00">
+          </label>
+          <div class="time-override-actions">
+            <button id="time-override-now" class="btn-secondary" type="button">Use current time</button>
+            <button id="time-override-clear" class="btn-secondary" type="button">Clear</button>
+          </div>
+        </div>
+      </div>
       <button id="theme-switch" class="theme-switch" role="switch" aria-checked="false" aria-label="Toggle bright mode" title="Switch to bright mode">
         <span class="theme-switch-icon theme-switch-sun" aria-hidden="true">&#9728;</span>
         <span class="theme-switch-icon theme-switch-moon" aria-hidden="true">&#127769;</span>

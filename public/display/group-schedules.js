@@ -11,7 +11,7 @@ let lastTime = null;
 
 // --- Clock ---
 function updateClock() {
-  const now = new Date();
+  const now = window.__nowDate();
   let h = now.getHours();
   const m = now.getMinutes();
   const period = h >= 12 ? 'PM' : 'AM';
@@ -21,6 +21,7 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
+window.addEventListener('timeoverridechange', updateClock);
 
 // --- Preview banner ---
 if (PREVIEW_MODE) {
