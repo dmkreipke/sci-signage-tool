@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-04-24T18:11:38.833Z",
-  "forDate": "2026-04-24",
-  "lastSuccessAt": "2026-04-24T18:11:38.833Z",
-  "lastErrorAt": "2026-04-24T16:40:11.285Z",
+  "fetchedAt": "2026-04-25T19:31:21.585Z",
+  "forDate": "2026-04-25",
+  "lastSuccessAt": "2026-04-25T19:31:21.585Z",
+  "lastErrorAt": "2026-04-24T22:54:11.660Z",
   "lastErrorMessage": "fetch failed",
   "etag": null,
   "lastModified": null,
@@ -10,7 +10,7 @@
     {
       "source": "website",
       "startTime": "09:30",
-      "endTime": "10:00",
+      "endTime": "09:50",
       "title": "Story Time Under the Stars",
       "location": "Star Theater Planetarium",
       "category": "Planetarium",
@@ -19,16 +19,16 @@
     {
       "source": "website",
       "startTime": "10:30",
-      "endTime": "11:00",
-      "title": "Deep Freeze",
+      "endTime": "10:50",
+      "title": "Making Waves",
       "location": "SCI Live Theater",
       "category": "Live Programs",
-      "description": "Get chills and thrills from cryogenic demonstrations."
+      "description": "Discover how waves govern everything from the tiniest particles to the fabric of spacetime itself! This interactive program brings science to life with dancing flames, levitating superconductors, and a symphony of electricity."
     },
     {
       "source": "website",
       "startTime": "11:30",
-      "endTime": "12:00",
+      "endTime": "11:50",
       "title": "Solar Odyssey: Journey Through Our Cosmic Neighborhood",
       "location": "Star Theater Planetarium",
       "category": "Planetarium",
@@ -37,16 +37,7 @@
     {
       "source": "website",
       "startTime": "12:00",
-      "endTime": "13:00",
-      "title": "WHO H-D Channel 13 Live Weather Forecast",
-      "location": "What on Earth?",
-      "category": "Live Programs",
-      "description": "Here’s your chance to help a WHO-HD Channel 13 meteorologist give today’s live forecast as you learn about weather! Subject to change due to severe weather or technical difficulties."
-    },
-    {
-      "source": "website",
-      "startTime": "13:00",
-      "endTime": "13:15",
+      "endTime": "12:10",
       "title": "Snapping Turtle Feeding",
       "location": "What on Earth?",
       "category": "Live Programs",
@@ -54,8 +45,8 @@
     },
     {
       "source": "website",
-      "startTime": "13:30",
-      "endTime": "14:00",
+      "startTime": "13:00",
+      "endTime": "13:20",
       "title": "Iowa Skies Tonight",
       "location": "Star Theater Planetarium",
       "category": "Planetarium",
@@ -63,8 +54,17 @@
     },
     {
       "source": "website",
-      "startTime": "14:00",
-      "endTime": "14:30",
+      "startTime": "13:30",
+      "endTime": "13:50",
+      "title": "Cold Blooded Critters",
+      "location": "SCI Live Theater",
+      "category": "Live Programs",
+      "description": "Meet and get the chance to touch some of SCI’s resident reptiles and amphibians."
+    },
+    {
+      "source": "website",
+      "startTime": "14:30",
+      "endTime": "14:50",
       "title": "Fire Works",
       "location": "SCI Live Theater",
       "category": "Live Programs",
@@ -74,10 +74,10 @@
       "source": "website",
       "startTime": "15:00",
       "endTime": "15:30",
-      "title": "Black Holes: The Other Side of Infinity",
+      "title": "Phantom of the Universe: The Hunt for Dark Matter",
       "location": "Star Theater Planetarium",
       "category": "Planetarium",
-      "description": "Experience one of the most mysterious — and misunderstood — wonders of the Universe. Narrated by Liam Neeson. Sponsored by NASA. Program and location subject to change."
+      "description": "This show reveals dark matter's earliest clues, covering the astral choreography of galactic orbits and sensitive detectors hidden deep underground. Program and location subject to change."
     },
     {
       "source": "website",

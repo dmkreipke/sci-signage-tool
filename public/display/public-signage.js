@@ -1,5 +1,6 @@
 const POLL_INTERVAL_MS = 60 * 1000;
 const CLOCK_TICK_MS = 1000;
+const NEXT_UP_LOOKAHEAD_MIN = 45;
 
 let currentData = {
   events: [],
@@ -101,46 +102,97 @@ function makeNowCard(ev) {
   return el;
 }
 
+function makeNextUpCard(ev) {
+  const startMin = toMin(ev.startTime);
+  const endMin = toMin(ev.endTime);
+  const minsUntil = Math.max(0, startMin - nowMinutes());
+  const sf = fmt12(startMin);
+  const ef = fmt12(endMin);
+  const countdown = minsUntil < 1
+    ? 'Starting soon'
+    : `starts in ${minsUntil} minute${minsUntil === 1 ? '' : 's'}`;
+  const el = document.createElement('div');
+  el.className = 'now-card next-up-card ' + catClass(ev.category);
+  el.innerHTML = `
+    <div class="now-kicker"><span class="bar"></span> Next Up <span class="accent-dots"><i></i><i></i></span></div>
+    <div class="now-title">${esc(ev.title)}</div>
+    <div class="now-meta">
+      <div class="item"><span class="label">Location</span><span class="value">${esc(ev.location)}</span></div>
+      <div class="item"><span class="label">Starts</span><span class="value">${sf.pretty} ${sf.ampm}</span></div>
+      <div class="item"><span class="label">Ends</span><span class="value">${ef.pretty} ${ef.ampm}</span></div>
+    </div>
+    ${ev.description ? `<p class="now-desc">${esc(ev.description)}</p>` : ''}
+    <div class="prog-wrap">
+      <div class="prog-top">
+        <span class="l">Up next</span>
+        <span class="r">${countdown}</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" style="width:0%"></div></div>
+    </div>
+  `;
+  return el;
+}
+
+function fitNowTitle(titleEl, isCompact) {
+  const sizes = isCompact ? [56, 48, 42, 38, 34] : [96, 84, 72, 64, 56, 48];
+  for (const size of sizes) {
+    titleEl.style.fontSize = size + 'px';
+    if (titleEl.offsetHeight <= size * 0.92 * 2 + 2) return;
+  }
+  titleEl.style.display = '-webkit-box';
+  titleEl.style.webkitLineClamp = '2';
+  titleEl.style.webkitBoxOrient = 'vertical';
+  titleEl.style.overflow = 'hidden';
+}
+
 function renderNowArea(current, upcoming) {
   const area = document.getElementById('now-area');
-  const emptyArea = document.getElementById('empty-area');
   const doneArea = document.getElementById('done-area');
   const cardsEl = document.getElementById('now-cards');
   const overflowEl = document.getElementById('overflow-strip');
 
+  area.classList.remove('now-1up', 'now-2up', 'now-upcoming-only');
+
   if (current.length === 0 && upcoming.length === 0) {
     area.style.display = 'none';
-    emptyArea.style.display = 'none';
     doneArea.style.display = 'grid';
     return;
   }
 
   if (current.length === 0) {
-    area.style.display = 'none';
-    emptyArea.style.display = 'grid';
+    area.style.display = 'flex';
     doneArea.style.display = 'none';
-    const next = upcoming[0];
-    const sf = fmt12(toMin(next.startTime));
-    const mins = toMin(next.startTime) - nowMinutes();
-    document.getElementById('empty-head').textContent = next.title;
-    document.getElementById('empty-sub').textContent =
-      `Starts at ${sf.pretty} ${sf.ampm} in ${next.location} — in ${mins} minute${mins === 1 ? '' : 's'}.`;
+    area.classList.add('now-1up', 'now-upcoming-only');
+    cardsEl.innerHTML = '';
+    cardsEl.appendChild(makeNextUpCard(upcoming[0]));
+    overflowEl.hidden = true;
+    overflowEl.innerHTML = '';
+    requestAnimationFrame(() => {
+      cardsEl.querySelectorAll('.now-title').forEach(t => fitNowTitle(t, false));
+    });
     return;
   }
 
   area.style.display = 'flex';
-  emptyArea.style.display = 'none';
   doneArea.style.display = 'none';
 
   const sorted = [...current].sort((a, b) => toMin(b.endTime) - toMin(a.endTime));
   const primary = sorted.slice(0, 2);
   const overflow = sorted.slice(2);
 
-  area.classList.toggle('now-1up', primary.length === 1);
-  area.classList.toggle('now-2up', primary.length === 2);
+  const nextEvent = upcoming[0];
+  const showNextUp =
+    primary.length === 1 &&
+    !!nextEvent &&
+    (toMin(nextEvent.startTime) - nowMinutes()) <= NEXT_UP_LOOKAHEAD_MIN;
+
+  const totalCards = primary.length + (showNextUp ? 1 : 0);
+  area.classList.toggle('now-1up', totalCards === 1);
+  area.classList.toggle('now-2up', totalCards === 2);
 
   cardsEl.innerHTML = '';
   primary.forEach(ev => cardsEl.appendChild(makeNowCard(ev)));
+  if (showNextUp) cardsEl.appendChild(makeNextUpCard(nextEvent));
 
   if (overflow.length > 0) {
     overflowEl.hidden = false;
@@ -154,6 +206,11 @@ function renderNowArea(current, upcoming) {
     overflowEl.hidden = true;
     overflowEl.innerHTML = '';
   }
+
+  requestAnimationFrame(() => {
+    const isCompact = area.classList.contains('now-2up');
+    cardsEl.querySelectorAll('.now-title').forEach(t => fitNowTitle(t, isCompact));
+  });
 }
 
 function makeMarqueeCard(ev, isNextUp) {
@@ -276,7 +333,7 @@ window.addEventListener('resize', fitStage);
 
 fitStage();
 renderClock();
-fetchData();
+(document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fetchData);
 setInterval(fetchData, POLL_INTERVAL_MS);
 setInterval(render, 15000);
 setInterval(renderClock, CLOCK_TICK_MS);

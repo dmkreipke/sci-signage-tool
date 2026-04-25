@@ -1,5 +1,422 @@
 {
-  "publishedAt": "2026-04-24T02:52:26.135Z",
+  "publishedAt": "2026-04-24T18:39:16.086Z",
   "publishedBy": "admin",
-  "rows": []
+  "rows": [
+    {
+      "startTime": "8:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Jefferson Elementary School",
+      "location": "Full Facility",
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567001",
+      "startTimeISO": "08:00"
+    },
+    {
+      "startTime": "9:00 AM",
+      "programName": "Meet Stuffee Program",
+      "groupName": "Jefferson Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567001",
+      "startTimeISO": "09:00"
+    },
+    {
+      "startTime": "9:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Lincoln Middle School",
+      "location": "Full Facility",
+      "id": "b2c3d4e5-f6a7-8901-bcde-f01234567002",
+      "startTimeISO": "09:00"
+    },
+    {
+      "startTime": "9:30 AM",
+      "programName": "School Lunch",
+      "groupName": "Jefferson Elementary School",
+      "location": "Innovation Hallway",
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567001",
+      "startTimeISO": "09:30"
+    },
+    {
+      "startTime": "9:30 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Roosevelt Elementary School",
+      "location": "Full Facility",
+      "id": "c3d4e5f6-a7b8-9012-cdef-012345678003",
+      "startTimeISO": "09:30"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Kennedy Elementary School",
+      "location": "Full Facility",
+      "id": "d4e5f6a7-b8c9-0123-def0-123456789004",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "Iowa Skies Tonight",
+      "groupName": "Lincoln Middle School",
+      "location": "Star Theater Planetarium",
+      "id": "b2c3d4e5-f6a7-8901-bcde-f01234567002",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:30 AM",
+      "programName": "Solar System Adventure",
+      "groupName": "Jefferson Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567001",
+      "startTimeISO": "10:30"
+    },
+    {
+      "startTime": "10:30 AM",
+      "programName": "School Lunch",
+      "groupName": "Lincoln Middle School",
+      "location": "Innovation Hallway",
+      "id": "b2c3d4e5-f6a7-8901-bcde-f01234567002",
+      "startTimeISO": "10:30"
+    },
+    {
+      "startTime": "10:30 AM",
+      "programName": "Zula Patrol: Under the Weather",
+      "groupName": "Roosevelt Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "c3d4e5f6-a7b8-9012-cdef-012345678003",
+      "startTimeISO": "10:30"
+    },
+    {
+      "startTime": "11:00 AM",
+      "programName": "SCI Live Show",
+      "groupName": "Jefferson Elementary School",
+      "location": "SCI Live Theater",
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567001",
+      "startTimeISO": "11:00"
+    },
+    {
+      "startTime": "11:00 AM",
+      "programName": "Solar System Adventure",
+      "groupName": "Kennedy Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "d4e5f6a7-b8c9-0123-def0-123456789004",
+      "startTimeISO": "11:00"
+    },
+    {
+      "startTime": "11:00 AM",
+      "programName": "School Lunch",
+      "groupName": "Roosevelt Elementary School",
+      "location": "Innovation Hallway",
+      "id": "c3d4e5f6-a7b8-9012-cdef-012345678003",
+      "startTimeISO": "11:00"
+    },
+    {
+      "startTime": "11:30 AM",
+      "programName": "School Lunch",
+      "groupName": "Kennedy Elementary School",
+      "location": "Innovation Hallway",
+      "id": "d4e5f6a7-b8c9-0123-def0-123456789004",
+      "startTimeISO": "11:30"
+    },
+    {
+      "startTime": "11:30 AM",
+      "programName": "Wonder of Water",
+      "groupName": "Lincoln Middle School",
+      "location": "Full Facility",
+      "id": "b2c3d4e5-f6a7-8901-bcde-f01234567002",
+      "startTimeISO": "11:30"
+    },
+    {
+      "startTime": "12:00 PM",
+      "programName": "Meet Stuffee Program",
+      "groupName": "Roosevelt Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "c3d4e5f6-a7b8-9012-cdef-012345678003",
+      "startTimeISO": "12:00"
+    },
+    {
+      "startTime": "12:00 PM",
+      "programName": "School SCI Exploration",
+      "groupName": "Washington High School",
+      "location": "Full Facility",
+      "id": "e5f6a7b8-c9d0-1234-ef01-234567890005",
+      "startTimeISO": "12:00"
+    },
+    {
+      "startTime": "12:30 PM",
+      "programName": "Iowa Skies Tonight",
+      "groupName": "Kennedy Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "d4e5f6a7-b8c9-0123-def0-123456789004",
+      "startTimeISO": "12:30"
+    },
+    {
+      "startTime": "12:30 PM",
+      "programName": "SCI Live Show",
+      "groupName": "Lincoln Middle School",
+      "location": "SCI Live Theater",
+      "id": "b2c3d4e5-f6a7-8901-bcde-f01234567002",
+      "startTimeISO": "12:30"
+    },
+    {
+      "startTime": "12:30 PM",
+      "programName": "School Lunch",
+      "groupName": "Washington High School",
+      "location": "Innovation Hallway",
+      "id": "e5f6a7b8-c9d0-1234-ef01-234567890005",
+      "startTimeISO": "12:30"
+    },
+    {
+      "startTime": "1:00 PM",
+      "programName": "School SCI Exploration",
+      "groupName": "Adams Elementary School",
+      "location": "Full Facility",
+      "id": "f6a7b8c9-d0e1-2345-f012-34567890ab06",
+      "startTimeISO": "13:00"
+    },
+    {
+      "startTime": "1:00 PM",
+      "programName": "Wonder of Water",
+      "groupName": "Roosevelt Elementary School",
+      "location": "Full Facility",
+      "id": "c3d4e5f6-a7b8-9012-cdef-012345678003",
+      "startTimeISO": "13:00"
+    },
+    {
+      "startTime": "1:30 PM",
+      "programName": "SCI Live Show",
+      "groupName": "Kennedy Elementary School",
+      "location": "SCI Live Theater",
+      "id": "d4e5f6a7-b8c9-0123-def0-123456789004",
+      "startTimeISO": "13:30"
+    },
+    {
+      "startTime": "1:30 PM",
+      "programName": "Iowa Skies Tonight",
+      "groupName": "Washington High School",
+      "location": "Star Theater Planetarium",
+      "id": "e5f6a7b8-c9d0-1234-ef01-234567890005",
+      "startTimeISO": "13:30"
+    },
+    {
+      "startTime": "2:00 PM",
+      "programName": "School Lunch",
+      "groupName": "Adams Elementary School",
+      "location": "Innovation Hallway",
+      "id": "f6a7b8c9-d0e1-2345-f012-34567890ab06",
+      "startTimeISO": "14:00"
+    },
+    {
+      "startTime": "2:30 PM",
+      "programName": "Wonder of Water",
+      "groupName": "Washington High School",
+      "location": "Full Facility",
+      "id": "e5f6a7b8-c9d0-1234-ef01-234567890005",
+      "startTimeISO": "14:30"
+    },
+    {
+      "startTime": "3:00 PM",
+      "programName": "Zula Patrol: Under the Weather",
+      "groupName": "Adams Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "f6a7b8c9-d0e1-2345-f012-34567890ab06",
+      "startTimeISO": "15:00"
+    },
+    {
+      "startTime": "3:30 PM",
+      "programName": "Wonder of Water",
+      "groupName": "Adams Elementary School",
+      "location": "Full Facility",
+      "id": "f6a7b8c9-d0e1-2345-f012-34567890ab06",
+      "startTimeISO": "15:30"
+    },
+    {
+      "startTime": "3:30 PM",
+      "programName": "Fireworks!",
+      "groupName": "Washington High School",
+      "location": "SCI Live Theater",
+      "id": "e5f6a7b8-c9d0-1234-ef01-234567890005",
+      "startTimeISO": "15:30"
+    },
+    {
+      "startTime": "4:30 PM",
+      "programName": "Solar System Adventure",
+      "groupName": "Adams Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "f6a7b8c9-d0e1-2345-f012-34567890ab06",
+      "startTimeISO": "16:30"
+    },
+    {
+      "startTime": "5:00 PM",
+      "programName": "School SCI Exploration",
+      "groupName": "Monroe Science Club",
+      "location": "Full Facility",
+      "id": "a7b8c9d0-e1f2-3456-0123-4567890abc07",
+      "startTimeISO": "17:00"
+    },
+    {
+      "startTime": "5:30 PM",
+      "programName": "School Lunch",
+      "groupName": "Monroe Science Club",
+      "location": "Innovation Hallway",
+      "id": "a7b8c9d0-e1f2-3456-0123-4567890abc07",
+      "startTimeISO": "17:30"
+    },
+    {
+      "startTime": "6:00 PM",
+      "programName": "School SCI Exploration",
+      "groupName": "Jackson Astronomy Club",
+      "location": "Full Facility",
+      "id": "b8c9d0e1-f2a3-4567-1234-567890abcd08",
+      "startTimeISO": "18:00"
+    },
+    {
+      "startTime": "6:30 PM",
+      "programName": "Iowa Skies Tonight",
+      "groupName": "Monroe Science Club",
+      "location": "Star Theater Planetarium",
+      "id": "a7b8c9d0-e1f2-3456-0123-4567890abc07",
+      "startTimeISO": "18:30"
+    },
+    {
+      "startTime": "7:00 PM",
+      "programName": "School Lunch",
+      "groupName": "Jackson Astronomy Club",
+      "location": "Innovation Hallway",
+      "id": "b8c9d0e1-f2a3-4567-1234-567890abcd08",
+      "startTimeISO": "19:00"
+    },
+    {
+      "startTime": "7:00 PM",
+      "programName": "Fireworks!",
+      "groupName": "Monroe Science Club",
+      "location": "SCI Live Theater",
+      "id": "a7b8c9d0-e1f2-3456-0123-4567890abc07",
+      "startTimeISO": "19:00"
+    },
+    {
+      "startTime": "7:30 PM",
+      "programName": "Iowa Skies Tonight",
+      "groupName": "Jackson Astronomy Club",
+      "location": "Star Theater Planetarium",
+      "id": "b8c9d0e1-f2a3-4567-1234-567890abcd08",
+      "startTimeISO": "19:30"
+    },
+    {
+      "startTime": "7:30 PM",
+      "programName": "SCI Live Show",
+      "groupName": "Monroe Science Club",
+      "location": "SCI Live Theater",
+      "id": "a7b8c9d0-e1f2-3456-0123-4567890abc07",
+      "startTimeISO": "19:30"
+    },
+    {
+      "startTime": "8:00 PM",
+      "programName": "School SCI Exploration",
+      "groupName": "Harrison Scout Troop 42",
+      "location": "Full Facility",
+      "id": "c9d0e1f2-a3b4-5678-2345-67890abcde09",
+      "startTimeISO": "20:00"
+    },
+    {
+      "startTime": "8:30 PM",
+      "programName": "Solar System Adventure",
+      "groupName": "Jackson Astronomy Club",
+      "location": "Star Theater Planetarium",
+      "id": "b8c9d0e1-f2a3-4567-1234-567890abcd08",
+      "startTimeISO": "20:30"
+    },
+    {
+      "startTime": "9:00 PM",
+      "programName": "School Lunch",
+      "groupName": "Harrison Scout Troop 42",
+      "location": "Innovation Hallway",
+      "id": "c9d0e1f2-a3b4-5678-2345-67890abcde09",
+      "startTimeISO": "21:00"
+    },
+    {
+      "startTime": "9:30 PM",
+      "programName": "Zula Patrol: Under the Weather",
+      "groupName": "Harrison Scout Troop 42",
+      "location": "Star Theater Planetarium",
+      "id": "c9d0e1f2-a3b4-5678-2345-67890abcde09",
+      "startTimeISO": "21:30"
+    },
+    {
+      "startTime": "9:30 PM",
+      "programName": "Night Sky Tour",
+      "groupName": "Jackson Astronomy Club",
+      "location": "Star Theater Planetarium",
+      "id": "b8c9d0e1-f2a3-4567-1234-567890abcd08",
+      "startTimeISO": "21:30"
+    },
+    {
+      "startTime": "10:00 PM",
+      "programName": "School SCI Exploration",
+      "groupName": "Polk Night Owls Camp",
+      "location": "Full Facility",
+      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
+      "startTimeISO": "22:00"
+    },
+    {
+      "startTime": "10:30 PM",
+      "programName": "Night Sky Tour",
+      "groupName": "Harrison Scout Troop 42",
+      "location": "Star Theater Planetarium",
+      "id": "c9d0e1f2-a3b4-5678-2345-67890abcde09",
+      "startTimeISO": "22:30"
+    },
+    {
+      "startTime": "11:00 PM",
+      "programName": "School Lunch",
+      "groupName": "Polk Night Owls Camp",
+      "location": "Innovation Hallway",
+      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
+      "startTimeISO": "23:00"
+    },
+    {
+      "startTime": "11:30 PM",
+      "programName": "Iowa Skies Tonight",
+      "groupName": "Harrison Scout Troop 42",
+      "location": "Star Theater Planetarium",
+      "id": "c9d0e1f2-a3b4-5678-2345-67890abcde09",
+      "startTimeISO": "23:30"
+    },
+    {
+      "startTime": "11:30 PM",
+      "programName": "Solar System Adventure",
+      "groupName": "Polk Night Owls Camp",
+      "location": "Star Theater Planetarium",
+      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
+      "startTimeISO": "23:30"
+    },
+    {
+      "startTime": "1:30 AM",
+      "programName": "Iowa Skies Tonight",
+      "groupName": "Polk Night Owls Camp",
+      "location": "Star Theater Planetarium",
+      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
+      "startTimeISO": "01:30"
+    },
+    {
+      "startTime": "2:30 AM",
+      "programName": "Fireworks!",
+      "groupName": "Polk Night Owls Camp",
+      "location": "SCI Live Theater",
+      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
+      "startTimeISO": "02:30"
+    },
+    {
+      "startTime": "5:00 AM",
+      "programName": "Wonder of Water",
+      "groupName": "Polk Night Owls Camp",
+      "location": "Full Facility",
+      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
+      "startTimeISO": "05:00"
+    },
+    {
+      "startTime": "7:30 AM",
+      "programName": "Meet Stuffee Program",
+      "groupName": "Polk Night Owls Camp",
+      "location": "Star Theater Planetarium",
+      "id": "d0e1f2a3-b4c5-6789-3456-7890abcdef10",
+      "startTimeISO": "07:30"
+    }
+  ]
 }

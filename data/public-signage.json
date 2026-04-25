@@ -1,5 +1,5 @@
 {
-  "publishedAt": "2026-04-24T18:04:38.947Z",
+  "publishedAt": "2026-04-25T19:30:33.545Z",
   "qrUrl": "https://www.sciowa.org/programs-and-events/event-calendar/",
   "qrLabel": "",
   "tickerText": "Welcome to the Science Center of Iowa — Programs run throughout the day, no reservation required for general admission · Planetarium & Live Shows seat on a first-come basis, arrive 5 minutes early · Ask any staff member for today's program locations · Members visit free — join at the A-ha! Store.",
@@ -16,25 +16,27 @@
   "categories": [
     "Live Programs",
     "Planetarium",
-    "Special Events"
+    "Open Hours"
   ],
   "closingTime": "16:00",
   "manualEvents": [
     {
-      "id": "manual-9e156c7e-99c6-4036-a6a3-5c3578a124ab",
+      "id": "manual-849ad1b1-3c9e-40d0-aea6-2fc0f2455488",
       "source": "manual",
       "date": "2026-04-24",
-      "startTime": "10:30",
-      "endTime": "12:00",
+      "startTime": "13:00",
+      "endTime": "15:00",
       "title": "Innovation Lab Open Hours",
       "location": "Innovation Lab",
-      "category": "Live Programs",
-      "description": "Come make a robot say swear words!"
+      "category": "Open Hours",
+      "description": "Recycle!"
     }
   ],
   "hiddenWebsiteEvents": {
-    "2026-04-24": [
-      "12:00|13:00|WHO H-D Channel 13 Live Weather Forecast|What on Earth?"
+    "2026-04-25": [
+      "17:00|17:45|5:00 p.m. - Pink Floyd: Dark Side of the Moon Dome Show|Star Theater Planitarium",
+      "18:15|19:00|6:15 p.m. - Pink Floyd: Dark Side of the Moon Dome Show|Star Theater Planitarium",
+      "19:30|20:15|7:30 p.m. - Pink Floyd: Dark Side of the Moon Dome Show|Star Theater Planitarium"
     ]
   }
 }
