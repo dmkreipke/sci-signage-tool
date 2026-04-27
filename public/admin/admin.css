@@ -348,6 +348,8 @@ main { padding: 32px; max-width: 1100px; margin: 0 auto; }
 .drop-zone p { color: var(--text-secondary); margin-bottom: 8px; }
 .drop-zone .sub { font-size: 0.85rem; }
 
+.upload-secondary-actions { margin-top: 16px; text-align: center; }
+
 /* Buttons */
 .btn-primary {
   display: inline-block;

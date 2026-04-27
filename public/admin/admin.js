@@ -390,6 +390,7 @@ document.getElementById('btn-manage-wipe').addEventListener('click', async () =>
 
 // --- Manage state ---
 document.getElementById('btn-manage-upload').addEventListener('click', () => showState('upload'));
+document.getElementById('btn-upload-manage').addEventListener('click', () => loadManage());
 
 document.getElementById('btn-manage-add-row').addEventListener('click', () => {
   managedRows.push(blankRow());
