@@ -465,7 +465,27 @@ td[contenteditable="true"] {
 }
 td[contenteditable="true"]:focus { background: color-mix(in srgb, var(--accent-cyan) 8%, transparent); box-shadow: 0 0 0 1px var(--accent-cyan) inset; }
 
+td:has(> input[data-field]) { padding: 0; }
+td > input[data-field] {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: inherit;
+  border: none;
+  padding: 10px 16px;
+  margin: 0;
+  font: inherit;
+  outline: none;
+  border-radius: 4px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+td > input[data-field]:focus {
+  background: color-mix(in srgb, var(--accent-cyan) 8%, transparent);
+  box-shadow: 0 0 0 1px var(--accent-cyan) inset;
+}
+
 .warn-cell { color: var(--accent-gold); }
+.warn-cell > input[data-field] { color: var(--accent-gold); }
 
 .btn-row-remove {
   background: transparent;

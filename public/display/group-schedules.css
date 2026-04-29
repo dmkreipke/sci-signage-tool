@@ -168,7 +168,7 @@ body {
   text-align: center;
 }
 .card-arrive {
-  font-size: clamp(15px, 1.35vw, 20px);
+  font-size: clamp(14px, 1.3vw, 20px);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.75);
   font-variant-numeric: tabular-nums;
@@ -189,14 +189,14 @@ body {
   padding-left: 8px;
 }
 .lunch-time {
-  font-size: clamp(14px, 2vw, 24px);
+  font-size: clamp(18px, 2.4vw, 30px);
   font-weight: 700;
   color: #ffffff;
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
 }
 .lunch-loc {
-  font-size: clamp(14px, 1.4vw, 18px);
+  font-size: clamp(18px, 1.8vw, 24px);
   color: rgba(255, 255, 255, 0.6);
   margin-top: 1px;
 }
@@ -209,30 +209,27 @@ body {
   overflow: hidden;
 }
 .program-item {
-  display: grid;
-  grid-template-columns: 6.5em 1fr;
-  column-gap: 10px;
-  row-gap: 2px;
-  align-items: baseline;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   border-left: 3px solid #d5f43c;
   padding-left: 10px;
 }
 .program-time {
-  font-size: clamp(18px, 1.7vw, 24px);
+  font-size: clamp(22px, 2.1vw, 30px);
   font-weight: 700;
   color: #ffffff;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 .program-name {
-  font-size: clamp(18px, 1.7vw, 24px);
+  font-size: clamp(22px, 2.1vw, 30px);
   font-weight: 700;
   color: #ffffff;
   line-height: 1.2;
 }
 .program-loc {
-  grid-column: 2 / 3;
-  font-size: clamp(14px, 1.4vw, 18px);
+  font-size: clamp(18px, 1.8vw, 24px);
   color: rgba(255, 255, 255, 0.6);
 }
 

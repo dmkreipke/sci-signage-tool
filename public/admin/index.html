@@ -166,6 +166,38 @@
           <tbody id="manage-body"></tbody>
         </table>
       </div>
+
+      <section class="ps-section">
+        <h3 class="ps-heading">Dropdown lists</h3>
+        <div class="help-sub">
+          Controls the autocomplete options for the Program, Group, and Location cells in the schedule
+          above and on the upload preview. One entry per line. The permanent programs and locations always remain.
+          Pushing changes adds new row values; uploading and publishing a new file replaces non-permanent values;
+          wiping the schedule clears them.
+        </div>
+        <div class="ps-lists-grid">
+          <label class="ps-field">
+            <span>Programs</span>
+            <textarea id="gs-list-programs" rows="6"></textarea>
+          </label>
+          <label class="ps-field">
+            <span>Groups</span>
+            <textarea id="gs-list-groups" rows="6"></textarea>
+          </label>
+          <label class="ps-field">
+            <span>Locations</span>
+            <textarea id="gs-list-locations" rows="6"></textarea>
+          </label>
+          <div class="ps-field-actions">
+            <span id="gs-lists-status" class="ps-status-note"></span>
+            <button id="btn-gs-save-lists" class="btn-primary">Save lists</button>
+          </div>
+        </div>
+      </section>
+
+      <datalist id="gs-programs"></datalist>
+      <datalist id="gs-groups"></datalist>
+      <datalist id="gs-locations"></datalist>
     </div>
     </div>
     <!-- End Group Schedule tab panel -->

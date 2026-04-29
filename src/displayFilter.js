@@ -31,9 +31,10 @@ function aggregateByGroup(rows) {
   const groups = new Map();
 
   for (const row of rows) {
-    if (!row.id) continue;
-    if (!groups.has(row.id)) {
-      groups.set(row.id, {
+    const key = (row.groupName || '').trim().toLowerCase();
+    if (!key) continue;
+    if (!groups.has(key)) {
+      groups.set(key, {
         id: row.id,
         groupName: row.groupName,
         arriveTime: '',
@@ -42,9 +43,7 @@ function aggregateByGroup(rows) {
         programs: [],
       });
     }
-    const g = groups.get(row.id);
-
-    if (!g.groupName && row.groupName) g.groupName = row.groupName;
+    const g = groups.get(key);
 
     if (row.programName === ARRIVE_PROGRAM) {
       if (!g.arriveTimeISO || row.startTimeISO < g.arriveTimeISO) {

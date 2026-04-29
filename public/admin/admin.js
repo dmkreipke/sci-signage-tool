@@ -280,9 +280,9 @@ function renderPreview(rows, warnings) {
   body.innerHTML = sortedRows.map(({ row, i }) => `
     <tr class="${warnSet.has(i) ? 'warn-row' : ''}" data-index="${i}">
       <td contenteditable="true" data-field="startTime">${esc(row.startTime)}</td>
-      <td contenteditable="true" data-field="programName">${esc(row.programName)}</td>
-      <td contenteditable="true" data-field="groupName">${esc(row.groupName)}</td>
-      <td contenteditable="true" data-field="location" class="${!row.location ? 'warn-cell' : ''}">${esc(row.location)}</td>
+      <td><input data-field="programName" list="gs-programs" value="${esc(row.programName)}"></td>
+      <td><input data-field="groupName" list="gs-groups" value="${esc(row.groupName)}"></td>
+      <td class="${!row.location ? 'warn-cell' : ''}"><input data-field="location" list="gs-locations" value="${esc(row.location)}"></td>
       <td><button class="btn-row-remove" data-remove-index="${i}" title="Remove this row">×</button></td>
     </tr>
   `).join('');
@@ -315,11 +315,13 @@ function updatePreviewSortIndicators(activeColumn) {
 }
 
 document.getElementById('preview-body').addEventListener('input', e => {
-  const td = e.target.closest('td[data-field]');
-  if (!td) return;
-  const tr = td.closest('tr[data-index]');
+  const target = e.target.closest('[data-field]');
+  if (!target) return;
+  const tr = target.closest('tr[data-index]');
+  if (!tr) return;
   const index = parseInt(tr.dataset.index, 10);
-  parsedRows[index][td.dataset.field] = td.textContent.trim();
+  const value = target.tagName === 'INPUT' ? target.value : target.textContent;
+  parsedRows[index][target.dataset.field] = value.trim();
 });
 
 document.getElementById('preview-body').addEventListener('click', e => {
@@ -351,10 +353,14 @@ document.getElementById('btn-confirm').addEventListener('click', async () => {
     const res = await fetch('/api/schedule/publish', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rows: parsedRows }),
+      body: JSON.stringify({ rows: parsedRows, mode: 'replace' }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Publish failed');
+    if (data.lists) {
+      fillGsListsForm(data.lists);
+      renderGsDatalists(data.lists);
+    }
     document.getElementById('published-msg').textContent =
       `${data.count} rows published at ${new Date(data.publishedAt).toLocaleTimeString()}.`;
     showState('published');
@@ -372,11 +378,16 @@ document.getElementById('btn-manage').addEventListener('click', () => loadManage
 
 // --- Wipe schedule (from within the Manage toolbar) ---
 document.getElementById('btn-manage-wipe').addEventListener('click', async () => {
-  if (!confirm('Wipe the published schedule? All displays will go blank until a new CSV is uploaded.')) return;
+  if (!confirm('Wipe the published schedule? All displays will go blank until a new CSV is uploaded. Non-permanent dropdown list values will also be cleared.')) return;
   spinner.hidden = false;
   try {
     const res = await fetch('/api/schedule', { method: 'DELETE' });
     if (!res.ok) throw new Error('Wipe failed');
+    const data = await res.json().catch(() => ({}));
+    if (data && data.lists) {
+      fillGsListsForm(data.lists);
+      renderGsDatalists(data.lists);
+    }
     parsedRows = [];
     managedRows = [];
     showState('upload');
@@ -403,12 +414,18 @@ document.getElementById('btn-manage-add-row').addEventListener('click', () => {
 async function loadManage() {
   spinner.hidden = false;
   try {
-    const res = await fetch('/api/schedule');
-    const data = await res.json();
+    const [scheduleRes, listsRes] = await Promise.all([
+      fetch('/api/schedule'),
+      fetch('/api/schedule/lists'),
+    ]);
+    const data = await scheduleRes.json();
+    const lists = await listsRes.json();
     managedRows = data.rows || [];
     sortState = { column: null, ascending: true };
     document.getElementById('manage-published-at').textContent =
       data.publishedAt ? `Published ${new Date(data.publishedAt).toLocaleString()}` : '';
+    fillGsListsForm(lists);
+    renderGsDatalists(lists);
     renderManageTable();
     updateSortIndicators(null);
     showState('manage');
@@ -449,9 +466,9 @@ function renderManageTable() {
     return `
     <tr data-manage-index="${originalIndex}" class="${row._new ? 'new-row' : ''}">
       <td contenteditable="true" data-field="startTime">${esc(row.startTime)}</td>
-      <td contenteditable="true" data-field="programName">${esc(row.programName)}</td>
-      <td contenteditable="true" data-field="groupName">${esc(row.groupName)}</td>
-      <td contenteditable="true" data-field="location" class="${!row.location ? 'warn-cell' : ''}">${esc(row.location)}</td>
+      <td><input data-field="programName" list="gs-programs" value="${esc(row.programName)}"></td>
+      <td><input data-field="groupName" list="gs-groups" value="${esc(row.groupName)}"></td>
+      <td class="${!row.location ? 'warn-cell' : ''}"><input data-field="location" list="gs-locations" value="${esc(row.location)}"></td>
       <td><button class="btn-row-remove" data-remove-index="${originalIndex}" title="Remove this row">×</button></td>
     </tr>
   `;
@@ -487,11 +504,13 @@ function updateSortIndicators(activeColumn) {
 
 // Single delegated listeners — attached once, not inside renderManageTable
 document.getElementById('manage-body').addEventListener('input', e => {
-  const td = e.target.closest('td[data-field]');
-  if (!td) return;
-  const tr = td.closest('tr[data-manage-index]');
+  const target = e.target.closest('[data-field]');
+  if (!target) return;
+  const tr = target.closest('tr[data-manage-index]');
+  if (!tr) return;
   const index = parseInt(tr.dataset.manageIndex, 10);
-  managedRows[index][td.dataset.field] = td.textContent.trim();
+  const value = target.tagName === 'INPUT' ? target.value : target.textContent;
+  managedRows[index][target.dataset.field] = value.trim();
 });
 
 document.getElementById('manage-body').addEventListener('click', e => {
@@ -508,15 +527,71 @@ document.getElementById('btn-manage-save').addEventListener('click', async () =>
     const res = await fetch('/api/schedule/publish', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rows: managedRows }),
+      body: JSON.stringify({ rows: managedRows, mode: 'merge' }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Save failed');
+    if (data.lists) {
+      fillGsListsForm(data.lists);
+      renderGsDatalists(data.lists);
+    }
     managedRows = managedRows.map(r => { const c = { ...r }; delete c._new; return c; });
     renderManageTable();
     document.getElementById('manage-published-at').textContent =
       `Saved at ${new Date(data.publishedAt).toLocaleTimeString()}`;
     alert(`Saved. ${data.count} rows are now live.`);
+  } catch (err) {
+    alert(`Save failed: ${err.message}`);
+  } finally {
+    spinner.hidden = true;
+  }
+});
+
+// --- Group Schedule dropdown lists ---
+function parseGsList(textareaId) {
+  return document.getElementById(textareaId).value
+    .split('\n')
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function fillGsListsForm(lists) {
+  document.getElementById('gs-list-programs').value = (lists.programs || []).join('\n');
+  document.getElementById('gs-list-groups').value = (lists.groups || []).join('\n');
+  document.getElementById('gs-list-locations').value = (lists.locations || []).join('\n');
+}
+
+function renderGsDatalists(lists) {
+  const fill = (id, items) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = (items || []).map(v => `<option value="${esc(v)}"></option>`).join('');
+  };
+  fill('gs-programs', lists.programs);
+  fill('gs-groups', lists.groups);
+  fill('gs-locations', lists.locations);
+}
+
+document.getElementById('btn-gs-save-lists').addEventListener('click', async () => {
+  const payload = {
+    programs:  parseGsList('gs-list-programs'),
+    groups:    parseGsList('gs-list-groups'),
+    locations: parseGsList('gs-list-locations'),
+  };
+  const status = document.getElementById('gs-lists-status');
+  status.textContent = '';
+  spinner.hidden = false;
+  try {
+    const res = await fetch('/api/schedule/lists', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    fillGsListsForm(data);
+    renderGsDatalists(data);
+    status.textContent = `Saved ${new Date(data.publishedAt).toLocaleTimeString()}`;
   } catch (err) {
     alert(`Save failed: ${err.message}`);
   } finally {

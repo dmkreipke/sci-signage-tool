@@ -5,6 +5,7 @@ const store = require('../src/scheduleStore');
 const { filterAndMerge } = require('../src/displayFilter');
 const scraper = require('../src/publicScheduleScraper');
 const publicStore = require('../src/publicSignageStore');
+const scheduleListsStore = require('../src/scheduleListsStore');
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
@@ -22,18 +23,30 @@ router.post('/schedule/upload', upload.single('file'), (req, res) => {
 });
 
 router.post('/schedule/publish', (req, res) => {
-  const { rows, publishedBy } = req.body;
+  const { rows, publishedBy, mode } = req.body;
   if (!Array.isArray(rows)) return res.status(400).json({ error: 'rows must be an array' });
   const normalized = rows.map(row => ({
     ...row,
     startTimeISO: parseTimeToISO(row.startTime) || row.startTimeISO || '',
   }));
   const data = store.write(normalized, publishedBy || 'admin');
-  res.json({ ok: true, count: normalized.length, publishedAt: data.publishedAt });
+  const lists = mode === 'replace'
+    ? scheduleListsStore.replaceFromRows(normalized)
+    : scheduleListsStore.mergeFromRows(normalized);
+  res.json({ ok: true, count: normalized.length, publishedAt: data.publishedAt, lists });
 });
 
 router.get('/schedule', (req, res) => {
   res.json(store.read());
+});
+
+router.get('/schedule/lists', (req, res) => {
+  res.json(scheduleListsStore.read());
+});
+
+router.put('/schedule/lists', (req, res) => {
+  const data = scheduleListsStore.saveLists(req.body || {});
+  res.json({ ok: true, ...data });
 });
 
 router.get('/schedule/:display', (req, res) => {
@@ -48,7 +61,8 @@ router.get('/schedule/:display', (req, res) => {
 
 router.delete('/schedule', (req, res) => {
   store.clear();
-  res.json({ ok: true });
+  const lists = scheduleListsStore.resetToPermanentOnly();
+  res.json({ ok: true, lists });
 });
 
 // ===== Public Day Signage =====
