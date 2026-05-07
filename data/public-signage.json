@@ -1,5 +1,5 @@
 {
-  "publishedAt": "2026-04-28T19:30:28.101Z",
+  "publishedAt": "2026-05-07T14:08:14.694Z",
   "qrUrl": "https://www.sciowa.org/programs-and-events/event-calendar/",
   "qrLabel": "",
   "tickerText": "Welcome to the Science Center of Iowa — Programs run throughout the day, no reservation required for general admission · Planetarium & Live Shows seat on a first-come basis, arrive 5 minutes early · Ask any staff member for today's program locations · Members visit free — join at the A-ha! Store.",
@@ -19,7 +19,19 @@
     "Open Hours"
   ],
   "closingTime": "16:00",
-  "manualEvents": [],
+  "manualEvents": [
+    {
+      "id": "manual-03ba17c0-5c79-4189-b75b-a276fe4ba727",
+      "source": "manual",
+      "date": "2026-05-07",
+      "startTime": "15:30",
+      "endTime": "16:00",
+      "title": "Solar Odyssey: Journey Through Our Cosmic Neighborhood",
+      "location": "Star Theater Planetarium",
+      "category": "Planetarium",
+      "description": ""
+    }
+  ],
   "hiddenWebsiteEvents": {
     "2026-04-25": [
       "17:00|17:45|5:00 p.m. - Pink Floyd: Dark Side of the Moon Dome Show|Star Theater Planitarium",

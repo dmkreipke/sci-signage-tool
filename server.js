@@ -19,10 +19,11 @@ app.get('/admin', (req, res) => {
 app.listen(PORT, () => {
   console.log(`SCI Signage Tool running at http://localhost:${PORT}`);
   console.log(`  Admin portal:    http://localhost:${PORT}/admin`);
-  console.log(`  Star Theater:    http://localhost:${PORT}/display/star-theater.html`);
-  console.log(`  SCI Live:        http://localhost:${PORT}/display/sci-live.html`);
-  console.log(`  Group Schedules: http://localhost:${PORT}/display/group-schedules.html`);
-  console.log(`  Public Signage:  http://localhost:${PORT}/display/public-signage.html`);
+  console.log(`  Star Theater (group):  http://localhost:${PORT}/display/star-theater-group.html`);
+  console.log(`  Star Theater (public): http://localhost:${PORT}/display/star-theater-public.html`);
+  console.log(`  SCI Live:              http://localhost:${PORT}/display/sci-live.html`);
+  console.log(`  Group Schedules:       http://localhost:${PORT}/display/group-schedules.html`);
+  console.log(`  Public Signage:        http://localhost:${PORT}/display/public-signage.html`);
 
   scraper.refresh().then(r => {
     if (r.ok) console.log(`[scraper] initial fetch: ${r.count} events`);

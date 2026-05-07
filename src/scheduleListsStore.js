@@ -8,6 +8,7 @@ const PERMANENT_LOCATIONS = [
   'SCI Live Theater',
   'Star Theater Planetarium',
   'Full Facility',
+  'Principal Hall',
 ];
 
 const PERMANENT_PROGRAMS = [

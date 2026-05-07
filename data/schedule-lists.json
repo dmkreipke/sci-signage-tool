@@ -1,5 +1,5 @@
 {
-  "publishedAt": "2026-04-29T02:20:39.447Z",
+  "publishedAt": "2026-05-04T20:50:27.771Z",
   "programs": [
     "Fire Works",
     "Deep Freeze",
@@ -10,13 +10,26 @@
     "Solar Odyssey",
     "Meet Stuffee",
     "School SCI Exploration",
-    "School Lunch"
+    "School Lunch",
+    "Meet Stuffee Program",
+    "Fireworks!"
   ],
-  "groups": [],
+  "groups": [
+    "Winterset Elementary School",
+    "Jordan Creek Elementary School",
+    "Moore Elementary School",
+    "Western Hills Elementary School",
+    "Hartley",
+    "Princeton R",
+    "Clear Lake Elementary School",
+    "Lenox Community School",
+    "Keota Elementary School"
+  ],
   "locations": [
     "Innovation Hallway",
     "SCI Live Theater",
     "Star Theater Planetarium",
-    "Full Facility"
+    "Full Facility",
+    "Principal Hall"
   ]
 }

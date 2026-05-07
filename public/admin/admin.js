@@ -404,11 +404,10 @@ document.getElementById('btn-manage-upload').addEventListener('click', () => sho
 document.getElementById('btn-upload-manage').addEventListener('click', () => loadManage());
 
 document.getElementById('btn-manage-add-row').addEventListener('click', () => {
-  managedRows.push(blankRow());
+  managedRows.unshift(blankRow());
   renderManageTable();
-  // scroll new row into view
   const body = document.getElementById('manage-body');
-  body.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  body.firstElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
 async function loadManage() {

@@ -1,5 +1,198 @@
 {
-  "publishedAt": "2026-04-29T02:20:39.445Z",
+  "publishedAt": "2026-05-04T20:50:27.770Z",
   "publishedBy": "admin",
-  "rows": []
+  "rows": [
+    {
+      "startTime": "9:30 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Winterset Elementary School",
+      "location": "Full Facility",
+      "id": "cae53aec-53ec-4d46-a993-a8faea848596",
+      "startTimeISO": "09:30"
+    },
+    {
+      "startTime": "9:45 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Jordan Creek Elementary School",
+      "location": "Full Facility",
+      "id": "a39d2c77-2b7e-4895-b6bc-5fe8e084245d",
+      "startTimeISO": "09:45"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "School Lunch",
+      "groupName": "Winterset Elementary School",
+      "location": "Innovation Hallway",
+      "id": "cae53aec-53ec-4d46-a993-a8faea848596",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Moore Elementary School",
+      "location": "Full Facility",
+      "id": "727cf9cf-8ce5-4e33-9c8c-0ae192a7da2b",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Western Hills Elementary School",
+      "location": "Full Facility",
+      "id": "404e6a13-8414-437e-b8a4-100a02302a3b",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Hartley",
+      "location": "Full Facility",
+      "id": "14436a8d-736a-47e1-8dfc-4d0207a972ee",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Princeton R",
+      "location": "Full Facility",
+      "id": "de743438-4342-4e08-b052-605fc4942276",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Clear Lake Elementary School",
+      "location": "Full Facility",
+      "id": "078f8fbf-190a-4f90-b363-9cc2e41e788e",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:00 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Lenox Community School",
+      "location": "Full Facility",
+      "id": "3a20ee65-82cd-40a1-902c-d7f6463a19a2",
+      "startTimeISO": "10:00"
+    },
+    {
+      "startTime": "10:30 AM",
+      "programName": "Cold Blooded Critters",
+      "groupName": "Winterset Elementary School",
+      "location": "SCI Live Theater",
+      "id": "cae53aec-53ec-4d46-a993-a8faea848596",
+      "startTimeISO": "10:30"
+    },
+    {
+      "startTime": "10:30 AM",
+      "programName": "Meet Stuffee Program",
+      "groupName": "Western Hills Elementary School",
+      "location": "Star Theater Planetarium",
+      "id": "404e6a13-8414-437e-b8a4-100a02302a3b",
+      "startTimeISO": "10:30"
+    },
+    {
+      "startTime": "10:30 AM",
+      "programName": "School Lunch",
+      "groupName": "Moore Elementary School",
+      "location": "Innovation Hallway",
+      "id": "727cf9cf-8ce5-4e33-9c8c-0ae192a7da2b",
+      "startTimeISO": "10:30"
+    },
+    {
+      "startTime": "10:30 AM",
+      "programName": "School SCI Exploration",
+      "groupName": "Keota Elementary School",
+      "location": "Full Facility",
+      "id": "4d91accf-b770-4ead-919b-15816ecb5f63",
+      "startTimeISO": "10:30"
+    },
+    {
+      "startTime": "11:00 AM",
+      "programName": "Cold Blooded Critters",
+      "groupName": "Moore Elementary School",
+      "location": "SCI Live Theater",
+      "id": "727cf9cf-8ce5-4e33-9c8c-0ae192a7da2b",
+      "startTimeISO": "11:00"
+    },
+    {
+      "startTime": "11:00 AM",
+      "programName": "School Lunch",
+      "groupName": "Western Hills Elementary School",
+      "location": "Innovation Hallway",
+      "id": "404e6a13-8414-437e-b8a4-100a02302a3b",
+      "startTimeISO": "11:00"
+    },
+    {
+      "startTime": "11:00 AM",
+      "programName": "School Lunch",
+      "groupName": "Keota Elementary School",
+      "location": "Innovation Hallway",
+      "id": "4d91accf-b770-4ead-919b-15816ecb5f63",
+      "startTimeISO": "11:00"
+    },
+    {
+      "startTime": "11:30 AM",
+      "programName": "Fireworks!",
+      "groupName": "Keota Elementary School",
+      "location": "",
+      "id": "4d91accf-b770-4ead-919b-15816ecb5f63",
+      "startTimeISO": "11:30"
+    },
+    {
+      "startTime": "11:30 AM",
+      "programName": "Fireworks!",
+      "groupName": "Lenox Community School",
+      "location": "",
+      "id": "3a20ee65-82cd-40a1-902c-d7f6463a19a2",
+      "startTimeISO": "11:30"
+    },
+    {
+      "startTime": "11:30 AM",
+      "programName": "School Lunch",
+      "groupName": "Clear Lake Elementary School",
+      "location": "Innovation Hallway",
+      "id": "078f8fbf-190a-4f90-b363-9cc2e41e788e",
+      "startTimeISO": "11:30"
+    },
+    {
+      "startTime": "12:00 PM",
+      "programName": "Cold Blooded Critters",
+      "groupName": "Clear Lake Elementary School",
+      "location": "SCI Live Theater",
+      "id": "078f8fbf-190a-4f90-b363-9cc2e41e788e",
+      "startTimeISO": "12:00"
+    },
+    {
+      "startTime": "12:00 PM",
+      "programName": "School Lunch",
+      "groupName": "Hartley",
+      "location": "Innovation Hallway",
+      "id": "14436a8d-736a-47e1-8dfc-4d0207a972ee",
+      "startTimeISO": "12:00"
+    },
+    {
+      "startTime": "12:30 PM",
+      "programName": "Fireworks!",
+      "groupName": "Hartley",
+      "location": "",
+      "id": "14436a8d-736a-47e1-8dfc-4d0207a972ee",
+      "startTimeISO": "12:30"
+    },
+    {
+      "startTime": "12:30 PM",
+      "programName": "School Lunch",
+      "groupName": "Jordan Creek Elementary School",
+      "location": "Innovation Hallway",
+      "id": "a39d2c77-2b7e-4895-b6bc-5fe8e084245d",
+      "startTimeISO": "12:30"
+    },
+    {
+      "startTime": "1:00 PM",
+      "programName": "Zap",
+      "groupName": "Jordan Creek Elementary School",
+      "location": "SCI Live Theater",
+      "id": "a39d2c77-2b7e-4895-b6bc-5fe8e084245d",
+      "startTimeISO": "13:00"
+    }
+  ]
 }
