@@ -1,5 +1,5 @@
 const POLL_INTERVAL = 60 * 1000;
-const PX_PER_SECOND = 60;         // scroll speed — increase to go faster
+const PX_PER_SECOND = 100;        // scroll speed — increase to go faster
 const PREVIEW_MODE = new URLSearchParams(location.search).has('preview');
 
 let groups = [];
