@@ -2,17 +2,54 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>SCI — Daily Programs Signage</title>
+<title>SCI — Daily Programs &amp; Events</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Barlow:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="public-signage.css">
+<style>
+  .upnext { padding-top: 40px; padding-bottom: 72px; }
+  .schedule-strip {
+    padding: 8px 64px 10px;
+  }
+  .strip-row {
+    display: flex; gap: 28px;
+    justify-content: center; align-items: stretch;
+    transition: opacity 600ms ease, transform 600ms ease;
+    will-change: opacity, transform;
+  }
+  .strip-row.is-fading { opacity: 0; transform: translateY(6px); }
+  .strip-row .event-card {
+    width: auto;
+    flex: 0 0 calc((100% - 56px) / 3);
+  }
+  .strip-dots {
+    position: absolute;
+    left: 64px; right: 64px; bottom: 62px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    min-height: 14px;
+    z-index: 5;
+  }
+  .strip-dots .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    transition: background 300ms ease, transform 300ms ease, box-shadow 300ms ease;
+  }
+  .strip-dots .dot.active {
+    background: var(--sci-green);
+    box-shadow: 0 0 10px rgba(159,201,60,0.7);
+    transform: scale(1.15);
+  }
+</style>
 </head>
 <body>
 
 <div id="stage-wrap">
-  <div id="stage" data-screen-label="Public Signage">
+  <div id="stage" data-screen-label="Public Signage (Paginated)">
 
     <header class="hdr">
       <div class="hdr-title">
@@ -61,7 +98,10 @@
         <div class="l"><span class="bar"></span> Up Next Today</div>
         <div class="r" id="upnext-count">—</div>
       </div>
-      <div class="marquee"><div class="track" id="track"></div></div>
+      <div class="schedule-strip" id="strip">
+        <div class="strip-row" id="strip-row"></div>
+        <div class="strip-dots" id="strip-dots"></div>
+      </div>
     </section>
 
     <div class="ticker">

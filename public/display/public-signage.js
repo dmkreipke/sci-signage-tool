@@ -1,6 +1,7 @@
 const POLL_INTERVAL_MS = 60 * 1000;
 const CLOCK_TICK_MS = 1000;
 const NEXT_UP_LOOKAHEAD_MIN = 45;
+const STRIP_MAX_CARDS = 6;
 
 let currentData = {
   events: [],
@@ -213,7 +214,7 @@ function renderNowArea(current, upcoming) {
   });
 }
 
-function makeMarqueeCard(ev, isNextUp) {
+function makeStripCard(ev) {
   const startMin = toMin(ev.startTime);
   const endMin = toMin(ev.endTime);
   const dur = Math.max(0, endMin - startMin);
@@ -238,48 +239,118 @@ function makeMarqueeCard(ev, isNextUp) {
   return el;
 }
 
-function renderMarquee(upcoming, anyNowPlaying) {
-  const track = document.getElementById('track');
+const STRIP_PAGE_MS = 7000;
+const STRIP_FADE_MS = 600; // must match .strip-row CSS transition duration
+const STRIP_PER_PAGE = 3;
+
+let _stripState = null;
+let _stripTimer = null;
+let _stripFadeTimer = null;
+
+function stopStripCycle() {
+  if (_stripTimer) clearTimeout(_stripTimer);
+  if (_stripFadeTimer) clearTimeout(_stripFadeTimer);
+  _stripTimer = null;
+  _stripFadeTimer = null;
+}
+
+function chunkPages(items, perPage) {
+  const N = items.length;
+  if (N <= perPage) return [items.slice()];
+  const pages = Math.ceil(N / perPage);
+  const base = Math.floor(N / pages);
+  const rem = N % pages;
+  const out = [];
+  let i = 0;
+  for (let p = 0; p < pages; p++) {
+    const size = base + (p < rem ? 1 : 0);
+    out.push(items.slice(i, i + size));
+    i += size;
+  }
+  return out;
+}
+
+function paintStripPage(rowEl, dotsEl, pages, pageIdx) {
+  rowEl.innerHTML = '';
+  pages[pageIdx].forEach((ev) => rowEl.appendChild(makeStripCard(ev)));
+  dotsEl.innerHTML = '';
+  if (pages.length > 1) {
+    for (let i = 0; i < pages.length; i++) {
+      const dot = document.createElement('span');
+      dot.className = 'dot' + (i === pageIdx ? ' active' : '');
+      dotsEl.appendChild(dot);
+    }
+  }
+}
+
+function scheduleStripAdvance() {
+  if (_stripTimer) clearTimeout(_stripTimer);
+  if (!_stripState || _stripState.pages.length <= 1) return;
+  _stripTimer = setTimeout(advanceStripPage, STRIP_PAGE_MS);
+}
+
+function advanceStripPage() {
+  if (!_stripState || _stripState.pages.length <= 1) return;
+  const rowEl = document.getElementById('strip-row');
+  const dotsEl = document.getElementById('strip-dots');
+  const next = (_stripState.pageIdx + 1) % _stripState.pages.length;
+  rowEl.classList.add('is-fading');
+  if (_stripFadeTimer) clearTimeout(_stripFadeTimer);
+  _stripFadeTimer = setTimeout(() => {
+    if (!_stripState) return;
+    _stripState.pageIdx = next;
+    paintStripPage(rowEl, dotsEl, _stripState.pages, next);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        rowEl.classList.remove('is-fading');
+        scheduleStripAdvance();
+      });
+    });
+  }, STRIP_FADE_MS);
+}
+
+function sameUpcomingList(a, b) {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i].startTime !== b[i].startTime ||
+        a[i].endTime !== b[i].endTime ||
+        a[i].title !== b[i].title) return false;
+  }
+  return true;
+}
+
+function renderScheduleStrip(items, anyNowPlaying, totalUpcoming) {
+  const rowEl = document.getElementById('strip-row');
+  const dotsEl = document.getElementById('strip-dots');
   const countEl = document.getElementById('upnext-count');
   const headLeft = document.querySelector('.upnext-head .l');
-  track.innerHTML = '';
 
-  if (upcoming.length === 0) {
+  if (!items.length) {
     countEl.textContent = anyNowPlaying ? 'Last program of the day' : 'Today’s programs have concluded';
-    track.style.animation = 'none';
     if (headLeft) headLeft.style.display = 'none';
+    rowEl.classList.remove('is-fading');
+    rowEl.innerHTML = '';
+    dotsEl.innerHTML = '';
+    stopStripCycle();
+    _stripState = null;
     return;
   }
 
   if (headLeft) headLeft.style.display = '';
-  countEl.textContent = `${upcoming.length} program${upcoming.length === 1 ? '' : 's'} remaining today`;
-
-  if (upcoming.length <= 3) {
-    upcoming.forEach(ev => track.appendChild(makeMarqueeCard(ev)));
-    track.style.animation = 'none';
-    track.style.removeProperty('--half-width');
-    return;
+  if (totalUpcoming > items.length) {
+    countEl.textContent = `Next ${items.length} of ${totalUpcoming} programs`;
+  } else {
+    countEl.textContent = `${totalUpcoming} program${totalUpcoming === 1 ? '' : 's'} remaining today`;
   }
 
-  const copies = Math.max(3, Math.ceil(10 / upcoming.length));
-  for (let k = 0; k < copies; k++) {
-    upcoming.forEach((ev, i) => {
-      const isNextUp = !anyNowPlaying && i === 0 && k === 0;
-      track.appendChild(makeMarqueeCard(ev, isNextUp));
-    });
-  }
+  if (_stripState && sameUpcomingList(_stripState.items, items)) return;
 
-  requestAnimationFrame(() => {
-    const totalWidth = track.scrollWidth;
-    const onePass = totalWidth / copies;
-    track.style.setProperty('--half-width', onePass + 'px');
-    const baseSpeed = 40;
-    const scaled = Math.max(20, baseSpeed * (onePass / 1400));
-    track.style.setProperty('--speed', scaled + 's');
-    track.style.animation = 'none';
-    void track.offsetWidth;
-    track.style.animation = '';
-  });
+  stopStripCycle();
+  rowEl.classList.remove('is-fading');
+  const pages = chunkPages(items, STRIP_PER_PAGE);
+  _stripState = { items: items.slice(), pages, pageIdx: 0 };
+  paintStripPage(rowEl, dotsEl, pages, 0);
+  scheduleStripAdvance();
 }
 
 function renderClosingCard(closingTime) {
@@ -300,9 +371,18 @@ function render() {
   const current = remaining.filter(e => toMin(e.startTime) <= now);
   const upcoming = remaining.filter(e => toMin(e.startTime) > now);
 
+  // Match the hero's own "borrow next-up" condition so the strip doesn't
+  // show the same event the hero is already featuring.
+  const heroBorrowsNext =
+    current.length === 1 &&
+    !!upcoming[0] &&
+    (toMin(upcoming[0].startTime) - now) <= NEXT_UP_LOOKAHEAD_MIN;
+  const dedupedUpcoming = heroBorrowsNext ? upcoming.slice(1) : upcoming;
+  const stripPool = dedupedUpcoming.slice(0, STRIP_MAX_CARDS);
+
   renderClock();
   renderNowArea(current, upcoming);
-  renderMarquee(upcoming, current.length > 0);
+  renderScheduleStrip(stripPool, current.length > 0, dedupedUpcoming.length);
   renderQR(currentData.config.qrUrl);
   renderTicker(currentData.config.tickerText);
   renderClosingCard(currentData.config.closingTime);
