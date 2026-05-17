@@ -9,6 +9,7 @@ const SCRAPE_INTERVAL_MS = 60 * 1000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/special-event-images', express.static(path.join(__dirname, 'data', 'special-event-images')));
 
 app.use('/api', apiRoutes);
 

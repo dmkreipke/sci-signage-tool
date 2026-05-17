@@ -12,3 +12,6 @@ npm-debug.log*
 
 # dev tools and docs
 forHumans/
+
+# uploaded special-event poster images
+data/special-event-images/

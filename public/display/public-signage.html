@@ -69,20 +69,37 @@
     </section>
 
     <aside class="qr-rail">
-      <img class="rail-logo" src="assets/sci-logo-green.png" alt="SCI" onerror="this.style.display='none'" />
-      <h2>Today's<em>Full Schedule</em></h2>
-      <div class="divider"></div>
-      <div class="qr-big" id="qr-box"></div>
-      <div class="scan-cta">
-        <div class="big">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
-          Scan to view
+      <div class="qr-rail-stage">
+        <div class="qr-rail-panel qr-rail-panel-default is-active" id="rail-panel-default">
+          <img class="rail-logo" src="assets/sci-logo-green.png" alt="SCI" onerror="this.style.display='none'" />
+          <h2>Today's<em>Full Schedule</em></h2>
+          <div class="divider"></div>
+          <div class="qr-big" id="qr-box"></div>
+          <div class="scan-cta">
+            <div class="big">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+              Scan to view
+            </div>
+            <div class="sub">   </div>
+          </div>
+          <div class="closing-card" id="closing-card" hidden>
+            <div class="closing-kicker">SCI Closes At</div>
+            <div class="closing-time" id="closing-time-text">—</div>
+          </div>
         </div>
-        <div class="sub">   </div>
-      </div>
-      <div class="closing-card" id="closing-card" hidden>
-        <div class="closing-kicker">Closes today at</div>
-        <div class="closing-time" id="closing-time-text">—</div>
+
+        <div class="qr-rail-panel qr-rail-panel-special" id="rail-panel-special">
+          <div class="special-kicker">Special Events</div>
+          <div class="special-image" id="special-image"></div>
+          <div class="special-title" id="special-title"></div>
+          <div class="special-subtitle" id="special-subtitle"></div>
+          <div class="special-meta">
+            <div class="special-date" id="special-date"></div>
+            <div class="special-location" id="special-location"></div>
+          </div>
+          <div class="special-qr" id="special-qr"></div>
+          <div class="special-qr-label" id="special-qr-label"></div>
+        </div>
       </div>
     </aside>
 

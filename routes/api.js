@@ -92,6 +92,7 @@ router.get('/public-signage/today', (req, res) => {
     },
     config,
     events: merged,
+    specialEvents: publicStore.listSpecial(),
   });
 });
 
@@ -139,6 +140,59 @@ router.put('/public-signage/hidden', (req, res) => {
   const result = publicStore.setHidden(date, signature, Boolean(hidden));
   if (!result.ok) return res.status(400).json({ error: 'Invalid request', details: result.errors });
   res.json({ ok: true });
+});
+
+function extFromFile(file) {
+  if (!file || !file.originalname) return '';
+  const m = String(file.originalname).match(/\.([a-zA-Z0-9]+)$/);
+  return m ? m[1] : '';
+}
+
+router.get('/public-signage/special', (req, res) => {
+  res.json({ events: publicStore.listSpecial() });
+});
+
+router.post('/public-signage/special', upload.single('image'), (req, res) => {
+  const buffer = req.file ? req.file.buffer : null;
+  const ext = extFromFile(req.file);
+  const result = publicStore.addSpecial(req.body || {}, buffer, ext);
+  if (!result.ok) return res.status(400).json({ error: 'Invalid event', details: result.errors });
+  res.status(201).json(result.event);
+});
+
+router.patch('/public-signage/special/:id', upload.single('image'), (req, res) => {
+  const buffer = req.file ? req.file.buffer : null;
+  const ext = extFromFile(req.file);
+  const removeImage = String((req.body || {}).removeImage || '').toLowerCase() === 'true';
+  const result = publicStore.updateSpecial(req.params.id, req.body || {}, buffer, ext, removeImage);
+  if (!result.ok) {
+    const status = result.errors && result.errors[0] === 'not found' ? 404 : 400;
+    return res.status(status).json({ error: 'Invalid event', details: result.errors });
+  }
+  res.json(result.event);
+});
+
+router.delete('/public-signage/special/:id', (req, res) => {
+  const result = publicStore.removeSpecial(req.params.id);
+  if (!result.ok) return res.status(404).json({ error: 'not found' });
+  res.json({ ok: true });
+});
+
+router.post('/public-signage/special/:id/duplicate', (req, res) => {
+  const result = publicStore.duplicateSpecial(req.params.id);
+  if (!result.ok) {
+    const status = result.errors && result.errors[0] === 'not found' ? 404 : 400;
+    return res.status(status).json({ error: 'Duplicate failed', details: result.errors });
+  }
+  res.status(201).json(result.event);
+});
+
+router.put('/public-signage/special/order', (req, res) => {
+  const ids = req.body && Array.isArray(req.body.ids) ? req.body.ids : null;
+  if (!ids) return res.status(400).json({ error: 'ids array required' });
+  const result = publicStore.reorderSpecial(ids);
+  if (!result.ok) return res.status(400).json({ error: 'Reorder failed', details: result.errors });
+  res.json({ ok: true, events: result.events });
 });
 
 module.exports = router;

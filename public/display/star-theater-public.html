@@ -382,7 +382,7 @@
   /* ------------- TODAY'S SHOWS — paginated schedule strip ------------- */
   .section-head {
     display: flex; align-items: center; gap: 16px;
-    padding: 44px 64px 18px;
+    padding: 20px 64px 18px;
     z-index: 3; position: relative;
   }
   .section-head .h-bar {
@@ -433,7 +433,7 @@
 
   .strip-card {
     flex: 0 0 calc((100% - 44px) / 3); /* exactly 3 across with 22px × 2 gaps */
-    min-height: 280px;
+    min-height: 220px;
     background:
       linear-gradient(180deg, rgba(31,37,98,0.78), rgba(13,17,56,0.85));
     border: 1.5px solid rgba(255,255,255,0.12);
@@ -502,13 +502,17 @@
     transform: scale(1.15);
   }
 
+  /* When hero title wraps to two lines, squeeze strip margins to avoid QR overlap */
+  .layout-compact .schedule-strip { margin-top: 4px; margin-bottom: 4px; }
+  .layout-compact .strip-dots { margin-top: 12px; }
+
   /* ------------- COSMIC PLAYLIST NOTE ------------- */
   .cosmic-note-block {
-    margin: 40px 64px 0;
+    margin: 16px 64px 0;
     text-align: center;
     color: #fff;
     font-size: 30px;
-    padding: 28px 24px;
+    padding: 14px 24px;
     border-top: 1px solid rgba(245,180,0,0.25);
     border-bottom: 1px solid rgba(245,180,0,0.25);
     background: linear-gradient(180deg, rgba(245,180,0,0.04), rgba(245,180,0,0));

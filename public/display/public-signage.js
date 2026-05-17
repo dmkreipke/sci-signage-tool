@@ -10,6 +10,14 @@ let currentData = {
 let lastQrUrl = null;
 let lastTickerText = null;
 
+const SPECIAL_QR_MS = 12000;
+const SPECIAL_PANEL_MS = SPECIAL_QR_MS;
+let specialEvents = [];
+let nextSpecialIndex = 0;
+let lastShowedQr = true;
+let specialTimer = null;
+let lastSpecialFingerprint = '';
+
 function toMin(t) {
   if (!t || typeof t !== 'string') return 0;
   const [h, m] = t.split(':').map(Number);
@@ -358,7 +366,7 @@ function renderClosingCard(closingTime) {
   if (!card) return;
   if (!closingTime || !/^\d{2}:\d{2}$/.test(closingTime)) { card.hidden = true; return; }
   const minutesUntilClose = toMin(closingTime) - nowMinutes();
-  if (minutesUntilClose <= 0 || minutesUntilClose > 180) { card.hidden = true; return; }
+  if (minutesUntilClose <= 0) { card.hidden = true; return; }
   const t = fmt12(toMin(closingTime));
   document.getElementById('closing-time-text').textContent = `${t.pretty} ${t.ampm}`;
   card.hidden = false;
@@ -397,10 +405,113 @@ async function fetchData() {
       events: (data.events || []).filter(e => !e.hidden),
       config: data.config || currentData.config,
     };
+    updateSpecialEvents(data.specialEvents || []);
     render();
   } catch {
     /* keep existing state on network error */
   }
+}
+
+function specialFingerprint(list) {
+  return list.map(e => `${e.id}:${e.imageFilename || ''}:${e.title || ''}:${e.subtitle || ''}:${e.dateLabel || ''}:${e.location || ''}:${e.url || ''}:${e.fit || 'cover'}:${e.transparent ? 1 : 0}`).join('|');
+}
+
+function updateSpecialEvents(list) {
+  const visible = (list || []).filter(e => !e.hidden);
+  const fp = specialFingerprint(visible);
+  if (fp === lastSpecialFingerprint) return;
+  lastSpecialFingerprint = fp;
+  specialEvents = visible;
+  restartSpecialRotation();
+}
+
+function restartSpecialRotation() {
+  if (specialTimer) { clearTimeout(specialTimer); specialTimer = null; }
+  nextSpecialIndex = 0;
+  lastShowedQr = true;
+  showQrPanel();
+  if (specialEvents.length === 0) return;
+  specialTimer = setTimeout(advanceSpecial, SPECIAL_QR_MS);
+}
+
+function advanceSpecial() {
+  if (specialEvents.length === 0) {
+    showQrPanel();
+    lastShowedQr = true;
+    return;
+  }
+  if (lastShowedQr) {
+    if (nextSpecialIndex >= specialEvents.length) nextSpecialIndex = 0;
+    showSpecialPanel(specialEvents[nextSpecialIndex]);
+    nextSpecialIndex += 1;
+    lastShowedQr = false;
+    specialTimer = setTimeout(advanceSpecial, SPECIAL_PANEL_MS);
+  } else {
+    showQrPanel();
+    lastShowedQr = true;
+    specialTimer = setTimeout(advanceSpecial, SPECIAL_QR_MS);
+  }
+}
+
+function showQrPanel() {
+  const def = document.getElementById('rail-panel-default');
+  const sp = document.getElementById('rail-panel-special');
+  if (def) def.classList.add('is-active');
+  if (sp) sp.classList.remove('is-active');
+}
+
+function renderSpecialQr(url) {
+  const box = document.getElementById('special-qr');
+  const label = document.getElementById('special-qr-label');
+  if (!box || !label) return;
+  if (!url) {
+    box.innerHTML = '';
+    label.textContent = '';
+    return;
+  }
+  try {
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    box.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+    const svg = box.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', '100%');
+    }
+    label.textContent = 'Scan for details';
+  } catch {
+    box.innerHTML = '';
+    label.textContent = '';
+  }
+}
+
+function showSpecialPanel(ev) {
+  const def = document.getElementById('rail-panel-default');
+  const sp = document.getElementById('rail-panel-special');
+  if (!sp) return;
+  const img = document.getElementById('special-image');
+  const title = document.getElementById('special-title');
+  const subtitle = document.getElementById('special-subtitle');
+  const date = document.getElementById('special-date');
+  const loc = document.getElementById('special-location');
+  if (ev.imageFilename) {
+    img.style.backgroundImage = `url('/special-event-images/${encodeURIComponent(ev.imageFilename)}')`;
+    img.style.backgroundSize = ev.fit === 'contain' ? 'contain' : 'cover';
+    sp.classList.remove('no-image');
+  } else {
+    img.style.backgroundImage = '';
+    sp.classList.add('no-image');
+  }
+  if (ev.transparent) img.classList.add('transparent');
+  else img.classList.remove('transparent');
+  title.textContent = ev.title || '';
+  subtitle.textContent = ev.subtitle || '';
+  date.textContent = ev.dateLabel || '';
+  loc.textContent = ev.location || '';
+  renderSpecialQr(ev.url || '');
+  if (def) def.classList.remove('is-active');
+  sp.classList.add('is-active');
 }
 
 function fitStage() {

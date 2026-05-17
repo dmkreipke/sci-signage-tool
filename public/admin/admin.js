@@ -659,22 +659,26 @@ function psRelTime(iso) {
 async function loadPublicSignage() {
   spinner.hidden = false;
   try {
-    const [todayRes, manualRes, configRes] = await Promise.all([
+    const [todayRes, manualRes, configRes, specialRes] = await Promise.all([
       fetch('/api/public-signage/today'),
       fetch('/api/public-signage/manual'),
       fetch('/api/public-signage/config'),
+      fetch('/api/public-signage/special'),
     ]);
     const today = await todayRes.json();
     const manual = await manualRes.json();
     const config = await configRes.json();
+    const special = await specialRes.json();
 
     psTodayISO = today.today;
     psManualLocal = (manual.events || []).map(e => ({ ...e, _dirty: false, _new: false }));
+    psSpecialLocal = (special.events || []).map(e => ({ ...e, _dirty: false, _new: false }));
 
     renderPsTodayTable(today);
     renderPsScrapeStatus(today.scrape, today.today);
     renderPsDatalists(config);
     renderPsManualList();
+    renderPsSpecialList();
     fillPsConfigForm(config);
     showState('publicSignage');
   } catch (err) {
@@ -967,6 +971,281 @@ async function refreshPsTodayView() {
   } catch { /* ignore */ }
 }
 
+// ---------- Special events ----------
+
+let psSpecialLocal = [];
+
+function renderPsSpecialList() {
+  const list = document.getElementById('ps-special-list');
+  if (psSpecialLocal.length === 0) {
+    list.innerHTML = `<div class="ps-empty">No special events yet. Click <strong>+ Add special event</strong> to add one.</div>`;
+    return;
+  }
+  list.innerHTML = psSpecialLocal.map((ev, idx) => {
+    const stateCls = ev._new ? 'ps-new' : (ev._dirty ? 'ps-dirty' : '');
+    const hiddenCls = ev.hidden ? 'ps-special-hidden' : '';
+    const cls = [stateCls, hiddenCls].filter(Boolean).join(' ');
+    const previewCls = [
+      'ps-special-preview',
+      ev.transparent ? 'preview-transparent' : 'preview-framed',
+      ev.fit === 'contain' ? 'preview-contain' : 'preview-cover',
+    ].join(' ');
+    const imgPreview = ev.imageFilename
+      ? `<img src="/special-event-images/${esc(ev.imageFilename)}?t=${Date.now()}" alt="" />`
+      : `<div class="ps-special-noimg">No image<br><span class="ps-special-dims">480 × 640</span><span class="ps-special-dims-note">3:4 portrait</span></div>`;
+    const imgButtons = ev._new
+      ? `<label class="btn-secondary ps-file-label">Choose image<input type="file" accept="image/jpeg,image/png,image/webp" data-ps-special-file="${idx}" hidden></label>`
+      : `<label class="btn-secondary ps-file-label">${ev.imageFilename ? 'Replace image' : 'Choose image'}<input type="file" accept="image/jpeg,image/png,image/webp" data-ps-special-file="${idx}" hidden></label>${ev.imageFilename ? `<button class="btn-secondary" data-ps-special-removeimg="${idx}">Remove image</button>` : ''}`;
+    const pendingNote = ev._pendingImageName
+      ? `<span class="ps-dirty-note">image ready: ${esc(ev._pendingImageName)}</span>`
+      : (ev._pendingRemoveImage ? `<span class="ps-dirty-note">image will be removed</span>` : '');
+    const hiddenBadge = ev.hidden ? '<span class="ps-special-hidden-badge">Hidden</span>' : '';
+    return `
+      <div class="ps-special-card ${cls}" data-ps-special-index="${idx}" data-ps-special-id="${esc(ev.id || '')}"${ev._new ? '' : ' draggable="true"'}>
+        ${ev._new ? '<div class="ps-special-drag-handle ps-special-drag-disabled"></div>' : '<div class="ps-special-drag-handle" title="Drag to reorder">⋮⋮</div>'}
+        <div class="ps-special-preview-col">
+          <div class="${previewCls}">${imgPreview}${hiddenBadge}</div>
+          <div class="ps-seg-group">
+            <div class="ps-seg-label">Fit</div>
+            <div class="ps-seg" role="group">
+              <button type="button" class="ps-seg-btn ${ev.fit !== 'contain' ? 'is-active' : ''}" data-pssf-fit="${idx}" data-val="cover">Crop</button>
+              <button type="button" class="ps-seg-btn ${ev.fit === 'contain' ? 'is-active' : ''}" data-pssf-fit="${idx}" data-val="contain">Fit</button>
+            </div>
+            <div class="ps-seg-label">Frame</div>
+            <div class="ps-seg" role="group">
+              <button type="button" class="ps-seg-btn ${!ev.transparent ? 'is-active' : ''}" data-pssf-transparent="${idx}" data-val="false">Frame</button>
+              <button type="button" class="ps-seg-btn ${ev.transparent ? 'is-active' : ''}" data-pssf-transparent="${idx}" data-val="true">None</button>
+            </div>
+          </div>
+        </div>
+        <div class="ps-special-fields">
+          <label class="ps-field"><span>Title</span>
+            <input type="text" data-pssf="title" value="${esc(ev.title)}">
+          </label>
+          <label class="ps-field"><span>Subtitle</span>
+            <input type="text" data-pssf="subtitle" value="${esc(ev.subtitle || '')}">
+          </label>
+          <label class="ps-field"><span>Date label</span>
+            <input type="text" data-pssf="dateLabel" value="${esc(ev.dateLabel || '')}">
+          </label>
+          <label class="ps-field"><span>Location</span>
+            <input type="text" data-pssf="location" list="ps-locations" value="${esc(ev.location || '')}">
+          </label>
+          <label class="ps-field ps-field-full"><span>URL <small style="text-transform:none;letter-spacing:normal;color:#8b949e">(optional — generates a QR on the display)</small></span>
+            <input type="text" data-pssf="url" value="${esc(ev.url || '')}">
+          </label>
+          <div class="ps-special-imgrow">
+            ${imgButtons}
+            ${pendingNote}
+          </div>
+          <div class="ps-field-actions">
+            ${ev._new
+              ? `<button class="btn-secondary" data-ps-special-cancel="${idx}">Cancel</button><button class="btn-primary" data-ps-special-save="${idx}">Save event</button>`
+              : `<button class="btn-danger" data-ps-special-delete="${idx}">Delete</button><button class="btn-secondary ps-special-dup-btn" data-ps-special-duplicate="${idx}">Duplicate</button><button class="${ev.hidden ? 'btn-primary' : 'btn-secondary'} ps-special-hide-btn" data-ps-special-toggle-hide="${idx}">${ev.hidden ? 'Unhide' : 'Hide'}</button>${ev._dirty ? `<button class="btn-primary ps-special-save-btn" data-ps-special-save="${idx}">Save changes</button><span class="ps-dirty-note ps-dirty-note-right">unsaved changes</span>` : ''}`
+            }
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function markPsSpecialDirty(idx) {
+  const ev = psSpecialLocal[idx];
+  if (!ev || ev._new) return;
+  if (!ev._dirty) {
+    ev._dirty = true;
+    renderPsSpecialList();
+  }
+}
+
+document.getElementById('btn-ps-add-special').addEventListener('click', () => {
+  psSpecialLocal.unshift({
+    id: null,
+    title: '',
+    subtitle: '',
+    dateLabel: '',
+    location: '',
+    url: '',
+    fit: 'cover',
+    transparent: false,
+    hidden: false,
+    imageFilename: '',
+    _new: true,
+    _dirty: true,
+  });
+  renderPsSpecialList();
+});
+
+document.getElementById('ps-special-list').addEventListener('input', e => {
+  const input = e.target.closest('[data-pssf]');
+  if (!input) return;
+  const card = input.closest('[data-ps-special-index]');
+  if (!card) return;
+  const idx = parseInt(card.dataset.psSpecialIndex, 10);
+  psSpecialLocal[idx][input.dataset.pssf] = input.value;
+  markPsSpecialDirty(idx);
+});
+
+document.getElementById('ps-special-list').addEventListener('change', e => {
+  const fileInput = e.target.closest('[data-ps-special-file]');
+  if (!fileInput) return;
+  const idx = parseInt(fileInput.dataset.psSpecialFile, 10);
+  const file = fileInput.files && fileInput.files[0];
+  if (!file) return;
+  psSpecialLocal[idx]._pendingImageFile = file;
+  psSpecialLocal[idx]._pendingImageName = file.name;
+  psSpecialLocal[idx]._pendingRemoveImage = false;
+  if (!psSpecialLocal[idx]._new) psSpecialLocal[idx]._dirty = true;
+  renderPsSpecialList();
+});
+
+document.getElementById('ps-special-list').addEventListener('click', async e => {
+  const fitBtn = e.target.closest('[data-pssf-fit]');
+  if (fitBtn) {
+    const idx = parseInt(fitBtn.dataset.pssfFit, 10);
+    if (psSpecialLocal[idx].fit !== fitBtn.dataset.val) {
+      psSpecialLocal[idx].fit = fitBtn.dataset.val;
+      markPsSpecialDirty(idx);
+      renderPsSpecialList();
+    }
+    return;
+  }
+  const transBtn = e.target.closest('[data-pssf-transparent]');
+  if (transBtn) {
+    const idx = parseInt(transBtn.dataset.pssfTransparent, 10);
+    const next = transBtn.dataset.val === 'true';
+    if (psSpecialLocal[idx].transparent !== next) {
+      psSpecialLocal[idx].transparent = next;
+      markPsSpecialDirty(idx);
+      renderPsSpecialList();
+    }
+    return;
+  }
+  const cancelBtn = e.target.closest('[data-ps-special-cancel]');
+  const removeImgBtn = e.target.closest('[data-ps-special-removeimg]');
+  const deleteBtn = e.target.closest('[data-ps-special-delete]');
+  const duplicateBtn = e.target.closest('[data-ps-special-duplicate]');
+  const toggleHideBtn = e.target.closest('[data-ps-special-toggle-hide]');
+  const saveBtn = e.target.closest('[data-ps-special-save]');
+
+  if (duplicateBtn) {
+    const idx = parseInt(duplicateBtn.dataset.psSpecialDuplicate, 10);
+    const ev = psSpecialLocal[idx];
+    spinner.hidden = false;
+    try {
+      const res = await fetch(`/api/public-signage/special/${encodeURIComponent(ev.id)}/duplicate`, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      psSpecialLocal.splice(idx + 1, 0, { ...data, _dirty: false, _new: false });
+      renderPsSpecialList();
+    } catch (err) {
+      alert(`Duplicate failed: ${err.message}`);
+    } finally {
+      spinner.hidden = true;
+    }
+    return;
+  }
+
+  if (toggleHideBtn) {
+    const idx = parseInt(toggleHideBtn.dataset.psSpecialToggleHide, 10);
+    const ev = psSpecialLocal[idx];
+    const newHidden = !ev.hidden;
+    spinner.hidden = false;
+    try {
+      const formData = new FormData();
+      formData.append('hidden', newHidden ? 'true' : 'false');
+      const res = await fetch(`/api/public-signage/special/${encodeURIComponent(ev.id)}`, { method: 'PATCH', body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      psSpecialLocal[idx] = { ...data, _dirty: false, _new: false };
+      renderPsSpecialList();
+    } catch (err) {
+      alert(`Toggle failed: ${err.message}`);
+    } finally {
+      spinner.hidden = true;
+    }
+    return;
+  }
+
+  if (cancelBtn) {
+    const idx = parseInt(cancelBtn.dataset.psSpecialCancel, 10);
+    psSpecialLocal.splice(idx, 1);
+    renderPsSpecialList();
+    return;
+  }
+
+  if (removeImgBtn) {
+    const idx = parseInt(removeImgBtn.dataset.psSpecialRemoveimg, 10);
+    psSpecialLocal[idx]._pendingRemoveImage = true;
+    psSpecialLocal[idx]._pendingImageFile = null;
+    psSpecialLocal[idx]._pendingImageName = '';
+    psSpecialLocal[idx]._dirty = true;
+    renderPsSpecialList();
+    return;
+  }
+
+  if (deleteBtn) {
+    const idx = parseInt(deleteBtn.dataset.psSpecialDelete, 10);
+    const ev = psSpecialLocal[idx];
+    if (!confirm(`Delete "${ev.title || '(untitled)'}"? This cannot be undone.`)) return;
+    spinner.hidden = false;
+    try {
+      const res = await fetch(`/api/public-signage/special/${encodeURIComponent(ev.id)}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      psSpecialLocal.splice(idx, 1);
+      renderPsSpecialList();
+    } catch (err) {
+      alert(`Delete failed: ${err.message}`);
+    } finally {
+      spinner.hidden = true;
+    }
+    return;
+  }
+
+  if (saveBtn) {
+    const idx = parseInt(saveBtn.dataset.psSpecialSave, 10);
+    const ev = psSpecialLocal[idx];
+    if (!ev.title || !ev.title.trim()) {
+      alert('Title is required.');
+      return;
+    }
+    spinner.hidden = false;
+    try {
+      const formData = new FormData();
+      formData.append('title', ev.title || '');
+      formData.append('subtitle', ev.subtitle || '');
+      formData.append('dateLabel', ev.dateLabel || '');
+      formData.append('location', ev.location || '');
+      formData.append('url', ev.url || '');
+      formData.append('fit', ev.fit || 'cover');
+      formData.append('transparent', ev.transparent ? 'true' : 'false');
+      formData.append('hidden', ev.hidden ? 'true' : 'false');
+      if (ev._pendingImageFile) formData.append('image', ev._pendingImageFile);
+      if (ev._pendingRemoveImage) formData.append('removeImage', 'true');
+      const url = ev._new
+        ? '/api/public-signage/special'
+        : `/api/public-signage/special/${encodeURIComponent(ev.id)}`;
+      const method = ev._new ? 'POST' : 'PATCH';
+      const res = await fetch(url, { method, body: formData });
+      const data = await res.json();
+      if (!res.ok) {
+        const msg = data.details ? data.details.join('; ') : (data.error || `HTTP ${res.status}`);
+        throw new Error(msg);
+      }
+      psSpecialLocal[idx] = { ...data, _dirty: false, _new: false };
+      renderPsSpecialList();
+    } catch (err) {
+      alert(`Save failed: ${err.message}`);
+    } finally {
+      spinner.hidden = true;
+    }
+  }
+});
+
 document.getElementById('btn-ps-save-config').addEventListener('click', async () => {
   const payload = {
     tickerText: document.getElementById('ps-ticker').value,
@@ -1039,6 +1318,80 @@ document.getElementById('btn-ps-save-lists').addEventListener('click', async () 
     spinner.hidden = true;
   }
 });
+
+// --- Drag-and-drop reorder for special events ---
+(function () {
+  const list = document.getElementById('ps-special-list');
+  if (!list) return;
+  let draggingId = null;
+
+  list.addEventListener('dragstart', (e) => {
+    const card = e.target.closest('.ps-special-card[draggable="true"]');
+    if (!card) { e.preventDefault(); return; }
+    draggingId = card.dataset.psSpecialId;
+    card.classList.add('dragging');
+    try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', draggingId); } catch {}
+  });
+
+  list.addEventListener('dragend', () => {
+    list.querySelectorAll('.dragging, .drag-over-top, .drag-over-bottom')
+      .forEach(el => el.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom'));
+    draggingId = null;
+  });
+
+  list.addEventListener('dragover', (e) => {
+    const target = e.target.closest('.ps-special-card');
+    if (!target || !draggingId) return;
+    if (target.dataset.psSpecialId === draggingId) return;
+    e.preventDefault();
+    try { e.dataTransfer.dropEffect = 'move'; } catch {}
+    const rect = target.getBoundingClientRect();
+    const after = e.clientY > rect.top + rect.height / 2;
+    target.classList.toggle('drag-over-top', !after);
+    target.classList.toggle('drag-over-bottom', after);
+  });
+
+  list.addEventListener('dragleave', (e) => {
+    const target = e.target.closest('.ps-special-card');
+    if (!target) return;
+    target.classList.remove('drag-over-top', 'drag-over-bottom');
+  });
+
+  list.addEventListener('drop', async (e) => {
+    const target = e.target.closest('.ps-special-card');
+    if (!target || !draggingId) return;
+    e.preventDefault();
+    const targetId = target.dataset.psSpecialId;
+    if (targetId === draggingId) return;
+    const rect = target.getBoundingClientRect();
+    const after = e.clientY > rect.top + rect.height / 2;
+
+    const srcIdx = psSpecialLocal.findIndex(ev => ev.id === draggingId);
+    const tgtIdx = psSpecialLocal.findIndex(ev => ev.id === targetId);
+    if (srcIdx === -1 || tgtIdx === -1) return;
+    const [moved] = psSpecialLocal.splice(srcIdx, 1);
+    let insertAt = psSpecialLocal.findIndex(ev => ev.id === targetId);
+    if (after) insertAt += 1;
+    psSpecialLocal.splice(insertAt, 0, moved);
+    renderPsSpecialList();
+
+    const ids = psSpecialLocal.filter(ev => !ev._new).map(ev => ev.id);
+    try {
+      const res = await fetch('/api/public-signage/special/order', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+    } catch (err) {
+      alert(`Reorder failed: ${err.message}. Reloading from server.`);
+      loadPublicSignage();
+    }
+  });
+})();
 
 // --- Initial tab activation (runs once all functions are defined) ---
 activateTab(localStorage.getItem(TAB_KEY) || 'group');

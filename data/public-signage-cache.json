@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-05-07T18:36:34.672Z",
-  "forDate": "2026-05-07",
-  "lastSuccessAt": "2026-05-07T18:36:34.672Z",
-  "lastErrorAt": "2026-05-07T17:00:34.043Z",
+  "fetchedAt": "2026-05-17T20:19:43.067Z",
+  "forDate": "2026-05-17",
+  "lastSuccessAt": "2026-05-17T20:19:43.067Z",
+  "lastErrorAt": "2026-05-17T16:34:14.261Z",
   "lastErrorMessage": "fetch failed",
   "etag": null,
   "lastModified": null,
@@ -20,51 +20,6 @@
       "source": "website",
       "startTime": "10:30",
       "endTime": "10:50",
-      "title": "Deep Freeze",
-      "location": "SCI Live Theater",
-      "category": "Live Programs",
-      "description": "Get chills and thrills from cryogenic demonstrations."
-    },
-    {
-      "source": "website",
-      "startTime": "11:30",
-      "endTime": "11:50",
-      "title": "Iowa Skies Tonight",
-      "location": "Star Theater Planetarium",
-      "category": "Planetarium",
-      "description": "Locate constellations and planets, and hear myths of the night sky in this live planetarium program. Program and location subject to change."
-    },
-    {
-      "source": "website",
-      "startTime": "12:00",
-      "endTime": "12:20",
-      "title": "Making Waves",
-      "location": "SCI Live Theater",
-      "category": "Live Programs",
-      "description": "Discover how waves govern everything from the tiniest particles to the fabric of spacetime itself! This interactive program brings science to life with dancing flames, levitating superconductors, and a symphony of electricity."
-    },
-    {
-      "source": "website",
-      "startTime": "12:30",
-      "endTime": "12:40",
-      "title": "Snapping Turtle Feeding",
-      "location": "What on Earth?",
-      "category": "Live Programs",
-      "description": "Have you ever wondered what Snippy the Snapping Turtle eats? Come check out a feeding demonstration of one of SCI’s most ravenous reptiles! The snapping turtle feeding may be too intense for some visitors."
-    },
-    {
-      "source": "website",
-      "startTime": "13:00",
-      "endTime": "13:20",
-      "title": "Cold Blooded Critters",
-      "location": "SCI Live Theater",
-      "category": "Live Programs",
-      "description": "Meet and get the chance to touch some of SCI’s resident reptiles and amphibians."
-    },
-    {
-      "source": "website",
-      "startTime": "13:30",
-      "endTime": "13:50",
       "title": "Discovering Deep Skies",
       "location": "Star Theater Planetarium",
       "category": "Planetarium",
@@ -72,21 +27,57 @@
     },
     {
       "source": "website",
-      "startTime": "14:30",
-      "endTime": "14:50",
-      "title": "Fire Works",
+      "startTime": "11:00",
+      "endTime": "11:20",
+      "title": "Chemistry Clues",
       "location": "SCI Live Theater",
       "category": "Live Programs",
-      "description": "From things that glow to things that explode, this program is a real blast!"
+      "description": "Investigate the clues chemists use with explosive experiments!"
+    },
+    {
+      "source": "website",
+      "startTime": "12:00",
+      "endTime": "12:10",
+      "title": "Snapping Turtle Feeding",
+      "location": "What on Earth?",
+      "category": "Live Programs",
+      "description": "Have you ever wondered what Snippy the Snapping Turtle eats? Come check out a feeding demonstration of one of SCI’s most ravenous reptiles! The snapping turtle feeding may be too intense for some visitors."
+    },
+    {
+      "source": "website",
+      "startTime": "12:30",
+      "endTime": "12:50",
+      "title": "Iowa Skies Tonight",
+      "location": "Star Theater Planetarium",
+      "category": "Planetarium",
+      "description": "Locate constellations and planets, and hear myths of the night sky in this live planetarium program. Program and location subject to change."
+    },
+    {
+      "source": "website",
+      "startTime": "14:00",
+      "endTime": "14:20",
+      "title": "Solar Odyssey: Journey Through Our Cosmic Neighborhood",
+      "location": "Star Theater Planetarium",
+      "category": "Planetarium",
+      "description": "Help guide a breathtaking journey through our solar system, exploring the unique features, mysteries, and wonders of its most important celestial bodies."
+    },
+    {
+      "source": "website",
+      "startTime": "14:30",
+      "endTime": "14:50",
+      "title": "Zap",
+      "location": "SCI Live Theater",
+      "category": "Live Programs",
+      "description": "Investigate the world of electrons and electricity for a hair-raising experience!"
     },
     {
       "source": "website",
       "startTime": "15:00",
       "endTime": "15:20",
-      "title": "Phantom of the Universe: The Hunt for Dark Matter",
+      "title": "Black Holes: The Other Side of Infinity",
       "location": "Star Theater Planetarium",
       "category": "Planetarium",
-      "description": "This show reveals dark matter's earliest clues, covering the astral choreography of galactic orbits and sensitive detectors hidden deep underground. Program and location subject to change."
+      "description": "Experience one of the most mysterious — and misunderstood — wonders of the Universe. Narrated by Liam Neeson. Sponsored by NASA. Program and location subject to change."
     }
   ]
 }

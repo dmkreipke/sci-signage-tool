@@ -3,6 +3,9 @@ const path = require('path');
 const crypto = require('crypto');
 
 const DATA_FILE = path.join(__dirname, '..', 'data', 'public-signage.json');
+const SPECIAL_IMAGES_DIR = path.join(__dirname, '..', 'data', 'special-event-images');
+
+const ALLOWED_IMAGE_EXTS = new Set(['jpg', 'jpeg', 'png', 'webp']);
 
 const DEFAULTS = {
   publishedAt: null,
@@ -19,6 +22,7 @@ const DEFAULTS = {
   categories: ['Planetarium', 'Live Programs', 'Special Events'],
   closingTime: '17:00',
   manualEvents: [],
+  specialEvents: [],
   hiddenWebsiteEvents: {},
 };
 
@@ -68,6 +72,7 @@ function read() {
       ...DEFAULTS,
       ...parsed,
       manualEvents: parsed.manualEvents || [],
+      specialEvents: Array.isArray(parsed.specialEvents) ? parsed.specialEvents : [],
       titles: Array.isArray(parsed.titles) ? parsed.titles : DEFAULTS.titles,
       locations: Array.isArray(parsed.locations) ? parsed.locations : DEFAULTS.locations,
       categories: Array.isArray(parsed.categories) ? parsed.categories : DEFAULTS.categories,
@@ -195,6 +200,156 @@ function manualForDate(iso) {
     .map(({ date, ...rest }) => rest);
 }
 
+function sanitizeImageExt(ext) {
+  const cleaned = String(ext || '').trim().toLowerCase().replace(/^\./, '');
+  return ALLOWED_IMAGE_EXTS.has(cleaned) ? cleaned : null;
+}
+
+function writeSpecialImage(id, buffer, ext) {
+  const safeExt = sanitizeImageExt(ext);
+  if (!safeExt) return null;
+  fs.mkdirSync(SPECIAL_IMAGES_DIR, { recursive: true });
+  const filename = `${id}.${safeExt}`;
+  fs.writeFileSync(path.join(SPECIAL_IMAGES_DIR, filename), buffer);
+  return filename;
+}
+
+function deleteSpecialImage(filename) {
+  if (!filename) return;
+  const safeName = path.basename(String(filename));
+  const fullPath = path.join(SPECIAL_IMAGES_DIR, safeName);
+  try { fs.unlinkSync(fullPath); } catch { /* file may already be gone */ }
+}
+
+function specialBool(v) {
+  if (typeof v === 'boolean') return v;
+  const s = String(v == null ? '' : v).trim().toLowerCase();
+  return s === 'true' || s === '1' || s === 'on' || s === 'yes';
+}
+
+function normalizeSpecial(input, id, existing) {
+  const fitRaw = String(input.fit || '').trim().toLowerCase();
+  return {
+    id,
+    title: String(input.title || '').trim(),
+    subtitle: String(input.subtitle || '').trim(),
+    dateLabel: String(input.dateLabel || '').trim(),
+    location: String(input.location || '').trim(),
+    url: String(input.url || '').trim(),
+    fit: fitRaw === 'contain' ? 'contain' : 'cover',
+    transparent: specialBool(input.transparent),
+    hidden: specialBool(input.hidden),
+    imageFilename: existing && existing.imageFilename ? existing.imageFilename : '',
+    createdAt: existing && existing.createdAt ? existing.createdAt : new Date().toISOString(),
+  };
+}
+
+function listSpecial() {
+  return read().specialEvents;
+}
+
+function addSpecial(input, imageBuffer, imageExt) {
+  const title = String(input.title || '').trim();
+  if (!title) return { ok: false, errors: ['title is required'] };
+  const data = read();
+  const id = `special-${crypto.randomUUID()}`;
+  let imageFilename = '';
+  if (imageBuffer && imageBuffer.length) {
+    imageFilename = writeSpecialImage(id, imageBuffer, imageExt) || '';
+  }
+  const evt = normalizeSpecial(input, id, { imageFilename, createdAt: null });
+  data.specialEvents.push(evt);
+  writeAll(data);
+  return { ok: true, event: evt };
+}
+
+function updateSpecial(id, patch, imageBuffer, imageExt, removeImage) {
+  const data = read();
+  const idx = data.specialEvents.findIndex(e => e.id === id);
+  if (idx === -1) return { ok: false, errors: ['not found'] };
+  const current = data.specialEvents[idx];
+  const merged = { ...current, ...patch };
+  const title = String(merged.title || '').trim();
+  if (!title) return { ok: false, errors: ['title is required'] };
+
+  let nextImageFilename = current.imageFilename || '';
+  if (imageBuffer && imageBuffer.length) {
+    if (current.imageFilename) deleteSpecialImage(current.imageFilename);
+    nextImageFilename = writeSpecialImage(id, imageBuffer, imageExt) || '';
+  } else if (removeImage && current.imageFilename) {
+    deleteSpecialImage(current.imageFilename);
+    nextImageFilename = '';
+  }
+
+  data.specialEvents[idx] = normalizeSpecial(merged, id, {
+    imageFilename: nextImageFilename,
+    createdAt: current.createdAt,
+  });
+  writeAll(data);
+  return { ok: true, event: data.specialEvents[idx] };
+}
+
+function removeSpecial(id) {
+  const data = read();
+  const target = data.specialEvents.find(e => e.id === id);
+  if (!target) return { ok: false };
+  if (target.imageFilename) deleteSpecialImage(target.imageFilename);
+  data.specialEvents = data.specialEvents.filter(e => e.id !== id);
+  writeAll(data);
+  return { ok: true };
+}
+
+function duplicateSpecial(id) {
+  const data = read();
+  const idx = data.specialEvents.findIndex(e => e.id === id);
+  if (idx === -1) return { ok: false, errors: ['not found'] };
+  const source = data.specialEvents[idx];
+  const newId = `special-${crypto.randomUUID()}`;
+  let newImageFilename = '';
+  if (source.imageFilename) {
+    const srcPath = path.join(SPECIAL_IMAGES_DIR, path.basename(source.imageFilename));
+    try {
+      const buffer = fs.readFileSync(srcPath);
+      const extMatch = source.imageFilename.match(/\.([a-zA-Z0-9]+)$/);
+      const ext = extMatch ? extMatch[1] : '';
+      newImageFilename = writeSpecialImage(newId, buffer, ext) || '';
+    } catch {
+      newImageFilename = '';
+    }
+  }
+  const newEvent = {
+    ...source,
+    id: newId,
+    imageFilename: newImageFilename,
+    createdAt: new Date().toISOString(),
+  };
+  data.specialEvents.splice(idx + 1, 0, newEvent);
+  writeAll(data);
+  return { ok: true, event: newEvent };
+}
+
+function reorderSpecial(ids) {
+  if (!Array.isArray(ids)) return { ok: false, errors: ['ids array required'] };
+  const data = read();
+  const byId = new Map(data.specialEvents.map(e => [e.id, e]));
+  const seen = new Set();
+  const next = [];
+  for (const id of ids) {
+    if (typeof id !== 'string') continue;
+    if (seen.has(id)) continue;
+    const ev = byId.get(id);
+    if (!ev) continue;
+    seen.add(id);
+    next.push(ev);
+  }
+  for (const ev of data.specialEvents) {
+    if (!seen.has(ev.id)) next.push(ev);
+  }
+  data.specialEvents = next;
+  writeAll(data);
+  return { ok: true, events: next };
+}
+
 function getHiddenSignatures(dateISO) {
   const data = read();
   const list = data.hiddenWebsiteEvents[dateISO] || [];
@@ -235,4 +390,10 @@ module.exports = {
   signatureFor,
   getHiddenSignatures,
   setHidden,
+  listSpecial,
+  addSpecial,
+  updateSpecial,
+  removeSpecial,
+  duplicateSpecial,
+  reorderSpecial,
 };

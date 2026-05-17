@@ -1,5 +1,5 @@
 {
-  "publishedAt": "2026-05-07T14:08:14.694Z",
+  "publishedAt": "2026-05-17T20:06:37.763Z",
   "qrUrl": "https://www.sciowa.org/programs-and-events/event-calendar/",
   "qrLabel": "",
   "tickerText": "Welcome to the Science Center of Iowa — Programs run throughout the day, no reservation required for general admission · Planetarium & Live Shows seat on a first-come basis, arrive 5 minutes early · Ask any staff member for today's program locations · Members visit free — join at the A-ha! Store.",
@@ -23,13 +23,41 @@
     {
       "id": "manual-03ba17c0-5c79-4189-b75b-a276fe4ba727",
       "source": "manual",
-      "date": "2026-05-07",
-      "startTime": "15:30",
-      "endTime": "16:00",
+      "date": "2026-05-17",
+      "startTime": "11:00",
+      "endTime": "11:20",
       "title": "Solar Odyssey: Journey Through Our Cosmic Neighborhood",
       "location": "Star Theater Planetarium",
       "category": "Planetarium",
       "description": ""
+    }
+  ],
+  "specialEvents": [
+    {
+      "id": "special-0b82751c-5b42-4ce6-97a6-92164fece78b",
+      "title": "Star Parties",
+      "subtitle": "Observe celestial objects with high powered telescopes",
+      "dateLabel": "",
+      "location": "",
+      "url": "https://www.sciowa.org/programs-and-events/family-and-all-ages-programs/star-parties/",
+      "fit": "cover",
+      "transparent": false,
+      "hidden": false,
+      "imageFilename": "special-0b82751c-5b42-4ce6-97a6-92164fece78b.jpg",
+      "createdAt": "2026-05-17T02:57:48.205Z"
+    },
+    {
+      "id": "special-cbbcf5fc-12a4-4862-9db7-7a022624b014",
+      "title": "BioBlitz at Jester Park",
+      "subtitle": "Citizen Science with Polk County Conservation",
+      "dateLabel": "Sat, June 20",
+      "location": "Jester Park",
+      "url": "https://www.sciowa.org/programs-and-events/special-events/bioblitz-at-jester-park/",
+      "fit": "contain",
+      "transparent": true,
+      "hidden": false,
+      "imageFilename": "special-cbbcf5fc-12a4-4862-9db7-7a022624b014.png",
+      "createdAt": "2026-05-17T00:39:54.448Z"
     }
   ],
   "hiddenWebsiteEvents": {

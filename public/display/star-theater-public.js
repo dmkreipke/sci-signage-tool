@@ -371,6 +371,14 @@ function render() {
   renderScheduleStrip(stripList);
   renderQR();
   renderTicker();
+
+  // Toggle compact layout when the hero title wraps to two lines, to prevent
+  // the absolutely-positioned QR footer from overlapping the schedule strip.
+  const titleEl = document.getElementById('hero-title');
+  const lineH = parseFloat(getComputedStyle(titleEl).lineHeight);
+  document.getElementById('stage').classList.toggle(
+    'layout-compact', titleEl.scrollHeight > lineH * 1.5
+  );
 }
 
 function fitStage() {
