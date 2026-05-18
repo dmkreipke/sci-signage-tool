@@ -672,7 +672,7 @@ async function loadPublicSignage() {
 
     psTodayISO = today.today;
     psManualLocal = (manual.events || []).map(e => ({ ...e, _dirty: false, _new: false }));
-    psSpecialLocal = (special.events || []).map(e => ({ ...e, _dirty: false, _new: false }));
+    psSpecialLocal = (special.events || []).map(e => attachPsSpecialSaved({ ...e, _dirty: false, _new: false }));
 
     renderPsTodayTable(today);
     renderPsScrapeStatus(today.scrape, today.today);
@@ -792,9 +792,16 @@ function fillPsConfigForm(config) {
   closingInput.value = config.closingTime || '';
   closingInput._savedValue = closingInput.value;
   document.getElementById('ps-closing-dirty').hidden = true;
-  document.getElementById('ps-list-titles').value = (config.titles || []).join('\n');
-  document.getElementById('ps-list-locations').value = (config.locations || []).join('\n');
-  document.getElementById('ps-list-categories').value = (config.categories || []).join('\n');
+  const titles = document.getElementById('ps-list-titles');
+  const listLocations = document.getElementById('ps-list-locations');
+  const categories = document.getElementById('ps-list-categories');
+  titles.value = (config.titles || []).join('\n');
+  titles._savedValue = titles.value;
+  listLocations.value = (config.locations || []).join('\n');
+  listLocations._savedValue = listLocations.value;
+  categories.value = (config.categories || []).join('\n');
+  categories._savedValue = categories.value;
+  document.getElementById('ps-lists-dirty').hidden = true;
 }
 
 function renderPsDatalists(config) {
@@ -982,6 +989,15 @@ async function refreshPsTodayView() {
 
 let psSpecialLocal = [];
 
+const PS_SPECIAL_SAVED_FIELDS = ['title', 'subtitle', 'dateLabel', 'location', 'url', 'fit', 'transparent', 'hidden', 'imageFilename'];
+
+function attachPsSpecialSaved(ev) {
+  const saved = {};
+  for (const k of PS_SPECIAL_SAVED_FIELDS) saved[k] = ev[k];
+  ev._saved = saved;
+  return ev;
+}
+
 function renderPsSpecialList() {
   const list = document.getElementById('ps-special-list');
   if (psSpecialLocal.length === 0) {
@@ -997,21 +1013,30 @@ function renderPsSpecialList() {
       ev.transparent ? 'preview-transparent' : 'preview-framed',
       ev.fit === 'contain' ? 'preview-contain' : 'preview-cover',
     ].join(' ');
-    const imgPreview = ev.imageFilename
-      ? `<img src="/special-event-images/${esc(ev.imageFilename)}?t=${Date.now()}" alt="" />`
-      : `<div class="ps-special-noimg">No image<br><span class="ps-special-dims">480 × 640</span><span class="ps-special-dims-note">3:4 portrait</span></div>`;
-    const imgButtons = ev._new
-      ? `<button type="button" class="btn-secondary ps-file-label" data-ps-special-filepick="${idx}" data-tooltip="Upload a poster image for this event">Choose image</button>`
-      : `<button type="button" class="btn-secondary ps-file-label" data-ps-special-filepick="${idx}" data-tooltip="Upload a new poster image">${ev.imageFilename ? 'Replace image' : 'Choose image'}</button>${ev.imageFilename ? `<button class="btn-secondary" data-ps-special-removeimg="${idx}" data-tooltip="Remove the image from this event">Remove image</button>` : ''}`;
-    const pendingNote = ev._pendingImageName
-      ? `<span class="ps-dirty-note">image ready: ${esc(ev._pendingImageName)}</span>`
-      : (ev._pendingRemoveImage ? `<span class="ps-dirty-note">image will be removed</span>` : '');
+    const dropzone = `<div class="ps-special-dropzone" data-ps-special-filepick="${idx}" data-ps-special-droptarget="${idx}" data-tooltip="Drag an image here, or click to browse">
+        <div class="ps-special-dropzone-icon">⬆</div>
+        <div class="ps-special-dropzone-main">Drag image here</div>
+        <div class="ps-special-dropzone-sub">or click to browse</div>
+        <div class="ps-special-dropzone-dims">480 × 640 · 3:4</div>
+      </div>`;
+    const overlayButtons = `<button type="button" class="ps-special-img-action ps-special-img-replace" data-ps-special-filepick="${idx}" data-tooltip="Replace image" aria-label="Replace image">⇆</button><button type="button" class="ps-special-img-action ps-special-img-remove" data-ps-special-removeimg="${idx}" data-tooltip="Remove image" aria-label="Remove image">✕</button>`;
+    const imgPreview = ev._pendingImagePreviewUrl
+      ? `<img src="${esc(ev._pendingImagePreviewUrl)}" alt="" />${overlayButtons}`
+      : (ev._pendingRemoveImage
+        ? dropzone
+        : (ev.imageFilename
+          ? `<img src="/special-event-images/${esc(ev.imageFilename)}?t=${Date.now()}" alt="" />${overlayButtons}`
+          : dropzone));
+    const pendingCaption = ev._pendingImageName
+      ? `<div class="ps-special-pending-caption">image ready: ${esc(ev._pendingImageName)}</div>`
+      : (ev._pendingRemoveImage ? `<div class="ps-special-pending-caption">image will be removed</div>` : '');
     const hiddenBadge = ev.hidden ? '<span class="ps-special-hidden-badge">Hidden</span>' : '';
     return `
       <div class="ps-special-card ${cls}" data-ps-special-index="${idx}" data-ps-special-id="${esc(ev.id || '')}"${ev._new ? '' : ' draggable="true"'}>
         ${ev._new ? '<div class="ps-special-drag-handle ps-special-drag-disabled"></div>' : '<div class="ps-special-drag-handle" data-tooltip="Drag to reorder" aria-label="Drag to reorder">⋮⋮</div>'}
         <div class="ps-special-preview-col">
           <div class="${previewCls}">${imgPreview}${hiddenBadge}</div>
+          ${pendingCaption}
           <div class="ps-seg-group">
             <div class="ps-seg-label">Fit</div>
             <div class="ps-seg" role="group">
@@ -1036,21 +1061,18 @@ function renderPsSpecialList() {
             <input type="text" data-pssf="dateLabel" value="${esc(ev.dateLabel || '')}">
           </label>
           <label class="ps-field"><span>Location</span>
-            <input type="text" data-pssf="location" list="ps-locations" value="${esc(ev.location || '')}">
+            <input type="text" data-pssf="location" value="${esc(ev.location || '')}">
           </label>
           <label class="ps-field ps-field-full"><span>URL <small style="text-transform:none;letter-spacing:normal;color:#8b949e">(optional — generates a QR on the display)</small></span>
             <input type="text" data-pssf="url" value="${esc(ev.url || '')}">
           </label>
-          <div class="ps-special-imgrow">
-            ${imgButtons}
-            ${pendingNote}
-          </div>
           <div class="ps-field-actions">
             ${ev._new
               ? `<button class="btn-secondary" data-ps-special-cancel="${idx}" data-tooltip="Discard and remove this new event">Cancel</button><button class="btn-primary" data-ps-special-save="${idx}" data-tooltip="Save this event to the signage">Save event</button>`
-              : `<button class="btn-danger" data-ps-special-delete="${idx}" data-tooltip="Permanently delete this event">Delete</button><button class="btn-secondary ps-special-dup-btn" data-ps-special-duplicate="${idx}" data-tooltip="Duplicate this event card">Duplicate</button><button class="${ev.hidden ? 'btn-primary' : 'btn-secondary'} ps-special-hide-btn" data-ps-special-toggle-hide="${idx}" data-tooltip="${ev.hidden ? 'Make this event visible on the public display' : 'Hide this event from the public display'}">${ev.hidden ? 'Unhide from Display' : 'Hide from Display'}</button>${ev._dirty ? `<button class="btn-primary ps-special-save-btn" data-ps-special-save="${idx}" data-tooltip="Save changes to this event">Save changes</button><span class="ps-dirty-note ps-dirty-note-right">unsaved changes</span>` : ''}`
+              : `<button class="btn-danger" data-ps-special-delete="${idx}" data-tooltip="Permanently delete this event">Delete event</button><button class="btn-secondary ps-special-dup-btn" data-ps-special-duplicate="${idx}" data-tooltip="Duplicate this event card">Duplicate event</button><button class="${ev.hidden ? 'btn-primary' : 'btn-secondary'} ps-special-hide-btn" data-ps-special-toggle-hide="${idx}" data-tooltip="${ev.hidden ? 'Make this event visible on the public display' : 'Hide this event from the public display'}">${ev.hidden ? 'Unhide event' : 'Hide event'}</button>`
             }
           </div>
+          ${!ev._new && ev._dirty ? `<div class="ps-field-actions ps-field-actions-dirty"><span class="ps-dirty-note ps-dirty-note-left">unsaved changes</span><button class="btn-primary ps-special-save-btn" data-ps-special-save="${idx}" data-tooltip="Save changes to this event">Save changes</button><button class="btn-danger ps-special-undo-btn" data-ps-special-undo="${idx}" data-tooltip="Discard unsaved changes and revert to the last saved version">Undo changes</button></div>` : ''}
         </div>
       </div>
     `;
@@ -1060,9 +1082,15 @@ function renderPsSpecialList() {
 function markPsSpecialDirty(idx) {
   const ev = psSpecialLocal[idx];
   if (!ev || ev._new) return;
-  if (!ev._dirty) {
-    ev._dirty = true;
-    renderPsSpecialList();
+  if (ev._dirty) return;
+  ev._dirty = true;
+  const card = document.querySelector(`.ps-special-card[data-ps-special-index="${idx}"]`);
+  if (!card) return;
+  card.classList.add('ps-dirty');
+  const fields = card.querySelector('.ps-special-fields');
+  if (fields && !fields.querySelector('.ps-field-actions-dirty')) {
+    fields.insertAdjacentHTML('beforeend',
+      `<div class="ps-field-actions ps-field-actions-dirty"><span class="ps-dirty-note ps-dirty-note-left">unsaved changes</span><button class="btn-primary ps-special-save-btn" data-ps-special-save="${idx}" data-tooltip="Save changes to this event">Save changes</button><button class="btn-danger ps-special-undo-btn" data-ps-special-undo="${idx}" data-tooltip="Discard unsaved changes and revert to the last saved version">Undo changes</button></div>`);
   }
 }
 
@@ -1102,21 +1130,81 @@ psSpecialFilePicker.accept = 'image/jpeg,image/png,image/webp';
 psSpecialFilePicker.style.cssText = 'position:absolute;width:0;height:0;opacity:0;pointer-events:none';
 document.body.appendChild(psSpecialFilePicker);
 
-psSpecialFilePicker.addEventListener('change', () => {
-  const idx = psSpecialFilePendingIdx;
-  const file = psSpecialFilePicker.files && psSpecialFilePicker.files[0];
-  psSpecialFilePicker.value = '';
+function applyPsSpecialPendingImage(idx, file) {
   if (idx < 0 || !psSpecialLocal[idx] || !file) return;
+  if (!file.type || !file.type.startsWith('image/')) {
+    alert('That file does not look like an image. Use JPEG, PNG, or WebP.');
+    return;
+  }
   if (file.size > 25 * 1024 * 1024) {
     alert(`Image is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum is 25 MB.`);
     return;
   }
+  if (psSpecialLocal[idx]._pendingImagePreviewUrl) {
+    URL.revokeObjectURL(psSpecialLocal[idx]._pendingImagePreviewUrl);
+  }
   psSpecialLocal[idx]._pendingImageFile = file;
   psSpecialLocal[idx]._pendingImageName = file.name;
+  psSpecialLocal[idx]._pendingImagePreviewUrl = URL.createObjectURL(file);
   psSpecialLocal[idx]._pendingRemoveImage = false;
   if (!psSpecialLocal[idx]._new) psSpecialLocal[idx]._dirty = true;
   renderPsSpecialList();
+}
+
+psSpecialFilePicker.addEventListener('change', () => {
+  const idx = psSpecialFilePendingIdx;
+  const file = psSpecialFilePicker.files && psSpecialFilePicker.files[0];
+  psSpecialFilePicker.value = '';
+  applyPsSpecialPendingImage(idx, file);
 });
+
+(function wirePsSpecialDragDrop() {
+  const list = document.getElementById('ps-special-list');
+  function findDropTarget(el) {
+    if (!el || !el.closest) return null;
+    const dz = el.closest('.ps-special-dropzone');
+    if (dz) return { el: dz, idx: parseInt(dz.dataset.psSpecialDroptarget, 10) };
+    const card = el.closest('.ps-special-card');
+    if (!card) return null;
+    const preview = card.querySelector('.ps-special-preview');
+    if (!preview || !preview.querySelector('img')) return null;
+    return { el: preview, idx: parseInt(card.dataset.psSpecialIndex, 10) };
+  }
+  function isFileDrag(e) {
+    const types = e.dataTransfer && e.dataTransfer.types;
+    if (!types) return false;
+    return Array.from(types).includes('Files');
+  }
+  list.addEventListener('dragover', e => {
+    if (!isFileDrag(e)) return;
+    const t = findDropTarget(e.target);
+    if (!t) return;
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+    if (!t.el.classList.contains('is-drag-over')) {
+      list.querySelectorAll('.is-drag-over').forEach(n => n.classList.remove('is-drag-over'));
+      t.el.classList.add('is-drag-over');
+    }
+  });
+  list.addEventListener('dragleave', e => {
+    const t = findDropTarget(e.target);
+    if (!t) return;
+    if (!t.el.contains(e.relatedTarget)) t.el.classList.remove('is-drag-over');
+  });
+  list.addEventListener('drop', e => {
+    if (!isFileDrag(e)) return;
+    const t = findDropTarget(e.target);
+    if (!t) return;
+    e.preventDefault();
+    t.el.classList.remove('is-drag-over');
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    applyPsSpecialPendingImage(t.idx, file);
+  });
+  list.addEventListener('dragend', () => {
+    list.querySelectorAll('.is-drag-over').forEach(n => n.classList.remove('is-drag-over'));
+  });
+})();
 
 document.getElementById('ps-special-list').addEventListener('click', async e => {
   const fitBtn = e.target.closest('[data-pssf-fit]');
@@ -1151,7 +1239,18 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
   const deleteBtn = e.target.closest('[data-ps-special-delete]');
   const duplicateBtn = e.target.closest('[data-ps-special-duplicate]');
   const toggleHideBtn = e.target.closest('[data-ps-special-toggle-hide]');
+  const undoBtn = e.target.closest('[data-ps-special-undo]');
   const saveBtn = e.target.closest('[data-ps-special-save]');
+
+  if (undoBtn) {
+    const idx = parseInt(undoBtn.dataset.psSpecialUndo, 10);
+    const ev = psSpecialLocal[idx];
+    if (!ev || !ev._saved) return;
+    if (ev._pendingImagePreviewUrl) URL.revokeObjectURL(ev._pendingImagePreviewUrl);
+    psSpecialLocal[idx] = attachPsSpecialSaved({ ...ev._saved, id: ev.id, _dirty: false, _new: false });
+    renderPsSpecialList();
+    return;
+  }
 
   if (duplicateBtn) {
     const idx = parseInt(duplicateBtn.dataset.psSpecialDuplicate, 10);
@@ -1161,7 +1260,7 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
       const res = await fetch(`/api/public-signage/special/${encodeURIComponent(ev.id)}/duplicate`, { method: 'POST' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-      psSpecialLocal.splice(idx + 1, 0, { ...data, _dirty: false, _new: false });
+      psSpecialLocal.splice(idx + 1, 0, attachPsSpecialSaved({ ...data, _dirty: false, _new: false }));
       renderPsSpecialList();
     } catch (err) {
       alert(`Duplicate failed: ${err.message}`);
@@ -1182,7 +1281,7 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
       const res = await fetch(`/api/public-signage/special/${encodeURIComponent(ev.id)}`, { method: 'PATCH', body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-      psSpecialLocal[idx] = { ...data, _dirty: false, _new: false };
+      psSpecialLocal[idx] = attachPsSpecialSaved({ ...data, _dirty: false, _new: false });
       renderPsSpecialList();
     } catch (err) {
       alert(`Toggle failed: ${err.message}`);
@@ -1194,6 +1293,9 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
 
   if (cancelBtn) {
     const idx = parseInt(cancelBtn.dataset.psSpecialCancel, 10);
+    if (psSpecialLocal[idx]._pendingImagePreviewUrl) {
+      URL.revokeObjectURL(psSpecialLocal[idx]._pendingImagePreviewUrl);
+    }
     psSpecialLocal.splice(idx, 1);
     renderPsSpecialList();
     return;
@@ -1201,6 +1303,10 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
 
   if (removeImgBtn) {
     const idx = parseInt(removeImgBtn.dataset.psSpecialRemoveimg, 10);
+    if (psSpecialLocal[idx]._pendingImagePreviewUrl) {
+      URL.revokeObjectURL(psSpecialLocal[idx]._pendingImagePreviewUrl);
+      psSpecialLocal[idx]._pendingImagePreviewUrl = '';
+    }
     psSpecialLocal[idx]._pendingRemoveImage = true;
     psSpecialLocal[idx]._pendingImageFile = null;
     psSpecialLocal[idx]._pendingImageName = '';
@@ -1261,7 +1367,8 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
         const msg = (data.details ? data.details.join('; ') : null) || data.error || `HTTP ${res.status}`;
         throw new Error(msg);
       }
-      psSpecialLocal[idx] = { ...data, _dirty: false, _new: false };
+      if (ev._pendingImagePreviewUrl) URL.revokeObjectURL(ev._pendingImagePreviewUrl);
+      psSpecialLocal[idx] = attachPsSpecialSaved({ ...data, _dirty: false, _new: false });
       renderPsSpecialList();
     } catch (err) {
       alert(`Save failed: ${err.message}`);
@@ -1342,6 +1449,22 @@ document.getElementById('btn-ps-save-closing').addEventListener('click', async (
     spinner.hidden = true;
   }
 });
+
+function checkPsListsDirty() {
+  const titles = document.getElementById('ps-list-titles');
+  const locs = document.getElementById('ps-list-locations');
+  const cats = document.getElementById('ps-list-categories');
+  const changed =
+    titles.value !== (titles._savedValue ?? '') ||
+    locs.value !== (locs._savedValue ?? '') ||
+    cats.value !== (cats._savedValue ?? '');
+  document.getElementById('ps-lists-dirty').hidden = !changed;
+  if (changed) document.getElementById('ps-lists-status').textContent = '';
+}
+
+document.getElementById('ps-list-titles').addEventListener('input', checkPsListsDirty);
+document.getElementById('ps-list-locations').addEventListener('input', checkPsListsDirty);
+document.getElementById('ps-list-categories').addEventListener('input', checkPsListsDirty);
 
 document.getElementById('btn-ps-save-lists').addEventListener('click', async () => {
   const payload = {

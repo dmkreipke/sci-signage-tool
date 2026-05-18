@@ -13,8 +13,8 @@
       <span id="status-badge" class="badge"></span>
     </div>
     <nav class="tabs" role="tablist">
-      <button id="tab-public" class="tab" role="tab" aria-selected="false" data-tab="public" data-tooltip="Switch to Public Schedule tab">Public Schedule</button>
-      <button id="tab-group" class="tab" role="tab" aria-selected="false" data-tab="group" data-tooltip="Switch to Group Schedule tab">Group Schedule</button>
+      <button id="tab-public" class="tab" role="tab" aria-selected="false" data-tab="public" data-tooltip="Switch to Public Schedule tab">Public schedule</button>
+      <button id="tab-group" class="tab" role="tab" aria-selected="false" data-tab="group" data-tooltip="Switch to Group Schedule tab">Group schedule</button>
     </nav>
     <div class="header-right">
       <div class="time-override" id="time-override">
@@ -58,17 +58,17 @@
         <div class="display-group">
           <span class="display-group-label">Star Theater</span>
           <a href="/display/star-theater-group.html?preview=1" target="_blank" class="btn-pill" data-tooltip="Preview mode — shows all rows regardless of time">Preview</a>
-          <a href="/display/star-theater-group.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view — identical to the Star Theater kiosk right now">Live View</a>
+          <a href="/display/star-theater-group.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view — identical to the Star Theater kiosk right now">Live view</a>
         </div>
         <div class="display-group">
           <span class="display-group-label">SCI Live</span>
           <a href="/display/sci-live.html?preview=1" target="_blank" class="btn-pill" data-tooltip="Preview mode — shows all rows regardless of time">Preview</a>
-          <a href="/display/sci-live.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view — identical to the SCI Live kiosk right now">Live View</a>
+          <a href="/display/sci-live.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view — identical to the SCI Live kiosk right now">Live view</a>
         </div>
         <div class="display-group">
           <span class="display-group-label">Group Schedules</span>
           <a href="/display/group-schedules.html?preview=1" target="_blank" class="btn-pill" data-tooltip="Preview mode — shows all rows regardless of time">Preview</a>
-          <a href="/display/group-schedules.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view — identical to the Group Schedules kiosks right now">Live View</a>
+          <a href="/display/group-schedules.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view — identical to the Group Schedules kiosks right now">Live view</a>
         </div>
       </nav>
 
@@ -84,7 +84,7 @@
         </label>
       </div>
       <div class="upload-secondary-actions">
-        <button id="btn-upload-manage" class="btn-secondary" type="button" data-tooltip="View and edit the currently published schedule">Manage Current Schedule</button>
+        <button id="btn-upload-manage" class="btn-secondary" type="button" data-tooltip="View and edit the currently published schedule">Manage current schedule</button>
       </div>
       <div id="upload-error" class="error-msg" hidden></div>
     </div>
@@ -97,7 +97,7 @@
           <span id="warning-count" class="warning-label"></span>
         </div>
         <div class="toolbar-actions">
-          <button id="btn-reset" class="btn-secondary" data-tooltip="Discard changes and upload a new CSV file">Upload New File</button>
+          <button id="btn-reset" class="btn-secondary" data-tooltip="Discard changes and upload a new CSV file">Upload new file</button>
           <button id="btn-publish" class="btn-primary" data-tooltip="Send the current schedule to all display screens">Publish to Displays</button>
         </div>
       </div>
@@ -126,8 +126,8 @@
         <h2>Schedule Published</h2>
         <p id="published-msg"></p>
         <div class="modal-actions">
-          <button id="btn-manage" class="btn-secondary" data-tooltip="Open the schedule editor">Edit Current Schedule</button>
-          <button id="btn-new" class="btn-primary" data-tooltip="Upload a new CSV to replace the current schedule">Upload New Schedule</button>
+          <button id="btn-manage" class="btn-secondary" data-tooltip="Open the schedule editor">Edit current schedule</button>
+          <button id="btn-new" class="btn-primary" data-tooltip="Upload a new CSV to replace the current schedule">Upload new schedule</button>
         </div>
       </div>
     </div>
@@ -136,8 +136,8 @@
     <div id="state-manage" class="state">
       <div class="help-text">
         <strong>Manage Schedule</strong> — View and edit the schedule that is currently live on all displays.
-        Click any cell to edit it directly. Use <strong>+ Add Row</strong> to manually enter a new program.
-        Use <strong>×</strong> to remove a row. When you're done, click <strong>Push Changes</strong> to push
+        Click any cell to edit it directly. Use <strong>+ Add row</strong> to manually enter a new program.
+        Use <strong>×</strong> to remove a row. When you're done, click <strong>Push changes</strong> to push
         updates to all displays. Changes appear on the kiosks within 60 seconds.
       </div>
       <div class="toolbar">
@@ -146,10 +146,10 @@
           <span id="manage-published-at" style="color:#8b949e;font-size:0.85rem"></span>
         </div>
         <div class="toolbar-actions">
-          <button id="btn-manage-add-row" class="btn-secondary" data-tooltip="Add a blank row to the schedule">+ Add Row</button>
-          <button id="btn-manage-upload" class="btn-secondary" data-tooltip="Upload a new CSV to replace this schedule">Upload New File</button>
-          <button id="btn-manage-wipe" class="btn-danger" data-tooltip="Delete all rows and start from scratch">Wipe Schedule</button>
-          <button id="btn-manage-save" class="btn-primary" data-tooltip="Save changes and push to display screens">Push Changes</button>
+          <button id="btn-manage-add-row" class="btn-secondary" data-tooltip="Add a blank row to the schedule">+ Add row</button>
+          <button id="btn-manage-upload" class="btn-secondary" data-tooltip="Upload a new CSV to replace this schedule">Upload new file</button>
+          <button id="btn-manage-wipe" class="btn-danger" data-tooltip="Delete all rows and start from scratch">Wipe schedule</button>
+          <button id="btn-manage-save" class="btn-primary" data-tooltip="Save changes and push to display screens">Push changes</button>
         </div>
       </div>
       <div class="table-scroll">
@@ -207,11 +207,11 @@
       <nav class="tab-displays">
         <div class="display-group">
           <span class="display-group-label">Public Signage</span>
-          <a href="/display/public-signage.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view of the public day signage — merged website + manual events">Live View</a>
+          <a href="/display/public-signage.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view of the public day signage — merged website + manual events">Live view</a>
         </div>
         <div class="display-group">
           <span class="display-group-label">Star Theater</span>
-          <a href="/display/star-theater-public.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view of the Star Theater public-day lobby kiosk right now">Live View</a>
+          <a href="/display/star-theater-public.html" target="_blank" class="btn-pill btn-pill-live" data-tooltip="Live view of the Star Theater public-day lobby kiosk right now">Live view</a>
         </div>
       </nav>
 
@@ -300,6 +300,7 @@
           </label>
           <div class="ps-field-actions">
             <span id="ps-lists-status" class="ps-status-note"></span>
+            <span id="ps-lists-dirty" class="ps-dirty-note" hidden>unsaved changes</span>
             <button id="btn-ps-save-lists" class="btn-primary" data-tooltip="Save the autocomplete lists for public signage">Save lists</button>
           </div>
         </div>
@@ -317,9 +318,9 @@
             <input type="time" id="ps-closing-time">
           </label>
           <div class="ps-field-actions">
-            <button id="btn-ps-save-closing" class="btn-primary" data-tooltip="Save the closing time shown on the public display">Save closing time</button>
             <span id="ps-closing-status" class="ps-status-note"></span>
             <span id="ps-closing-dirty" class="ps-dirty-note" hidden>unsaved changes</span>
+            <button id="btn-ps-save-closing" class="btn-primary" data-tooltip="Save the closing time shown on the public display">Save closing time</button>
           </div>
         </div>
       </section>
@@ -336,9 +337,9 @@
             <input type="text" id="ps-qr-url" placeholder="https://www.sciowa.org/programs-and-events/event-calendar/">
           </label>
           <div class="ps-field-actions">
-            <button id="btn-ps-save-config" class="btn-primary" data-tooltip="Save the ticker text and QR code URL">Save signage text</button>
             <span id="ps-config-status" class="ps-status-note"></span>
             <span id="ps-config-dirty" class="ps-dirty-note" hidden>unsaved changes</span>
+            <button id="btn-ps-save-config" class="btn-primary" data-tooltip="Save the ticker text and QR code URL">Save signage text</button>
           </div>
         </div>
       </section>
@@ -358,7 +359,7 @@
       <p id="confirm-msg"></p>
       <div class="modal-actions">
         <button id="btn-cancel" class="btn-secondary" data-tooltip="Go back without publishing">Cancel</button>
-        <button id="btn-confirm" class="btn-primary" data-tooltip="Confirm and publish to all displays">Yes, Publish</button>
+        <button id="btn-confirm" class="btn-primary" data-tooltip="Confirm and publish to all displays">Yes, publish</button>
       </div>
     </div>
   </div>
