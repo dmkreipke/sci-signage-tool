@@ -13,8 +13,9 @@ npm-debug.log*
 # uploaded special-event poster images
 data/special-event-images/
 
-# Playwright MCP runtime artifacts (browser session logs, DOM snapshots)
+# Playwright MCP runtime artifacts (browser session logs, DOM snapshots, screenshots)
 .playwright-mcp/
+playWrightScreenshots/
 
 # local test image fixtures
 testImage/
