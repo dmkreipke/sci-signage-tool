@@ -585,11 +585,13 @@ body.bright-mode .ps-field input[type="time"]::-webkit-calendar-picker-indicator
 
 .ps-text-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .ps-text-grid .ps-field:first-child { grid-column: 1 / -1; }
-.ps-text-grid .ps-field-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+.ps-text-grid .ps-field-actions { grid-column: 1 / -1; display: flex; justify-content: flex-start; align-items: center; gap: 12px; }
+.ps-text-grid .ps-dirty-note { color: var(--accent-gold); font-size: 0.8rem; }
 .ps-lists-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .ps-lists-grid .ps-field-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
-.ps-closing-grid { display: grid; grid-template-columns: minmax(200px, 280px) 1fr; gap: 16px; align-items: end; }
-.ps-closing-grid .ps-field-actions { display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+.ps-closing-grid { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; width: fit-content; }
+.ps-closing-grid .ps-field-actions { display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center; }
+.ps-closing-grid .ps-dirty-note { color: var(--accent-gold); font-size: 0.8rem; }
 .ps-status-note { color: var(--accent-green); font-size: 0.85rem; }
 
 .ps-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
@@ -731,6 +733,31 @@ body.bright-mode .ps-dirty-note-right { color: var(--accent-gold); }
   animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* Tooltips */
+[data-tooltip] { position: relative; }
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font: 600 11px/1.4 'Segoe UI', Arial, sans-serif;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s 0s;
+  z-index: 9999;
+}
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after { opacity: 1; transition-delay: 1s; }
+[data-tooltip].tooltip-below::after { bottom: auto; top: calc(100% + 6px); }
+[data-tooltip].tooltip-right::after { left: 0; transform: none; }
 
 @media (max-width: 720px) {
   .ps-manual-card {

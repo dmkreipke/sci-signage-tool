@@ -1,0 +1,109 @@
+ ---------------
+|  Push to GH   |
+ ---------------
+
+  Step 1 — Navigate to your project folder                                                                
+  cd "C:\Users\dan.kreipke\Downloads\signageTool"
+  This tells the terminal "I want to work inside this folder." You must do this every time you open a new   terminal window before running any git commands.                                                        
+                                                                                                          
+  ---
+  Step 2 — Check what changed
+  git status
+  This shows you which files you edited. Red = not staged yet, green = ready to commit.
+
+  ---
+  Step 3 — Stage your changes
+  git add -A
+  Think of this as putting your changes in an envelope before mailing it. -A means "add everything I      
+  changed."
+
+  ---
+  Step 4 — Commit
+  git commit -m "describe what you changed here"
+  This seals the envelope and labels it. The message in quotes is your note to your future self about what
+   this change was. Example:
+  git commit -m "Make coming up label white with dark shadow"
+
+  ---
+  Step 5 — Push to GitHub
+  git push
+  This mails the envelope. Your changes are now on GitHub.
+
+  ---
+  All 5 steps every time (copy/paste this):
+  cd "C:\Users\dan.kreipke\Downloads\signageTool"
+  git add -A
+  git commit -m "describe your change"
+  git push
+  Just change the message each time and you're done.
+
+
+
+ ---------------
+|  Get Onto Pi  |
+ ---------------
+
+
+  ---
+  Step 1 — Get into the Pi
+  
+Run your piSSH.bat file (double-click it, or type it in a terminal). That runs:             
+  ssh signageserver@192.168.39.107                                                               
+  This opens a remote terminal session on the Pi over your local network. Everything you type
+  after this point is running on the Pi, not your Windows machine.
+
+  ---
+  Step 2 — Go to the project folder
+
+  cd ~/digitalSignage
+  cd means "change directory." This moves you into the folder where the signage app lives on  
+  the Pi. The ~ is a shortcut for the home directory (/home/dankreipke).
+
+  ---
+  Step 3 — Download the latest changes from GitHub
+
+  git pull
+  This contacts GitHub, downloads any new commits (like the one you just pushed), and applies 
+  them to the files on the Pi. It's the counterpart to git push — push sends changes up, pull 
+  brings changes down.
+
+  ---
+  Step 4 — Restart the server so it picks up the new files
+
+  pm2 restart all
+  The Node.js server that serves the signage pages is managed by a tool called PM2. Restarting
+   it makes it reload all the files from disk — without this step, the old version of the code
+   would keep running in memory even though the files changed.
+
+OR :  pm2 start server.js --name "signage-app"
+
+  If that command errors, try:
+  npm start
+  (though PM2 is the right tool here if it's set up).
+
+  ---
+  Step 5 — Confirm it's running
+
+  pm2 status
+  Shows you a table of running processes. You want to see the signage app listed with status  
+  online. If it says errored, something went wrong and you'd check the logs with pm2 logs.    
+
+  ---
+  Step 6 — Leave the Pi
+
+  exit
+  Closes the SSH session and returns you to your Windows terminal.
+
+  ---
+  The whole thing, in order, once you're SSH'd in:
+  cd ~/Downloads/signageTool
+  git pull
+  pm2 restart all
+  pm2 status
+  exit
+
+****
+
+
+  That's it every time. The only line that actually matters for deploying an update is git    
+  pull — the restart is just so the server loads the new code.

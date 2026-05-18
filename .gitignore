@@ -10,8 +10,11 @@ npm-debug.log*
 # Environment variables (secrets)
 .env
 
-# dev tools and docs
-forHumans/
-
 # uploaded special-event poster images
 data/special-event-images/
+
+# Playwright MCP runtime artifacts (browser session logs, DOM snapshots)
+.playwright-mcp/
+
+# local test image fixtures
+testImage/

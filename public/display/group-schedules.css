@@ -116,7 +116,7 @@ body {
 
 /* Animation applied via class so it can be paused / restarted on data change */
 .card-track.scrolling {
-  animation: scroll-left var(--scroll-duration, 60s) linear infinite;
+  animation: scroll-left var(--scroll-duration, 40s) linear infinite;
 }
 
 @keyframes scroll-left {

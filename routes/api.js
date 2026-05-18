@@ -9,6 +9,7 @@ const scheduleListsStore = require('../src/scheduleListsStore');
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+const uploadImage = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
 
 const VALID_DISPLAYS = ['star-theater', 'sci-live', 'group-schedules'];
 
@@ -152,7 +153,7 @@ router.get('/public-signage/special', (req, res) => {
   res.json({ events: publicStore.listSpecial() });
 });
 
-router.post('/public-signage/special', upload.single('image'), (req, res) => {
+router.post('/public-signage/special', uploadImage.single('image'), (req, res) => {
   const buffer = req.file ? req.file.buffer : null;
   const ext = extFromFile(req.file);
   const result = publicStore.addSpecial(req.body || {}, buffer, ext);
@@ -160,7 +161,7 @@ router.post('/public-signage/special', upload.single('image'), (req, res) => {
   res.status(201).json(result.event);
 });
 
-router.patch('/public-signage/special/:id', upload.single('image'), (req, res) => {
+router.patch('/public-signage/special/:id', uploadImage.single('image'), (req, res) => {
   const buffer = req.file ? req.file.buffer : null;
   const ext = extFromFile(req.file);
   const removeImage = String((req.body || {}).removeImage || '').toLowerCase() === 'true';
@@ -193,6 +194,15 @@ router.put('/public-signage/special/order', (req, res) => {
   const result = publicStore.reorderSpecial(ids);
   if (!result.ok) return res.status(400).json({ error: 'Reorder failed', details: result.errors });
   res.json({ ok: true, events: result.events });
+});
+
+// Catch multer errors (e.g. LIMIT_FILE_SIZE) so they return JSON instead of HTML
+router.use((err, req, res, next) => {
+  console.error('[api error]', err);
+  if (err && err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(413).json({ error: 'File too large (max 25 MB for images, 10 MB for CSV)' });
+  }
+  res.status(500).json({ error: err.message || 'Server error' });
 });
 
 module.exports = router;

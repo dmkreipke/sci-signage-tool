@@ -13,7 +13,7 @@ function applyTheme(theme) {
   if (sw) {
     sw.classList.toggle('on', bright);
     sw.setAttribute('aria-checked', bright ? 'true' : 'false');
-    sw.title = bright ? 'Switch to dark mode' : 'Switch to bright mode';
+    sw.setAttribute('data-tooltip', bright ? 'Switch to dark mode' : 'Switch to bright mode');
   }
 }
 applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
@@ -283,7 +283,7 @@ function renderPreview(rows, warnings) {
       <td><input data-field="programName" list="gs-programs" value="${esc(row.programName)}"></td>
       <td><input data-field="groupName" list="gs-groups" value="${esc(row.groupName)}"></td>
       <td class="${!row.location ? 'warn-cell' : ''}"><input data-field="location" list="gs-locations" value="${esc(row.location)}"></td>
-      <td><button class="btn-row-remove" data-remove-index="${i}" title="Remove this row">×</button></td>
+      <td><button class="btn-row-remove" data-remove-index="${i}" data-tooltip="Remove this row" aria-label="Remove this row">×</button></td>
     </tr>
   `).join('');
 }
@@ -468,7 +468,7 @@ function renderManageTable() {
       <td><input data-field="programName" list="gs-programs" value="${esc(row.programName)}"></td>
       <td><input data-field="groupName" list="gs-groups" value="${esc(row.groupName)}"></td>
       <td class="${!row.location ? 'warn-cell' : ''}"><input data-field="location" list="gs-locations" value="${esc(row.location)}"></td>
-      <td><button class="btn-row-remove" data-remove-index="${originalIndex}" title="Remove this row">×</button></td>
+      <td><button class="btn-row-remove" data-remove-index="${originalIndex}" data-tooltip="Remove this row" aria-label="Remove this row">×</button></td>
     </tr>
   `;
   }).join('');
@@ -702,7 +702,7 @@ function renderPsTodayTable(data) {
       : `<span class="ps-badge ps-badge-website">Website</span>`;
     const rowClass = isWebsite && ev.hidden ? ' class="ps-row-hidden"' : '';
     const toggleCell = isWebsite
-      ? `<td><label class="ps-hide-toggle" title="Show on public display"><input type="checkbox" data-ps-hide-sig="${esc(psSignature(ev))}"${ev.hidden ? '' : ' checked'}></label></td>`
+      ? `<td><label class="ps-hide-toggle tooltip-right" data-tooltip="Deselect to remove from displays. Select to keep on displays"><input type="checkbox" data-ps-hide-sig="${esc(psSignature(ev))}"${ev.hidden ? '' : ' checked'}></label></td>`
       : `<td style="text-align:center;color:#8b949e">—</td>`;
     return `
       <tr${rowClass}>
@@ -771,8 +771,8 @@ function renderPsManualList() {
         <div class="ps-field-actions">
           ${ev._dirty ? '<span class="ps-dirty-note">unsaved changes</span>' : ''}
           ${ev._new
-            ? `<button class="btn-secondary" data-ps-cancel="${idx}">Cancel</button><button class="btn-primary" data-ps-save="${idx}">Save event</button>`
-            : `<button class="btn-danger" data-ps-delete="${idx}">Delete</button>${ev._dirty ? `<button class="btn-primary" data-ps-save="${idx}">Save changes</button>` : ''}`
+            ? `<button class="btn-secondary" data-ps-cancel="${idx}" data-tooltip="Discard and remove this new event">Cancel</button><button class="btn-primary" data-ps-save="${idx}" data-tooltip="Save this event to the signage">Save event</button>`
+            : `<button class="btn-danger" data-ps-delete="${idx}" data-tooltip="Permanently delete this event">Delete</button>${ev._dirty ? `<button class="btn-primary" data-ps-save="${idx}" data-tooltip="Save changes to this event">Save changes</button>` : ''}`
           }
         </div>
       </div>
@@ -781,10 +781,17 @@ function renderPsManualList() {
 }
 
 function fillPsConfigForm(config) {
-  document.getElementById('ps-ticker').value = config.tickerText || '';
-  document.getElementById('ps-qr-url').value = config.qrUrl || '';
-  document.getElementById('ps-qr-label').value = config.qrLabel || '';
-  document.getElementById('ps-closing-time').value = config.closingTime || '';
+  const ticker = document.getElementById('ps-ticker');
+  const qrUrl = document.getElementById('ps-qr-url');
+  ticker.value = config.tickerText || '';
+  ticker._savedValue = ticker.value;
+  qrUrl.value = config.qrUrl || '';
+  qrUrl._savedValue = qrUrl.value;
+  document.getElementById('ps-config-dirty').hidden = true;
+  const closingInput = document.getElementById('ps-closing-time');
+  closingInput.value = config.closingTime || '';
+  closingInput._savedValue = closingInput.value;
+  document.getElementById('ps-closing-dirty').hidden = true;
   document.getElementById('ps-list-titles').value = (config.titles || []).join('\n');
   document.getElementById('ps-list-locations').value = (config.locations || []).join('\n');
   document.getElementById('ps-list-categories').value = (config.categories || []).join('\n');
@@ -994,27 +1001,27 @@ function renderPsSpecialList() {
       ? `<img src="/special-event-images/${esc(ev.imageFilename)}?t=${Date.now()}" alt="" />`
       : `<div class="ps-special-noimg">No image<br><span class="ps-special-dims">480 × 640</span><span class="ps-special-dims-note">3:4 portrait</span></div>`;
     const imgButtons = ev._new
-      ? `<label class="btn-secondary ps-file-label">Choose image<input type="file" accept="image/jpeg,image/png,image/webp" data-ps-special-file="${idx}" hidden></label>`
-      : `<label class="btn-secondary ps-file-label">${ev.imageFilename ? 'Replace image' : 'Choose image'}<input type="file" accept="image/jpeg,image/png,image/webp" data-ps-special-file="${idx}" hidden></label>${ev.imageFilename ? `<button class="btn-secondary" data-ps-special-removeimg="${idx}">Remove image</button>` : ''}`;
+      ? `<button type="button" class="btn-secondary ps-file-label" data-ps-special-filepick="${idx}" data-tooltip="Upload a poster image for this event">Choose image</button>`
+      : `<button type="button" class="btn-secondary ps-file-label" data-ps-special-filepick="${idx}" data-tooltip="Upload a new poster image">${ev.imageFilename ? 'Replace image' : 'Choose image'}</button>${ev.imageFilename ? `<button class="btn-secondary" data-ps-special-removeimg="${idx}" data-tooltip="Remove the image from this event">Remove image</button>` : ''}`;
     const pendingNote = ev._pendingImageName
       ? `<span class="ps-dirty-note">image ready: ${esc(ev._pendingImageName)}</span>`
       : (ev._pendingRemoveImage ? `<span class="ps-dirty-note">image will be removed</span>` : '');
     const hiddenBadge = ev.hidden ? '<span class="ps-special-hidden-badge">Hidden</span>' : '';
     return `
       <div class="ps-special-card ${cls}" data-ps-special-index="${idx}" data-ps-special-id="${esc(ev.id || '')}"${ev._new ? '' : ' draggable="true"'}>
-        ${ev._new ? '<div class="ps-special-drag-handle ps-special-drag-disabled"></div>' : '<div class="ps-special-drag-handle" title="Drag to reorder">⋮⋮</div>'}
+        ${ev._new ? '<div class="ps-special-drag-handle ps-special-drag-disabled"></div>' : '<div class="ps-special-drag-handle" data-tooltip="Drag to reorder" aria-label="Drag to reorder">⋮⋮</div>'}
         <div class="ps-special-preview-col">
           <div class="${previewCls}">${imgPreview}${hiddenBadge}</div>
           <div class="ps-seg-group">
             <div class="ps-seg-label">Fit</div>
             <div class="ps-seg" role="group">
-              <button type="button" class="ps-seg-btn ${ev.fit !== 'contain' ? 'is-active' : ''}" data-pssf-fit="${idx}" data-val="cover">Crop</button>
-              <button type="button" class="ps-seg-btn ${ev.fit === 'contain' ? 'is-active' : ''}" data-pssf-fit="${idx}" data-val="contain">Fit</button>
+              <button type="button" class="ps-seg-btn ${ev.fit !== 'contain' ? 'is-active' : ''}" data-pssf-fit="${idx}" data-val="cover" data-tooltip="Crop image to fill the frame">Crop</button>
+              <button type="button" class="ps-seg-btn ${ev.fit === 'contain' ? 'is-active' : ''}" data-pssf-fit="${idx}" data-val="contain" data-tooltip="Fit entire image within the frame">Fit</button>
             </div>
             <div class="ps-seg-label">Frame</div>
             <div class="ps-seg" role="group">
-              <button type="button" class="ps-seg-btn ${!ev.transparent ? 'is-active' : ''}" data-pssf-transparent="${idx}" data-val="false">Frame</button>
-              <button type="button" class="ps-seg-btn ${ev.transparent ? 'is-active' : ''}" data-pssf-transparent="${idx}" data-val="true">None</button>
+              <button type="button" class="ps-seg-btn ${!ev.transparent ? 'is-active' : ''}" data-pssf-transparent="${idx}" data-val="false" data-tooltip="Show a gold border frame around the image">Frame</button>
+              <button type="button" class="ps-seg-btn ${ev.transparent ? 'is-active' : ''}" data-pssf-transparent="${idx}" data-val="true" data-tooltip="No frame, transparent background">None</button>
             </div>
           </div>
         </div>
@@ -1040,8 +1047,8 @@ function renderPsSpecialList() {
           </div>
           <div class="ps-field-actions">
             ${ev._new
-              ? `<button class="btn-secondary" data-ps-special-cancel="${idx}">Cancel</button><button class="btn-primary" data-ps-special-save="${idx}">Save event</button>`
-              : `<button class="btn-danger" data-ps-special-delete="${idx}">Delete</button><button class="btn-secondary ps-special-dup-btn" data-ps-special-duplicate="${idx}">Duplicate</button><button class="${ev.hidden ? 'btn-primary' : 'btn-secondary'} ps-special-hide-btn" data-ps-special-toggle-hide="${idx}">${ev.hidden ? 'Unhide' : 'Hide'}</button>${ev._dirty ? `<button class="btn-primary ps-special-save-btn" data-ps-special-save="${idx}">Save changes</button><span class="ps-dirty-note ps-dirty-note-right">unsaved changes</span>` : ''}`
+              ? `<button class="btn-secondary" data-ps-special-cancel="${idx}" data-tooltip="Discard and remove this new event">Cancel</button><button class="btn-primary" data-ps-special-save="${idx}" data-tooltip="Save this event to the signage">Save event</button>`
+              : `<button class="btn-danger" data-ps-special-delete="${idx}" data-tooltip="Permanently delete this event">Delete</button><button class="btn-secondary ps-special-dup-btn" data-ps-special-duplicate="${idx}" data-tooltip="Duplicate this event card">Duplicate</button><button class="${ev.hidden ? 'btn-primary' : 'btn-secondary'} ps-special-hide-btn" data-ps-special-toggle-hide="${idx}" data-tooltip="${ev.hidden ? 'Make this event visible on the public display' : 'Hide this event from the public display'}">${ev.hidden ? 'Unhide from Display' : 'Hide from Display'}</button>${ev._dirty ? `<button class="btn-primary ps-special-save-btn" data-ps-special-save="${idx}" data-tooltip="Save changes to this event">Save changes</button><span class="ps-dirty-note ps-dirty-note-right">unsaved changes</span>` : ''}`
             }
           </div>
         </div>
@@ -1087,12 +1094,23 @@ document.getElementById('ps-special-list').addEventListener('input', e => {
   markPsSpecialDirty(idx);
 });
 
-document.getElementById('ps-special-list').addEventListener('change', e => {
-  const fileInput = e.target.closest('[data-ps-special-file]');
-  if (!fileInput) return;
-  const idx = parseInt(fileInput.dataset.psSpecialFile, 10);
-  const file = fileInput.files && fileInput.files[0];
-  if (!file) return;
+// Single shared file picker — lives outside the list so re-renders never destroy it
+let psSpecialFilePendingIdx = -1;
+const psSpecialFilePicker = document.createElement('input');
+psSpecialFilePicker.type = 'file';
+psSpecialFilePicker.accept = 'image/jpeg,image/png,image/webp';
+psSpecialFilePicker.style.cssText = 'position:absolute;width:0;height:0;opacity:0;pointer-events:none';
+document.body.appendChild(psSpecialFilePicker);
+
+psSpecialFilePicker.addEventListener('change', () => {
+  const idx = psSpecialFilePendingIdx;
+  const file = psSpecialFilePicker.files && psSpecialFilePicker.files[0];
+  psSpecialFilePicker.value = '';
+  if (idx < 0 || !psSpecialLocal[idx] || !file) return;
+  if (file.size > 25 * 1024 * 1024) {
+    alert(`Image is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum is 25 MB.`);
+    return;
+  }
   psSpecialLocal[idx]._pendingImageFile = file;
   psSpecialLocal[idx]._pendingImageName = file.name;
   psSpecialLocal[idx]._pendingRemoveImage = false;
@@ -1120,6 +1138,12 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
       markPsSpecialDirty(idx);
       renderPsSpecialList();
     }
+    return;
+  }
+  const filePickBtn = e.target.closest('[data-ps-special-filepick]');
+  if (filePickBtn) {
+    psSpecialFilePendingIdx = parseInt(filePickBtn.dataset.psSpecialFilepick, 10);
+    psSpecialFilePicker.click();
     return;
   }
   const cancelBtn = e.target.closest('[data-ps-special-cancel]');
@@ -1231,9 +1255,10 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
         : `/api/public-signage/special/${encodeURIComponent(ev.id)}`;
       const method = ev._new ? 'POST' : 'PATCH';
       const res = await fetch(url, { method, body: formData });
-      const data = await res.json();
+      let data;
+      try { data = await res.json(); } catch { data = {}; }
       if (!res.ok) {
-        const msg = data.details ? data.details.join('; ') : (data.error || `HTTP ${res.status}`);
+        const msg = (data.details ? data.details.join('; ') : null) || data.error || `HTTP ${res.status}`;
         throw new Error(msg);
       }
       psSpecialLocal[idx] = { ...data, _dirty: false, _new: false };
@@ -1246,11 +1271,24 @@ document.getElementById('ps-special-list').addEventListener('click', async e => 
   }
 });
 
+function checkConfigDirty() {
+  const ticker = document.getElementById('ps-ticker');
+  const qrUrl = document.getElementById('ps-qr-url');
+  const dirty = document.getElementById('ps-config-dirty');
+  const changed = ticker.value !== (ticker._savedValue ?? '') || qrUrl.value !== (qrUrl._savedValue ?? '');
+  dirty.hidden = !changed;
+  if (changed) document.getElementById('ps-config-status').textContent = '';
+}
+
+document.getElementById('ps-ticker').addEventListener('input', checkConfigDirty);
+document.getElementById('ps-qr-url').addEventListener('input', checkConfigDirty);
+
 document.getElementById('btn-ps-save-config').addEventListener('click', async () => {
+  const ticker = document.getElementById('ps-ticker');
+  const qrUrl = document.getElementById('ps-qr-url');
   const payload = {
-    tickerText: document.getElementById('ps-ticker').value,
-    qrUrl: document.getElementById('ps-qr-url').value,
-    qrLabel: document.getElementById('ps-qr-label').value,
+    tickerText: ticker.value,
+    qrUrl: qrUrl.value,
   };
   const status = document.getElementById('ps-config-status');
   status.textContent = '';
@@ -1263,6 +1301,9 @@ document.getElementById('btn-ps-save-config').addEventListener('click', async ()
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    ticker._savedValue = ticker.value;
+    qrUrl._savedValue = qrUrl.value;
+    document.getElementById('ps-config-dirty').hidden = true;
     status.textContent = `Saved ${new Date(data.publishedAt).toLocaleTimeString()}`;
   } catch (err) {
     alert(`Save failed: ${err.message}`);
@@ -1271,8 +1312,16 @@ document.getElementById('btn-ps-save-config').addEventListener('click', async ()
   }
 });
 
+document.getElementById('ps-closing-time').addEventListener('input', () => {
+  const input = document.getElementById('ps-closing-time');
+  const dirty = document.getElementById('ps-closing-dirty');
+  dirty.hidden = input.value === (input._savedValue ?? '');
+  if (!dirty.hidden) document.getElementById('ps-closing-status').textContent = '';
+});
+
 document.getElementById('btn-ps-save-closing').addEventListener('click', async () => {
-  const payload = { closingTime: document.getElementById('ps-closing-time').value };
+  const input = document.getElementById('ps-closing-time');
+  const payload = { closingTime: input.value };
   const status = document.getElementById('ps-closing-status');
   status.textContent = '';
   spinner.hidden = false;
@@ -1284,6 +1333,8 @@ document.getElementById('btn-ps-save-closing').addEventListener('click', async (
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    input._savedValue = input.value;
+    document.getElementById('ps-closing-dirty').hidden = true;
     status.textContent = `Saved ${new Date(data.publishedAt).toLocaleTimeString()}`;
   } catch (err) {
     alert(`Save failed: ${err.message}`);
